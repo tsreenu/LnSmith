@@ -1,0 +1,202 @@
+﻿@model DigitalAppraiser.Models.ViewModels.BankCustomerModel
+
+
+<div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
+    Customer Details
+</div>
+<br />
+<div class="panel-body">
+    @using (Html.BeginForm("BankCustomer", "Apraiser", FormMethod.Post, new { id = "formCustomerBank" }))
+    {
+        @Html.HiddenFor(x => x.BankId, new { id = "hdnBankId" })
+        <div class="col-sm-offset-1">
+            @*<div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Date<span style="color:red">*</span>:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" id="txtDateSelf" class="form-control" disabled />
+                        </div>
+                    </div>
+                </div>*@
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Branch<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.Branch, new { id = "txtBranch", @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Name<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.Name, new { id = "txtNameBank", @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Relation Type<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.DropDownListFor(x => x.RelationType, Model.RelationTypes, "Select", new { id = "ddRelationType", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Relation Name<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.RelationName, new { id = "txtRelationName", @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Address<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextAreaFor(x => x.Address, new { id = "txtAddressBank", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Mobile Number<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileBank", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Account Details:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.AccountDetails, new { id = "txtAccountDetails", @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Aadhar:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.AadharNumber, new { id = "txtMobileSelf", @class = "form-control", @onkeypress = "IsNumeric(event)" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">PAN:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.PanNumber, new { id = "txtMobileSelf", @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Caste:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.Caste, new { id = "txtMobileSelf", @class = "form-control" })
+                        </div>
+                    </div>
+                </div>*@
+            <input type="submit" class="btn btn-info btn-md col-sm-offset-3" id="btnSaveCustomerBank" value="Continue" onclick="SaveCustomerBank(event)" />
+            <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
+
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        //$("#txtDateSelf").datepicker({ dateFormat: "dd-mm-yy" }).datepicker("setDate", new Date());
+    })
+    IsNumeric = function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            e.preventDefault()
+        }
+    }
+    SaveCustomerBank = function () {
+        debugger;
+        var isValid = true;
+        var errorMsg = "";
+        if ($("#txtBranch").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        } if ($("#txtNameBank").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#ddRelationType").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtRelationName").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtMobileBank").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtAddressBank").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+
+        if (isValid == true) {
+            //$("#formCustomerBank").bind("submit");
+            $("#formCustomerBank").submit(function (e) {
+                e.currentTarget.submit();
+            });
+        } else {
+            $("#formCustomerBank").submit(function (e) {
+                e.preventDefault();
+            });
+            $("#divError").html(errorMsg);
+            $("#divError").show();
+        }
+    }
+</script>

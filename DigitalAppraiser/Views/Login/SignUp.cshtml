@@ -1,0 +1,424 @@
+﻿@model DigitalAppraiser.Models.ViewModels.SignUpModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SignUp</title>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/SiteCSS/Multiselect.css" rel="stylesheet" />
+    <script src="~/Scripts/MultiSelect/MultiSelect.js"></script>
+    <style>
+        .checkbox {
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    @Html.HiddenFor(x => x.AppraiserId, new { id = "hdnApraiserId" })
+    @Html.HiddenFor(x => x.StateId, new { id = "hdnStateId" })
+    @Html.HiddenFor(x => x.CityId, new { id = "hdnCityId" })
+    <input type="hidden" id="hdnSelectedBanks" value="@Json.Encode(Model.selectedBanks)" />
+    <input type="hidden" id="hdnBanks" value="@Json.Encode(Model.Banks)" />
+    <input type="hidden" id="hdnStates" value="@Json.Encode(Model.States)" />
+
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default col-sm-8 col-sm-offset-2" style="margin-top:2%">
+                <div class="panel-body">
+                    <div class="col-sm-offset-2">
+
+                        <h3 class="col-sm-offset-4" style="font-weight:bold">SignUp</h3><br />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Name<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x => x.AppraiserName, new { id = "txtAppraiserName", @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Appraiser Number:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x => x.AppraiserNumber, new { id = "txtAppraiserNumber", @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Mobile Number<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileNumber", @class = "form-control", @onkeypress = "IsNumeric(event)", @maxlength = "10", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Password<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    @Html.PasswordFor(x => x.Password, new { id = "txtPassword", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Confirm Password<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <input type="password" name="username" id="txtConfirmPwd" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">State<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <select id="ddStates" class="form-control" onchange="BindCities(this)">
+                                        <option value="0">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">City<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <select id="ddCity" class="form-control">
+                                        <option value="0">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Bank<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <select id="ddBanks" onchange="ChangeBank(this)" class="form-control hidden" multiple="multiple"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="divShopName" style="display:none">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Shop Name<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x => x.ShopName, new { id = "txtShopName", @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="divShopAddress" style="display:none">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Shop Address:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    @Html.TextAreaFor(x => x.ShopAddress, new { id = "txtShopAddress", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="divShopPhone" style="display:none">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="text-info">Shop Phone No:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x => x.ShopNumber, new { id = "txtShopNumber", @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                            </div>
+                            <span style="color:#6495ed;font-weight:bold;font-size:17px;">Enjoy your 30 days free trail!</span>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input id="chkTermsAndCondtions" type="checkbox" /> Terms and conditions &nbsp;&nbsp;&nbsp;
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-sm-offset-1">
+                                <div class="form-group">
+                                    <input type="button" class="btn btn-info btn-md" style="width:100%" value="Submit" onclick="SignUp()" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="divError" class="alert alert-danger">
+                            <span id="spnError"> </span>
+                            <span id="spnConfirmPwd" style="display:none;"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var banks = $.parseJSON($("#hdnBanks").val());
+    $(document).ready(function () {
+        $("#divError").hide();
+        var isSelf = false;
+        var optionString = "";
+        if (banks.length > 0) {
+            for (var i = 0; i < banks.length; i++) {
+                optionString += "<option value='" + banks[i].BankId + "'>" + banks[i].BankName + "</option>";
+            }
+            $("#ddBanks").append(optionString);
+        }
+
+        $('#ddBanks').multiselect({
+            includeSelectAllOption: true,
+            selectedClass: 'multiselect-selected'
+        });
+
+        $(".btn-group").width($("#txtConfirmPwd").width());
+        $(".checkbox").width($("#txtConfirmPwd").width());
+        $(".multiselect").width($("#txtConfirmPwd").width());
+
+        var States = $.parseJSON($("#hdnStates").val());
+        var optionStringStates = "<option value='0'>Select</option>";
+        if (States.length > 0) {
+            for (var i = 0; i < States.length; i++) {
+                optionStringStates += "<option value='" + States[i].StateId + "'>" + States[i].StateName + "</option>";
+            }
+            $("#ddStates").html(optionStringStates);
+        }
+        debugger;
+        if ($("#hdnApraiserId").val() != "0") {
+            $("#ddStates").val($("#hdnStateId").val());
+            $("#ddStates").trigger("change");
+            var selectedBanks = $.parseJSON($("#hdnSelectedBanks").val());
+            $('#ddBanks').val(selectedBanks);
+            $('#ddBanks').multiselect('refresh');
+            $('#ddBanks').trigger("change");
+            $("#ddCity").val($("#hdnCityId").val())
+            $("#chkTermsAndCondtions")[0].checked = true;
+            $("#txtPassword").prop("disabled", true);
+            $("#txtConfirmPwd").prop("disabled", true);
+        }
+    });
+
+    IsNumeric = function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            e.preventDefault()
+        }
+    }
+    BindCities = function (e) {
+        var stateId = e.value;//$("#ddStates").val()
+        if (stateId != 0) {
+            $.ajax({
+                url: '/Login/GetCities',
+                data: {
+                    stateid: stateId
+                },
+                type: 'get',
+                dataType: "json",
+                success: function (data) {
+                    var optionString = "<option value='0'>Select</option>";
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            optionString += "<option value='" + data[i].CityId + "'>" + data[i].CityName + "</option>";
+                        }
+                        $("#ddCity").html(optionString);
+                        if ($("#hdnApraiserId").val() != "0") {
+                            $("#ddCity").val($("#hdnCityId").val())
+                        }
+                    }
+                }
+            })
+        } else {
+            var optionString = "<option value='0'>Select</option>";
+            $("#ddCity").html(optionString);
+        }
+
+    }
+    ChangeBank = function (e) {
+        debugger;
+        if (e.selectedOptions.length > 0) {
+            for (var i = 0; i < e.selectedOptions.length; i++) {
+                if (e.selectedOptions[i].value == 1) {
+                    $("#divShopName").show();
+                    $("#divShopAddress").show();
+                    $("#divShopPhone").show();
+                    isSelf = true;
+                    return false;
+                } else {
+                    $("#divShopName").hide();
+                    $("#divShopAddress").hide();
+                    $("#divShopPhone").hide();
+                    isSelf = false;
+                }
+            }
+        } else {
+            $("#divShopName").hide();
+            isSelf = false;
+        }
+    }
+    SignUp = function () {
+        $("#divError").hide();
+        var errorMsg = "";
+        var ConfirmPwdMsg = "";
+        var isValid = true
+        if ($("#txtAppraiserName").val() == "") {
+            errorMsg = "Please enter name";
+            isValid = false;
+        }
+        //if ($("#txtAppraiserNumber").val() == "") {
+        //    errorMsg = errorMsg == "" ? "Please enter appraiser number" : errorMsg + ", appraiser number";
+        //    isValid = false;
+        //}
+        if ($("#txtMobileNumber").val() == "") {
+            errorMsg = errorMsg == "" ? "Please enter mobile number" : errorMsg + ", mobile number";
+            isValid = false;
+        } else if ($("#txtMobileNumber").val().length != 10) {
+            errorMsg = errorMsg == "" ? "Please enter valid mobile number" : errorMsg + ", valid mobile number";
+            isValid = false;
+        }
+        if ($("#hdnApraiserId").val() == "0") {
+            if ($("#txtPassword").val() == "") {
+                errorMsg = errorMsg == "" ? "Please enter password" : errorMsg + ", password";
+                isValid = false;
+            }
+            if ($("#txtConfirmPwd").val() == "") {
+                errorMsg = errorMsg == "" ? "Please enter confirm password" : errorMsg + ", confirm password";
+                isValid = false;
+            }
+            if ($("#txtPassword").val() != $("#txtConfirmPwd").val()) {
+                errorMsg == "" ? errorMsg = "Password and confirm password is not matching" : ConfirmPwdMsg = "password and confirm password is not matching";
+                isValid = false;
+            }
+        }
+        if ($("#txtAddress").val() == "") {
+            errorMsg = errorMsg == "" ? "Please enter address" : errorMsg + ", address";
+            isValid = false;
+        }
+        if ($("#ddBanks").val().length == 0) {
+            errorMsg = errorMsg == "" ? "Please select atleast one bank" : errorMsg + ", bank";
+            isValid = false;
+        }
+        if ($("#chkTermsAndCondtions")[0].checked == false) {
+            errorMsg = errorMsg == "" ? "Please select terms and conditions" : errorMsg + ", terms and conditions";
+            isValid = false;
+        }
+        if ($("#ddStates").val() == 0) {
+            errorMsg = errorMsg == "" ? "Please select state" : errorMsg + ", state";
+            isValid = false;
+        }
+        if ($("#ddCity").val() == 0) {
+            errorMsg = errorMsg == "" ? "Please select city" : errorMsg + ", city";
+            isValid = false;
+        }
+        if (isValid == false) {
+            $("#spnError").text(errorMsg);
+            if (ConfirmPwdMsg != "" && $("#txtConfirmPwd").val() != "") {
+                $("#spnConfirmPwd").text(ConfirmPwdMsg);
+                $("#spnConfirmPwd").show();
+            }
+            else {
+                $("#spnConfirmPwd").hide();
+            }
+            $("#divError").show();
+        } else {
+            debugger;
+            var bank = [];
+            for (var i = 0; i < $("#ddBanks").val().length; i++) {
+                var b = banks.filter(x => x.BankId == $("#ddBanks").val()[i]);
+                if (b.length > 0) {
+                    bank.push(b[0]);
+                    if (b[0].BankId == 1) {
+                        isSelf = true;
+                    }
+                }
+            }
+            var Data = {
+                'AppraiserId': 0,
+                'AppraiserName': $("#txtAppraiserName").val(),
+                'AppraiserNumber': $("#txtAppraiserNumber").val(),
+                'MobileNumber': $("#txtMobileNumber").val(),
+                'Password': $("#txtPassword").val(),
+                'StateId': $("#ddStates").val(),
+                'CityId': $("#ddCity").val(),
+                'IsSelfLoan': isSelf,
+                'ShopName': isSelf == true ? $("#txtShopName").val() : "",
+                'ShopAddress': isSelf == true ? $("#txtShopAddress").val() : "",
+                'ShopNumber': isSelf == true ? $("#txtShopNumber").val() : "",
+                'IsActive': true,
+                'Banks': bank
+            };
+
+            var url = '/Login/SignUp';
+            $.ajax({
+                type: "POST",
+                url: url,
+                //dataType: "json",
+                data: {
+                    signUpModel: Data, Banks: bank
+                },
+                cache: false,
+                success: function (data) {
+                    if (data != null) {
+                        if (data == "Mobile number already exists") {
+                            $("#spnError").text(data);
+                            $("#divError").show();
+                        } else {
+                            window.location.href = data;
+                        }
+                    }
+
+                }, error: function (error) {
+
+                }
+            })
+        }
+    }
+</script>

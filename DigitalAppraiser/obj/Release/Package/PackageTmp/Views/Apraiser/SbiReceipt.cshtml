@@ -1,0 +1,132 @@
+﻿@model DigitalAppraiser.Models.ViewModels.ReceiptModel
+<script src="~/Scripts/jQuery.print.js"></script>
+@{
+    var RelationType = "";
+    if (Model.bankCustomerDetails.RelationType == 1)
+    {
+        RelationType = "Son of";
+    }
+    else if (Model.bankCustomerDetails.RelationType == 2)
+    {
+        RelationType = "Daughter of";
+    }
+    else
+    {
+        RelationType = "Wife of";
+    }
+}
+
+<div class="container" id="divSbiReport">
+    <div class="row">
+        <div style="margin: auto;width:100%;text-align:center" id="divAnnexture">
+            <p class="h3">Annexure 22</p>
+        </div>
+        <div style="margin: auto;width:100%;text-align:center" id="divCertificate">
+            <p class="h2 underlined">APPRAISER CERTIFICATE</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-1">
+            <p>To</p>
+            <p>The Branch Manager</p>
+            <p>State Bank of India</p>
+            <div style="display:inline">
+                <p><span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Branch </span>Branch. <span class="pull-right" style="margin-right:20%;font-weight:bold">Ac.No.</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-1">
+            <p>
+                I here certify that
+
+                the Gold Ornaments mentioned below belonging to
+
+                Sri/Smt<span style="font-weight:bold;text-decoration:underline;">&nbsp;@Model.bankCustomerDetails.Name</span> &nbsp;<span>@RelationType </span> <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.RelationName</span> Resident of
+
+               <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Address</span> Have been weighted and scrutinized by me on
+
+                <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span> and the exact weight, purity of the metal and market value of each item as
+
+                on date are indicated below:
+            </p>
+            <br />
+            <p>Market rate per Gram : Rs: <span style="font-weight:bold;text-decoration:underline;">@Model.todayRate.Rate</span></p>
+        </div>
+    </div>
+    <div class="row col-sm-offset-1">
+        <table class="table-bordered table-responsive col-sm-12">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">S.No</th>
+                    <th scope="col" class="text-center">Description of the article</th>
+                    <th scope="col" class="text-center">Gross Weight</th>
+                    <th scope="col" class="text-center">Approximate weight of the precious stones in the ornaments (grams)</th>
+                    <th scope="col" class="text-center">Purity (Carat)</th>
+                    <th scope="col" class="text-center">Net Weight Grams in 22 Ct. Approximate</th>
+                    <th scope="col" class="text-center">Market Value Rs.</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal GW = 0;
+                    decimal SW = 0;
+                    decimal NW = 0;
+                    decimal MP = 0;
+                    int total = 0;
+                    for (int i = 1; i <= Model.ornamentsList.Count(); i++)
+                    {
+                        GW += Model.ornamentsList[i - 1].GrossWeight;
+                        SW += Model.ornamentsList[i - 1].StoneWeight;
+                        NW += Model.ornamentsList[i - 1].NetWeight;
+                        MP += Model.ornamentsList[i - 1].MarketPrice;
+                        total += Model.ornamentsList[i - 1].Quantity;
+                        <tr>
+                            <th scope="row" class="text-center">@i</th>
+                            <td class="text-center">@Model.ornamentsList[i - 1].Ornament (@Model.ornamentsList[i - 1].Quantity) </td>
+                            <td class="text-center">@Model.ornamentsList[i - 1].GrossWeight </td>
+                            <td class="text-center">@Model.ornamentsList[i - 1].StoneWeight </td>
+                            <td class="text-center">22 </td>
+                            <td class="text-center">@Model.ornamentsList[i - 1].NetWeight </td>
+                            <td class="text-center">@Model.ornamentsList[i - 1].MarketPrice </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td></td>
+                        <td class="text-center">Total(@total)</td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@GW</td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@SW</td>
+                        <td></td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@NW</td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@MP</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <br />
+    <div class="row col-sm-offset-1">
+        <p>
+            I Solemnly declare that weight, purity of the gold ornaments/precious stones indicated
+            above are correct and I under take to indemnify the Bank against any loss may sustain on
+            account of any inaccuracy in the above appraisal.
+        </p>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-offset-1">
+            <p>Place: <span class="pull-right">Yours Faithfully</span></p>
+            <p>Date: <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span><span class="pull-right"></span></p>
+        </div>
+    </div>
+</div>
+<input type="button" class="btn btn-info btn-md pull-right col-sm-2" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
+<script>
+    PrintReceipt = function () {
+        $.print("#divSbiReport");
+    }
+    $(document).ready(function () {
+    })
+</script>

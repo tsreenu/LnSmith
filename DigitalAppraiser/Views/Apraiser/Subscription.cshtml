@@ -1,0 +1,41 @@
+﻿@model DigitalAppraiser.Models.DBModels.SubscriptionDetails
+
+@{
+    ViewBag.Title = "Subscription";
+    Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
+}
+<div class="col-sm-8 col-sm-offset-2 panel panel-default" style="padding:0px">
+    <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
+        Subscription Details
+    </div>
+    <br />
+    <div class="panel-body">
+        @using (Html.BeginForm("Subscription", "Apraiser", FormMethod.Post, new { id = "formSubscription" }))
+        {
+            <div class="col-sm-offset-3">
+                <div class="col-sm-8">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>Subscribed Plan</td>
+                            <td>@Model.PlanName</td>
+                        </tr>
+                        <tr>
+                            <td>Subscription Start Date</td>
+                            <td>@Model.SubscriptionStartDate</td>
+                        </tr>
+                        <tr>
+                            <td>Subscription End Date</td>
+                            <td>@Model.SubscriptionEndDate</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#loader").hide();
+        ActiveMenu("liSubscription");
+    })
+</script>

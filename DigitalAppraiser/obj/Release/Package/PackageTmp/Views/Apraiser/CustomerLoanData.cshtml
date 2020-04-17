@@ -1,0 +1,102 @@
+﻿@model DigitalAppraiser.Models.ViewModels.CustomerLoanDataModel
+
+@{
+    ViewBag.Title = "CustomerLoanData";
+    Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
+}
+
+
+<style>
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td {
+        text-align: center;
+        border-right-width: 1px;
+        border-right-color: inherit;
+        border-right-style: solid;
+    }
+</style>
+
+<h2>Customer Loan Data</h2>
+<input type="hidden" id="hdnCustomerDataList" value="@Json.Encode(Model.customerDataList)" />
+<div class="row  col-sm-offset-1">
+    <table id="gridCustomerData" class="table table-bordered" style="border-collapse:collapse"></table>
+    <div id="divPager" style="text-align:center"> </div>
+    @*<button id="export" class="btn btn-success">Export to Excel</button>*@
+    <a href="@Url.Action("DownLoadExcel","Apraiser")" class="btn btn-success">Download</a>
+</div>
+<script>
+    $(document).ready(function () {
+        ActiveMenu("liCustomerData");
+        var data = $.parseJSON($("#hdnCustomerDataList").val());
+        var rowList = [];
+        var length = Math.ceil(data.length / 10);
+        for (var i = 1; i <= length; i++) {
+            rowList.push(i * 10);
+        }
+        $("#gridCustomerData").jqGrid({
+            datatype: "local",
+            //height: 250,
+            colNames: ['S No', 'Date', 'Loan Type', 'Loan ID', 'Name of the Customer', 'Mobile Number', 'Area', 'Loan Amount', 'Rate of Interest', 'Loan Status'],
+            colModel: [
+                { name: 'sno', index: 'sno', width: 50, sortable: false },
+                {
+                    name: 'date', index: 'date', width: 80, formatter: 'date',
+                    formatoptions: { newformat: 'd-M-Y' } },
+                { name: 'loanType', index: 'loanType', width: 150, sortable: false },
+                { name: 'loanId', index: 'loanId', width: 100, sortable: false },
+                { name: 'name', index: 'name', width: 150, sortable: false },
+                { name: 'number', index: 'number', width: 110, sortable: false },
+                { name: 'area', index: 'area', width: 150, sortable: false },
+                { name: 'loanAmount', index: 'loanAmount', width: 100, sortable: false },
+                { name: 'interest', index: 'interest', width: 90, sortable: false },
+                { name: 'loanStatus', index: 'loanStatus', width: 110, sortable: false },
+            ],
+            multiselect: false,
+            height: 'auto',
+            width: 'auto',
+            viewrecords: true,
+            loadonce: true,
+            rowNum: 10,
+            rowList: rowList,
+            pager: $("#divPager"),
+            //imgpath: '~/Content/themes/base/images/',
+            //caption: "Customer Loan Data"
+        });
+        debugger;
+        var mydata = [];
+        for (var i = 0; i < data.length; i++) {
+            //var date = GetFormattedDate(new Date(parseInt(data[i].Date.substr(6))));
+            mydata.push({
+                sno: i + 1,
+                date: data[i].Date,
+                loanType: data[i].BankName,
+                loanId: data[i].LoanId,
+                name: data[i].CustomerName,
+                number: data[i].MobileNumber,
+                area: data[i].Area,
+                loanAmount: data[i].LoanAmount,
+                interest: (data[i].LoanId == null ? "" : data[i].InterestRate),
+                loanStatus: (data[i].IsActive == true ? "Active" : "Settled")
+            })
+        }
+        for (var i = 0; i <= mydata.length; i++)
+            $("#gridCustomerData").jqGrid('addRowData', i + 1, mydata[i]);
+        $("#gridCustomerData").trigger('reloadGrid');
+        $("#loader").hide();
+    })
+
+    GetFormattedDate = function (date) {
+        var convDate = date;
+        var month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        var day = convDate.getDate();
+        var month_index = convDate.getMonth();
+        var year = convDate.getFullYear();
+
+        return "" + day + "-" + month_names[month_index] + "-" + year;
+    }
+</script> 

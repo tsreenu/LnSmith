@@ -1,0 +1,75 @@
+﻿@model DigitalAppraiser.Models.ViewModels.ProcessLoanModel
+
+@{
+    ViewBag.Title = "ProcessLoan";
+    Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
+}
+
+<div class="col-sm-8 col-sm-offset-2 panel panel-default" style="padding:0px">
+    <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">Process Loan</div>
+        <input type="hidden" id="hdnBanks" value="@Json.Encode(Model.appraiserBanks)" />
+        <div class="panel-body" id="divContainer">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="col-sm-8 col-sm-offset-1">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="text-info">Loan Type<span style="color:red">*</span>:</label><br />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                @*<select class="form-control" id="ddBanks">
+
+                                </select>*@
+                                @Html.DropDownListFor(x => x.selectedBank, Model.Banks, "Select", new { id = "ddBanks", @class = "form-control", @onchange = "SelectLoanType()" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="divCustomerDetails">
+
+                </div>
+            </div>
+        </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $("#loader").hide();
+        ActiveMenu("liProcessLoan");
+    })
+
+    SelectLoanType = function () {
+        var bankId = $("#ddBanks").val();
+        var Url = "";
+        if (bankId == "") {
+            $("#loader").hide();
+            Url = "";
+            $("#divCustomerDetails").html("");
+        } else if (bankId == 1) {
+            Url = "/Apraiser/SelfCustomer";
+        } else {
+            Url = "/Apraiser/BankCustomer?BankId=" + bankId;
+        }
+        if (Url != "") {
+            $.ajax({
+                url: Url,
+                type: "GET",
+                cache: false,
+                //data: { model: list },
+                success: function (data) {
+                    $("#divCustomerDetails").html(data);
+                    $("#loader").hide();
+                },
+                error: function (error) {
+                    $("#loader").hide();
+                }
+            })
+        }
+        $("#loader").hide();
+    }
+
+</script>

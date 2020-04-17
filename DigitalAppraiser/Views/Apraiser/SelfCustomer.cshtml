@@ -1,0 +1,125 @@
+﻿@model DigitalAppraiser.Models.ViewModels.SelfCustomerModel
+
+<div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
+    Customer Details
+</div>
+<br />
+<div class="panel-body">
+    @using (Html.BeginForm("SelfCustomer", "Apraiser", FormMethod.Post, new { id = "formCustomerSelf" }))
+    {
+        <div class="col-sm-offset-1">
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Date<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="text" id="txtDateSelf" class="form-control" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Name<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.Name, new { id = "txtNameSelf", @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Aadhar:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.UANNumber, new { id = "txtUANSelf", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Mobile Number<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileSelf", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Address<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextAreaFor(x => x.Address, new { id = "txtAddressSelf", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="btn btn-info btn-md col-sm-offset-3" id="btnSaveCustomerSelf" value="Continue" onclick="SaveCustomerSelf(event)" />
+            <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
+
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $("#txtDateSelf").datepicker({ dateFormat: "dd-M-yy" }).datepicker("setDate", new Date());
+        ActiveMenu("liProcessLoan");
+        $("#loader").hide();
+    })
+    IsNumeric = function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            e.preventDefault()
+        }
+    }
+    SaveCustomerSelf = function () {
+        var isValid = true;
+        var errorMsg = "";
+        if ($("#txtNameSelf").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        //if ($("#txtUANSelf").val() == "") {
+        //    errorMsg = "Please fill all amndatory fields."
+        //    isValid = false;
+        //}
+        if ($("#txtMobileSelf").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtAddressSelf").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+
+        if (isValid == true) {
+            //$("#formCustomerSelf").bind("submit");
+            $("#formCustomerSelf").submit(function (e) {
+                e.currentTarget.submit();
+            });
+        } else {
+            $("#formCustomerSelf").submit(function (e) {
+                e.preventDefault();
+            });
+            //$("#formCustomerSelf").submit(false);
+            $("#divError").html(errorMsg);
+            $("#divError").show();
+        }
+    }
+</script>
+
+

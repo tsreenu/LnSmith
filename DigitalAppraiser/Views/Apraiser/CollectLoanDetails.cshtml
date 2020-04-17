@@ -1,0 +1,85 @@
+﻿@model DigitalAppraiser.Models.ViewModels.ReceiptModel
+@{
+    ViewBag.Title = "CollectLoanDetails";
+    Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
+}
+
+@Html.HiddenFor(x => x.errMessage, new { id = "hdnErrorMsg" })
+<div class="panel panel-default col-sm-6 col-sm-offset-3" style="padding:0px">
+    <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
+        Search Loan ID
+    </div>
+    <br />
+    <div class="row" id="divContainer">
+
+        <div class="col-sm-offset-3">
+            <div class="col-sm-9">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="text-info">Loan ID<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <input type="text" id="txtLoanId" class="form-control" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="button" id="btnSubmitLoanId" value="Submit" class="btn btn-info btn-md col-sm-2 col-sm-offset-5" onclick="GetLoanDetails()" />
+        <br />
+        <div id="divError" class="alert alert-danger col-sm-4 col-sm-offset-4" style="display:none;margin-top:1%;">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="divCustomerDetails">
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        ActiveMenu("liCollectLoan");
+    })
+
+    GetLoanDetails = function () {
+        var isValid = true;
+        var errorMsg = "";
+        if ($("#txtLoanId").val() == "") {
+            isValid = false;
+            errorMsg = "Please enter all mandatory fields";
+        }
+        if (isValid == true) {
+            var Url = "/Apraiser/GetLoanDetails";
+            $.ajax({
+                url: Url,
+                type: "GET",
+                cache: false,
+                data: {
+                    LoanId: $("#txtLoanId").val()
+                },
+                success: function (data) {
+                    debugger;
+                    if (data == "") {
+                        $("#divError").html(data);
+                        $("#divError").show();
+                    } else {
+                        $("#divCustomerDetails").html(data);
+                        $("#divContainer").hide();
+                    }
+                },
+                error: function (error) {
+
+                }
+            });
+        } else {
+            $("#divError").html(errorMsg);
+            $("#divError").show();
+        }
+
+    }
+</script>

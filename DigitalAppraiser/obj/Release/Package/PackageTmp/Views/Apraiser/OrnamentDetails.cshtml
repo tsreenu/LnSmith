@@ -1,0 +1,335 @@
+﻿@model DigitalAppraiser.Models.ViewModels.OrnamentDetailsModel
+
+@{
+    ViewBag.Title = "OrnamentDetails";
+    Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
+}
+
+@Html.HiddenFor(x => x.customerId, new { id = "hdnCustomerId" })
+<div class="row col-sm-offset-2 col-xs-offset-2">
+
+    @using (Html.BeginForm("SaveOrnaments", "Apraiser", FormMethod.Post, new { id = "formOrnamentDetails" }))
+    {
+        <div>
+            <h2 class="col-sm-offset-3">Ornament Details</h2>
+        </div>
+        <input type="hidden" id="hdnTodayRate" value="@Json.Encode(Model.todayRate)" />
+        @Html.HiddenFor(x => x.ornamentsList, new { id = "hdnOrnamentList" })
+
+        <div class="col-sm-offset-2">
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">
+                            Ornament<span style="color:red">*</span>:
+                        </label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextAreaFor(x => x.ornamentDetails.Ornament, new { id = "txtOrnament", @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Quantity<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantity", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @*<label class="text-info" id="lblWeight" style="display:none">22 Carat Gold weight in grams<span style="color:red">*</span>:</label><br />*@
+                        <label class="text-info" id="lblWeight"><span id="spnWeight">Gross weight in grams </span><span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { id = "txtGrossWeight", @class = "form-control", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateNetWeightAndPrice()", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Stone weight in grams:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { id = "txtStoneWeight", @class = "form-control", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateNetWeightAndPrice()", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Quality<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.ornamentDetails.Quality, new { id = "txtQuality", @class = "form-control", onblur = "CalculateNetWeightAndPrice()", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Net weight in grams:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { id = "txtNetWeight", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Market Price:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.ornamentDetails.MarketPrice, new { id = "txtMarketPrice", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <img src="~/Content/Images/blue-plus-icon-12.png" style="width:6%" onclick="AddNewOrnament()" />
+                <input type="button" class="btn btn-info btn-md col-sm-offset-5" id="btnSaveCustomerSelf" value="Submit" onclick="SaveOrnamentDetails(event)" />
+            </div>
+            <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
+
+            </div>
+        </div>
+    }
+
+</div>
+<div id="divOrnamentsTbl" class="row col-xs-12" style="display:none">
+
+</div>
+<script>
+    var ornamentsList = [];
+    var TodayRate = $.parseJSON($("#hdnTodayRate").val());
+    $(document).ready(function () {
+        ActiveMenu("liProcessLoan");
+        if (TodayRate.BankId == 1) {
+            $("#spnWeight").text("Gross weight in grams");
+        } else {
+            $("#spnWeight").text("22 Carat Gold weight in grams");
+        }
+    })
+    IsNumeric = function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            e.preventDefault()
+        }
+    }
+    IsWeight = function (evt, element) {
+        //if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //    e.preventDefault()
+        //}
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 46 || charCode == 8 || charCode == 45))
+            return false;
+        else {
+            var len = $(element).val().length;
+            // Validation Point
+            var index = $(element).val().indexOf('.');
+            if (index > -1 && charCode == 46) {
+                return false;
+            }
+            if (index > 0 || index == 0) {
+                var CharAfterdot = (len + 1) - index;
+                if (CharAfterdot > 5) {
+                    return false;
+                }
+            }
+
+            // Validating Negative sign
+            index = $(element).val().indexOf('-');
+            if (index = '-1' && charCode == 45) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    CalculateNetWeightAndPrice = function () {
+        debugger;
+        //var TodayRate = $.parseJSON($("#hdnTodayRate").val());
+        var netWt = 0;
+        var marketPrice = 0;
+        var grossWt = $("#txtGrossWeight").val() == "" ? 0 : $("#txtGrossWeight").val();
+        var stoneWt = $("#txtStoneWeight").val() == "" ? 0 : $("#txtStoneWeight").val();
+        var quality = $("#txtQuality").val() == "" ? 1 : $("#txtQuality").val();
+        if ($("#txtQuality").val() != "") {
+            if (TodayRate.BankId == 1) {
+                netWt = (grossWt - stoneWt) * (quality / 100);
+
+                marketPrice = netWt * TodayRate.Rate;
+            } else {
+                var s = (grossWt - stoneWt) * (quality / 100);
+                netWt = s + ((s * 8) / 100);
+                marketPrice = netWt * TodayRate.Rate;
+            }
+            $("#txtNetWeight").val(netWt.toFixed(3));
+            $("#txtMarketPrice").val(marketPrice.toFixed(2));
+        }
+    }
+    AddNewOrnament = function () {
+        var isValid = true;
+        var errorMsg = "";
+        if ($("#txtOrnament").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#ddQuantity").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtGrossWeight").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtQuality").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if (isValid == true) {
+            ornamentsList.push({
+                Ornament: $("#txtOrnament").val(),
+                Quantity: $("#ddQuantity").val(),
+                GrossWeight: $("#txtGrossWeight").val(),
+                StoneWeight: $("#txtStoneWeight").val(),
+                Quality: $("#txtQuality").val(),
+                NetWeight: $("#txtNetWeight").val(),
+                MarketPrice: $("#txtMarketPrice").val(),
+                CustomerId: $("#txtQuality").val(),
+                LoanType: TodayRate.BankId
+            });
+            EmptyForm();
+            if (ornamentsList.length > 0) {
+                LoadGrid();
+            }
+        } else {
+            $("#divError").html(errorMsg);
+            $("#divError").show();
+        }
+    }
+    EmptyForm = function () {
+        $("#txtOrnament").val("");
+        $("#ddQuantity").val("");
+        $("#txtGrossWeight").val("");
+        $("#txtStoneWeight").val("");
+        $("#txtQuality").val("");
+        $("#txtNetWeight").val("");
+        $("#txtMarketPrice").val("");
+    }
+    LoadGrid = function () {
+        debugger;
+        var table = "<table class='table table-bordered'><thead><tr><th scope='col'>S No</th><th scope='col'>Item</th><th scope='col'>Quantity</th><th scope='col'>Gross Weight</th><th scope='col'>Stone Weight</th><th scope='col'>Quality</th><th scope='col'>Net Weight</th><th scope='col'>Market Price</th><th scope='col'></th></tr></thead><tbody>";
+        var td = "";
+        for (var i = 0; i < ornamentsList.length; i++) {
+            td += "<tr><td>" + (i + 1) + "</td><td>" + ornamentsList[i].Ornament + "</td><td>" + ornamentsList[i].Quantity + "</td><td>"
+                + ornamentsList[i].GrossWeight + "</td><td>" + ornamentsList[i].StoneWeight + "</td><td>" + ornamentsList[i].Quality + "</td><td>"
+                + ornamentsList[i].NetWeight + "</td><td>" + ornamentsList[i].MarketPrice + "</td><td><div style='display: inline-flex;'><input type='button'class='btn btn-xs btn-success' value='Edit' onclick='Edit(" + i + ")'/>&nbsp;&nbsp;&nbsp;<input type='button'class='btn btn-xs btn-success' value='Delete' onclick='Delete(" + i + ")'/></div></td></tr>";
+        }
+        table += td + "</tbody></table>";
+        $("#divOrnamentsTbl").html("");
+        $("#divOrnamentsTbl").html(table);
+        $("#divOrnamentsTbl").show();
+    }
+    SaveOrnamentDetails = function () {
+        var isValid = true;
+        var errorMsg = "";
+
+        if ($("#txtOrnament").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#ddQuantity").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtGrossWeight").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtQuality").val() == "") {
+            errorMsg = "Please fill all amndatory fields."
+            isValid = false;
+        }
+        if ($("#txtOrnament").val() == "" && $("#ddQuantity").val() == "" && $("#txtGrossWeight").val() == "" && $("#txtQuality").val() == "" && ornamentsList.length > 0) {
+            isValid = true;
+        }
+
+        if (isValid == true && $("#txtOrnament").val() != "") {
+            ornamentsList.push({
+                Ornament: $("#txtOrnament").val(),
+                Quantity: $("#ddQuantity").val(),
+                GrossWeight: $("#txtGrossWeight").val(),
+                StoneWeight: $("#txtStoneWeight").val(),
+                Quality: $("#txtQuality").val(),
+                NetWeight: $("#txtNetWeight").val(),
+                MarketPrice: $("#txtMarketPrice").val(),
+                CustomerId: $("#txtQuality").val(),
+                LoanType: TodayRate.BankId
+            });
+        }
+        if (isValid == true) {
+            var model = {
+                ornamentsList: ornamentsList,
+                ornamentDetails: "",
+                todayRate: TodayRate.Rate,
+                Quantity: "",
+                customerId: $("#hdnCustomerId").val()
+            };
+
+            $.ajax({
+                url: "/Apraiser/SaveOrnaments",
+                type: "POST",
+                cache: false,
+                data: { model: model },
+                success: function (data) {
+                    $("#divMain").html(data);
+                },
+                error: function (error) {
+
+                }
+            })
+
+            EmptyForm();
+        } else {
+            $("#formOrnamentDetails").submit(function (e) {
+                e.preventDefault();
+            });
+            $("#divError").html(errorMsg);
+            $("#divError").show();
+        }
+    }
+    Edit = function (i) {
+        $("#txtOrnament").val(ornamentsList[i].Ornament);
+        $("#ddQuantity").val(ornamentsList[i].Quantity);
+        $("#txtGrossWeight").val(ornamentsList[i].GrossWeight);
+        $("#txtStoneWeight").val(ornamentsList[i].StoneWeight);
+        $("#txtQuality").val(ornamentsList[i].Quality);
+        $("#txtNetWeight").val(ornamentsList[i].NetWeight);
+        $("#txtMarketPrice").val(ornamentsList[i].MarketPrice);
+        ornamentsList.splice(i, 1);
+    }
+    Delete = function (i) {
+        ornamentsList.splice(i, 1);
+        LoadGrid();
+    }
+</script>

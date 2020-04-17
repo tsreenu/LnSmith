@@ -1,0 +1,354 @@
+﻿@model DigitalAppraiser.Models.ViewModels.ReceiptModel
+
+@Html.HiddenFor(x => x.loanDetails.CreatedOn, new { id = "hdnLoanStartDate" })
+@Html.HiddenFor(x => x.loanDetails.LoanAmount, new { id = "hdnLoanAmount" })
+@Html.HiddenFor(x => x.loanDetails.Interest, new { id = "hdnLoanInterest" })
+@Html.HiddenFor(x => x.loanDetails.EMI, new { id = "hdnLoanEmi" })
+@Html.HiddenFor(x => x.loanDetails.LoanId, new { id = "hdnLoanId" })
+@Html.HiddenFor(x => x.loanDetails.IsActive, new { id = "hdnIsActive" })
+
+<input type="hidden" id="hdnDay" value="@Model.loanDetails.CreatedOn.Day" />
+<input type="hidden" id="hdnMonth" value="@Model.loanDetails.CreatedOn.Month" />
+<input type="hidden" id="hdnYear" value="@Model.loanDetails.CreatedOn.Year" />
+
+<div class="container" id="divSelfReceipt">
+    <h2 class="col-sm-offset-5">Settlement</h2>
+    <div class="row">
+        <div class="col-sm-offset-4">
+            <h1>@Model.ShopDetails</h1>
+        </div>
+        <div class="col-sm-offset-3">
+            <div class="col-sm-8">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Loan Given Date</td>
+                        <td id="txtDate">@Model.loanDetails.CreatedOn.Date.ToString("dd-MMM-yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td>Loan ID</td>
+                        <td>@Model.loanDetails.LoanId</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Name</td>
+                        <td>@Model.selfCustomerDetails.Name</td>
+                    </tr>
+                    <tr>
+                        <td>UAN Number</td>
+                        <td>@Model.selfCustomerDetails.UANNumber</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>@Model.selfCustomerDetails.Address</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile Number</td>
+                        <td>@Model.selfCustomerDetails.MobileNumber</td>
+                    </tr>
+                    <tr>
+                        <td>Principle Amount</td>
+                        <td>@Model.loanDetails.LoanAmount</td>
+                    </tr>
+                    <tr>
+                        <td>Rate of Interest</td>
+                        <td>@Model.loanDetails.Interest</td>
+                    </tr>
+                    <tr>
+                        <td>Estimated Monthly Interest</td>
+                        <td>@Model.loanDetails.EMI</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">S No</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Gross Weight</th>
+                    <th scope="col">Stone Weight</th>
+                    <th scope="col">Quality</th>
+                    <th scope="col">Net Weight</th>
+                    <th scope="col">Market Price</th>
+                    <th scope="col">Principle</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal GW = 0;
+                    decimal SW = 0;
+                    decimal NW = 0;
+                    decimal MP = 0;
+                    for (int i = 1; i <= Model.ornamentsList.Count(); i++)
+                    {
+                        GW += Model.ornamentsList[i - 1].GrossWeight;
+                        SW += Model.ornamentsList[i - 1].StoneWeight;
+                        NW += Model.ornamentsList[i - 1].NetWeight;
+                        MP += Model.ornamentsList[i - 1].MarketPrice;
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td>@Model.ornamentsList[i - 1].Ornament </td>
+                            <td>@Model.ornamentsList[i - 1].Quantity </td>
+                            <td>@Model.ornamentsList[i - 1].GrossWeight </td>
+                            <td>@Model.ornamentsList[i - 1].StoneWeight </td>
+                            <td>@Model.ornamentsList[i - 1].Quality </td>
+                            <td>@Model.ornamentsList[i - 1].NetWeight </td>
+                            <td>@Model.ornamentsList[i - 1].MarketPrice </td>
+                            <td></td>
+                        </tr>
+                    }
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td scope="col">@GW</td>
+                        <td scope="col">@SW</td>
+                        <td></td>
+                        <td scope="col">@NW</td>
+                        <td scope="col">@MP</td>
+                        <td scope="col">@Model.loanDetails.LoanAmount</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="text-info">Release Date<span style="color:red">*</span>:</label><br />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @if (Model.loanDetails.IsActive == false)
+                    {
+                        @Html.TextBox("ModifiedOn", Model.loanDetails.ModifiedOn.Date.ToString("dd/MMM/yyyy"), new { id = "txtReleaseDate", @class = "form-control", @disable = "disable" })
+                    }
+                    else
+                    {
+                        <input type="text" id="txtReleaseDate" class="form-control" onchange="MonthDiff()" />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="text-info">No.of Days:</label><br />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @if (Model.loanDetails.IsActive == false)
+                    {
+                        @Html.TextBox("NoOfDays", Model.loanDetails.NoOfDays, new { id = "txtDays", @class = "form-control", @disable = "disable" })
+                    }
+                    else
+                    {
+                        <input type="text" id="txtDays" class="form-control" disabled />
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="text-info">Total Interest<span style="color:red">*</span>:</label><br />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @if (Model.loanDetails.IsActive == false)
+                    {
+                        @Html.TextBox("CollectedInterest", Model.loanDetails.CollectedInterest, new { id = "txtTotalInerest", @class = "form-control", @disable = "disable" })
+                    }
+                    else
+                    {
+                        <input type="text" id="txtTotalInerest" class="form-control" disabled />
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="text-info">Toatal Amount<span style="color:red">*</span>:</label><br />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @if (Model.loanDetails.IsActive == false)
+                    {
+                        @Html.TextBoxFor(x => x.loanDetails.CollectedAmount, new { id = "txtTotalAmount", @class = "form-control", @disable = "disable" })
+                    }
+                    else
+                    {
+                        <input type="text" id="txtTotalAmount" class="form-control" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a class="btn btn-info btn-md pull-left col-sm-2" href="/Apraiser/CollectLoan">Back</a>
+<input type="button" class="btn btn-info btn-md pull-right col-sm-2" id="btnRelease" value="Release" onclick="OpenPopup()" />
+<!-- Modal -->
+<div class="modal fade" id="modelCollectLoan" role="dialog" style="margin-left:12%">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="width:70%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Settle Loan</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Are you really collected the Amount for the loan Id @Model.loanDetails.LoanId
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-info" data-dismiss="modal" onclick="ReleaseLoan()">Yes</button>
+                <button type="button" class="btn btn-default btn-info" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modelThankYou" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="width:70%">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm Loan</h4>
+                </div>*@
+            <div class="modal-body">
+                <p id="pSuccessMsg"></p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-default btn-info" href="/Apraiser/DashBoard" id="btnRedirectHome" style="display:none" onclick="">Ok</a>
+                <button type="button" id="btnSettleFailed" class="btn btn-default btn-info" data-dismiss="modal" style="display:none" onclick="">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var today = new Date();
+        var y = today.getFullYear();
+        if ($("#hdnIsActive").val() != "False") {
+            $("#txtReleaseDate").datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                //yearsRange: [y, 9999],
+                autoclose: true,
+            }).datepicker("setDate", new Date());
+            var months = MonthDiff();
+        }
+        //var months = MonthDiff();
+        if ($("#hdnIsActive").val() == "False") {
+            $("#btnRelease").attr("disabled", true);
+            $("#txtReleaseDate").hide();
+            $("#txtTotalAmount").attr("disabled", true);
+            $("#txtReleaseDate").attr("disabled", true);
+            $("#txtTotalInerest").attr("disabled", true);
+            $("#txtDays").attr("disabled", true);
+            $("#txtReleaseDate").show();
+        }
+        $("#loader").hide();
+    })
+
+    OpenPopup = function () {
+        var isValid = true;
+        var errorMsg = "";
+        if ($("#txtTotalAmount").val() == "") {
+            isValid = false;
+            errorMsg = "Please enter all mandatory fields";
+        }
+        if ($("#txtReleaseDate").val() == "") {
+            isValid = false;
+            errorMsg = "Please enter all mandatory fields";
+        }
+        if (isValid == true) {
+            $("#modelCollectLoan").modal('show');
+        } else {
+            $("#divError").html(errorMsg);
+            $("#divError").show();
+        }
+    }
+
+    ReleaseLoan = function () {
+        $("#loader").hide();
+        var Url = "/Apraiser/SettleLoan";
+        $.ajax({
+            url: Url,
+            type: "POST",
+            cache: false,
+            data: {
+                loanId: $("#hdnLoanId").val(), collectedAmount: $("#txtTotalAmount").val(), collectedOn: $("#txtReleaseDate").val(), CollectedInterest: $("#txtTotalInerest").val(), NoOfDays: $("#txtDays").val()
+            },
+            success: function (data) {
+                debugger;
+                if (data == 1) {
+                    $("#btnRedirectHome").show();
+                    $("#pSuccessMsg").text("Thank You Loan is settled.");
+                } else {
+                    $("#btnSettleFailed").show();
+                    $("#pSuccessMsg").text("Thank you Loan id is not settled.");
+                }
+                $("#modelThankYou").modal('show');
+                $("#loader").hide();
+            },
+            error: function (error) {
+                $("#loader").hide();
+            }
+        })
+    }
+    MonthDiff = function () {
+        debugger;
+        var from = new Date($("#hdnYear").val(), $("#hdnMonth").val() - 1, $("#hdnDay").val());
+        var day = from.getDate();
+        var month = from.getMonth();
+        var year = from.getFullYear();
+        var startDay = new Date(year, month, day);
+
+        var month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        var to = $("#txtReleaseDate").val().split("-");
+        var monthTo = month_names.indexOf(to[1]);
+        var endDay = new Date(to[2], monthTo, to[0]);
+
+        var millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+        var millisBetween = startDay.getTime() - endDay.getTime();
+        var days = Math.round(Math.abs((startDay.getTime() - endDay.getTime()) / (millisecondsPerDay)));
+
+        // Round down.
+        //alert(Math.floor(days));
+
+        //var months;
+        //months = (d2.getFullYear() - d1.getFullYear()) * 12;
+        //months -= d1.getMonth() + 1;
+        //months += d2.getMonth() + 1;
+        //months = months <= 0 ? 0 : months;
+        var totalInterest = parseFloat(($("#hdnLoanEmi").val() / 30) * days);
+        var totalLoan = parseFloat($("#hdnLoanAmount").val());
+        $("#txtTotalInerest").val(totalInterest.toFixed(2));
+        if ($("#hdnIsActive").val() != "False") {
+            var totAmount = totalLoan + totalInterest;
+            $("#txtTotalAmount").val(totAmount.toFixed(2));
+            $("#txtDays").val(days);
+        }
+    }
+
+</script>
