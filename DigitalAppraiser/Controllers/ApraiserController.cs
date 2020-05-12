@@ -1,6 +1,9 @@
-﻿using OfficeOpenXml;
+﻿using DigitalAppraiser.Models.DBModels;
+using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -9,29 +12,29 @@ using Models = DigitalAppraiser.Models;
 
 namespace DigitalAppraiser.Controllers
 {
-    [SessionTimeoutAttribute]
     [Authorize]
+    [SessionTimeoutAttribute]
     public class ApraiserController : Controller
     {
         // GET: Apraiser
         public ActionResult DashBoard()
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            //int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            //int AppraiserId = LogedUser.AppraiserId.Value;
             //var model = bl.GetUserDateRates(AppraiserId);
             return View();
         }
         public ActionResult TodayRate()
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int AppraiserId = LogedUser.AppraiserId.Value;
             var model = bl.GetUserDateRates(AppraiserId);
             return View("TodaysRate", model);
         }
         public ActionResult SaveTodayRate(Models.ViewModels.TodayRateModel model)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            string userName = (string)Session["UserName"];
+            string userName = LogedUser.UserName;
             var result = bl.SaveTodayRate(model, userName);
             return Json(result);
         }
@@ -39,7 +42,7 @@ namespace DigitalAppraiser.Controllers
         public ActionResult ProcessLoan()
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int AppraiserId = LogedUser.AppraiserId.Value;
             Models.ViewModels.ProcessLoanModel model = new Models.ViewModels.ProcessLoanModel();
             model.Banks = bl.GetAppraiserBanks(AppraiserId);
             return PartialView("ProcessLoan", model);
@@ -47,15 +50,14 @@ namespace DigitalAppraiser.Controllers
         [HttpGet]
         public ActionResult SelfCustomer()
         {
-
             return PartialView("SelfCustomer");
         }
         [HttpPost]
         public ActionResult SelfCustomer(Models.ViewModels.SelfCustomerModel model)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
-            string userName = (string)Session["UserName"];
+            int AppraiserId = LogedUser.AppraiserId.Value;
+            string userName = LogedUser.UserName;
             int customerId = bl.SaveSelfCustomerDetails(model, AppraiserId, userName);
             return RedirectToAction("OrnamentDetails", new { bankId = 1, customerId = customerId });
         }
@@ -63,7 +65,7 @@ namespace DigitalAppraiser.Controllers
         public ActionResult OrnamentDetails(int bankId, int customerId)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int AppraiserId = LogedUser.AppraiserId.Value;
             Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
             model.todayRate = bl.GetTodayRate(AppraiserId, bankId);
             //int[] list = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -80,7 +82,7 @@ namespace DigitalAppraiser.Controllers
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int customerId = model.customerId;
-            string userName = (string)Session["UserName"];
+            string userName = LogedUser.UserName;
             bl.SaveOrnaments(userName, customerId, model);
             model.ornamentsList = bl.GetOrnamentDetails(customerId, model.ornamentsList[0].LoanType).ornamentsList;
             model.loanDetails = new Models.DBModels.LoanDetails();
@@ -99,7 +101,7 @@ namespace DigitalAppraiser.Controllers
         public ActionResult GenerateLoan(Models.DBModels.LoanDetails model)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int AppraiserId = LogedUser.AppraiserId.Value;
             var returnModel = bl.GenerateLoan(model, AppraiserId);
             if (returnModel.loanDetails.LoanType == 1)
             {
@@ -127,8 +129,8 @@ namespace DigitalAppraiser.Controllers
         public ActionResult BankCustomer(Models.ViewModels.BankCustomerModel model)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
-            string userName = (string)Session["UserName"];
+            int AppraiserId = LogedUser.AppraiserId.Value;
+            string userName = LogedUser.UserName;
             int BankId = model.BankId;
             int customerId = bl.SaveBankCustomerDetails(model, AppraiserId, userName);
             return RedirectToAction("OrnamentDetails", new { bankId = BankId, customerId = customerId });
@@ -141,7 +143,7 @@ namespace DigitalAppraiser.Controllers
         {
             Models.ViewModels.CustomerLoanDataModel model = new Models.ViewModels.CustomerLoanDataModel();
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int AppraiserId = LogedUser.AppraiserId.Value;
             model = bl.GetCustomerLoanData(AppraiserId);
             return View("CustomerLoanData", model);
         }
@@ -175,7 +177,7 @@ namespace DigitalAppraiser.Controllers
         {
             Models.ViewModels.CustomerLoanDataModel model = new Models.ViewModels.CustomerLoanDataModel();
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int AppraiserId = LogedUser.AppraiserId.Value;
             model = bl.GetCustomerLoanData(AppraiserId);
 
             ExcelPackage excel = new ExcelPackage();
@@ -240,7 +242,7 @@ namespace DigitalAppraiser.Controllers
         public ActionResult Settings()
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int AppraiserId = LogedUser.AppraiserId.Value;
             Models.ViewModels.SignUpModel model = new Models.ViewModels.SignUpModel();
 
             return RedirectToAction("SignUp", "Login");
@@ -249,9 +251,26 @@ namespace DigitalAppraiser.Controllers
         public ActionResult Subscription()
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int appraiserId = Convert.ToInt32(Session["AppraiserId"]);
+            int appraiserId = LogedUser.AppraiserId.Value;
             Models.DBModels.SubscriptionDetails subscription = bl.GetSubscriptionDetails(appraiserId);
             return View(subscription);
+            //bl.payment();
+            //return View();
+        }
+
+        public ActionResult Payment(int planId)
+        {
+            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+            ViewBag.paytm = bl.payment(planId);
+            return View("PaymentPage");
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult PaytmResponse(PaytmResponse paytmResponse)
+        {
+            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+            var res = bl.AddPaymentDetails(paytmResponse);
+            return RedirectToAction("Dashboard");
         }
     }
 }

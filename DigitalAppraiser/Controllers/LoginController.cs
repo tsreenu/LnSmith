@@ -24,9 +24,9 @@ namespace DigitalAppraiser.Controllers
             if (isValidUser.ErrorMessage == "Valid User")
             {
                 FormsAuthentication.SetAuthCookie(isValidUser.MobileNumber, false);
-                Session["AppraiserId"] = isValidUser.AppraiserId;
-                Session["AppraiserMobile"] = isValidUser.MobileNumber;
-                Session["UserName"] = isValidUser.UserName;
+                LogedUser.MobileNumber = isValidUser.MobileNumber;
+                LogedUser.UserName = isValidUser.UserName;
+                LogedUser.AppraiserId = isValidUser.AppraiserId;
                 //return RedirectToAction("Dashbord", "Apraiser");
             }
             //else
@@ -89,6 +89,9 @@ namespace DigitalAppraiser.Controllers
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
+            LogedUser.AppraiserId = null;
+            LogedUser.MobileNumber = null;
+            LogedUser.UserName = null;
             Session.Abandon();
             return RedirectToAction("Login", "Login");
         }

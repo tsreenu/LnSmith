@@ -21,6 +21,7 @@ namespace DigitalAppraiser.Models.DBModels
         public virtual DbSet<BankCustomerDetails> BankCustomerDetails { get; set; }
         public virtual DbSet<LnSmithPlans> LnSmithPlans { get; set; }
         public virtual DbSet<SubscriptionDetails> SubscriptionDetails { get; set; }
+        public virtual DbSet<PaytmResponse> PaytmResponse { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

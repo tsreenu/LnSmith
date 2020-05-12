@@ -4,34 +4,98 @@
     ViewBag.Title = "Subscription";
     Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .columns {
+        float: left;
+        width: 33.3%;
+        padding: 8px;
+    }
+
+    .price {
+        list-style-type: none;
+        border: 1px solid #eee;
+        margin: 0;
+        padding: 0;
+        -webkit-transition: 0.3s;
+        transition: 0.3s;
+    }
+
+        .price:hover {
+            box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2)
+        }
+
+        .price .header {
+            background-color: #33719b;
+            color: white;
+            font-size: 25px;
+        }
+
+        .price li {
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .price .grey {
+            background-color: #eee;
+            font-size: 20px;
+        }
+
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 4% 10%;
+        text-align: center;
+        text-decoration: none !important;
+        font-size: 18px;
+    }
+</style>
 <div class="col-sm-8 col-sm-offset-2 panel panel-default" style="padding:0px">
     <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
         Subscription Details
     </div>
-    <br />
     <div class="panel-body">
         @using (Html.BeginForm("Subscription", "Apraiser", FormMethod.Post, new { id = "formSubscription" }))
         {
             <div class="col-sm-offset-3">
                 <div class="col-sm-8">
-                    <table class="table table-bordered">
-                        <tr>
-                            <td>Subscribed Plan</td>
-                            <td>@Model.PlanName</td>
+                    <table class="table table-responsive table-bordered">
+                        <tr class="price">
+                            <td class="grey">Subscribed Plan</td>
+                            <td class="grey">@Model.PlanName</td>
                         </tr>
-                        <tr>
-                            <td>Subscription Start Date</td>
-                            <td>@Model.SubscriptionStartDate</td>
+                        <tr class="price">
+                            <td class="grey">Subscription Start Date</td>
+                            <td class="grey">@Model.SubscriptionStartDate.Date.ToShortDateString()</td>
                         </tr>
-                        <tr>
-                            <td>Subscription End Date</td>
-                            <td>@Model.SubscriptionEndDate</td>
+                        <tr class="price">
+                            <td class="grey">Subscription End Date</td>
+                            <td class="grey">@Model.SubscriptionEndDate.Date.ToShortDateString()</td>
                         </tr>
                     </table>
                 </div>
             </div>
         }
+        @foreach (var item in Model.lnSmithPlans)
+        {
+            <div class="columns">
+                <ul class="price">
+                    <li class="header">@item.PlanName</li>
+                    <li class="grey">@item.PlanDuration Days</li>
+                    <li class="grey">@item.PlanValue <i class="fa fa-inr"></i></li>
+                    <li class="grey"><a href="/Apraiser/Payment?planId=@item.PlanId" class="button">Subscribe</a></li>
+                </ul>
+            </div>
+        }
     </div>
+
+
 </div>
 <script>
     $(document).ready(function () {

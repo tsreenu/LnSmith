@@ -7,7 +7,7 @@ namespace DigitalAppraiser.Models.DBModels
         [Key]
         public int PlanId { get; set; }
         public string PlanName { get; set; }
-        public double PlanValue { get; set; }
+        public decimal PlanValue { get; set; }
         public int PlanDuration { get; set; }
         public bool IsActive { get; set; }
     }

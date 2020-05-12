@@ -1,5 +1,7 @@
 ﻿@model DigitalAppraiser.Models.ViewModels.OrnamentDetailsModel
 @Html.HiddenFor(x => x.ornamentsList[0].LoanType, new { id = "hdnLoanType" })
+<div class="panel panel-default">
+    <br />
 <div class="container">
     <div class="row">
         <div class="col-sm-offset-3">
@@ -125,6 +127,8 @@
         <input type="button" class="btn btn-info btn-md" id="btnContinueSelf" value="Continue" data-toggle="modal" onclick="Validate()" />
         <input type="button" style="display:none" class="btn btn-info btn-md" id="btnContinueBank" value="Continue" onclick="GenerateLoan()"/>
     </div>
+    <br /><br />
+</div>
 </div>
 <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
 

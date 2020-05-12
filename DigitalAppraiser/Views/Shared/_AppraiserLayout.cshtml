@@ -1,63 +1,14 @@
 ﻿<!DOCTYPE html>
 <style>
-    /* Remove the navbar's default margin-bottom and rounded borders */
-    .navbar {
-        margin-bottom: 0;
-        border-radius: 0;
-    }
-
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {
-        min-height: 450px;
-    }
-
-    /* Set gray background color and 100% height */
-    .sidenav {
-        padding-top: 20px;
-        background-color: #f1f1f1;
-        height: 100%;
-    }
-
-    /* Set black background color, white text and some padding */
-    footer {
-        background-color: #555;
-        color: white;
-        padding: 15px;
-    }
-
-    /* On small screens, set height to 'auto' for sidenav and grid */
-
-    .row.content {
-        height: auto;
-    }
-
-    html {
-        height: 100%;
-    }
-
     body {
-        min-height: 100%;
-    }
-
-    .overlay {
-        background: #e9e9e9;
-        display: none;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        opacity: 0.5;
-        z-index: 1;
-    }
-    .active{
-
+        /*background: url('Images/background4.jpg') no-repeat;*/
+        background-image: url('../../Content/Images/background4.jpg');
     }
 </style>
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -65,8 +16,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-
-
+    <link href="~/Content/styles.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <!--[if IE]>
      <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
@@ -82,9 +33,9 @@
     <script>
         $(document).ready(function () {
             var height = window.innerHeight;
-            $("#divMainContainer").height(height - 200);
-            $('#divMain').css('min-height', height - 200);
-            $('#divMain').css('max-height', height - 200);
+            //$("#divMainContainer").height(height - 200);
+            //$('#divMain').css('min-height', height - 200);
+            //$('#divMain').css('max-height', height - 175);
         })
         $(document).ajaxStart(function () {
             $("#loader").show();
@@ -95,7 +46,7 @@
         });
         ActiveMenu = function (menuId) {
             debugger;
-            $("#myNavbar li.active").removeClass("active");
+            $("#myNavbar a.active").removeClass("active");
 
             $("#" + menuId).addClass("active");
         }
@@ -103,52 +54,37 @@
 
     </script>
 </head>
-<body style="background-color:#6f8e8e;">
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                @*<a class="" href="/Apraiser/DashBoard">
-                    <img src="~/Content/Images/logo.jpg" />
-                </a>*@
-                <a class="">
-                    <img src="~/Content/Images/logo.jpg" />
-                </a>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav" id="ulMenu" onchange="ActiveMenu()">
-                    <li id="liTodayRate" ><a href="/Apraiser/TodayRate">Today Rate</a></li>
-                    <li id="liProcessLoan"><a href="/Apraiser/ProcessLoan">Process Loan</a></li>
-                    <li id="liCustomerData"><a href="/Apraiser/CustomerLoanData">Customer data</a></li>
-                    <li id="liCollectLoan"><a href="/Apraiser/CollectLoan">Collect Personal Loans</a></li>
-                    <li id="liSubscription"><a href="/Apraiser/Subscription">Subscription</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/Apraiser/Settings"><img src="~/Content/Images/icons8-settings-52.png" /></a></li>
-                    @*<li><a href="/Apraiser/Settings"><span class="glyphicon glyphicon-cog" style="color:#349ce1"></span></a></li>*@
-                    <li style="margin-top: 8%;"><span style="color: #9d9d9d;">@Session["UserName"].ToString()</span></li>
-                    <li><a href="/Login/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                </ul>
-            </div>
-        </div>
+<body style="padding: 0px;">
+
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label class="logo"><img src="~/Content/Images/logo.jpg" /></label>
+        <ul id="ulMenu" onchange="ActiveMenu()" style="overflow-y: auto;">
+            <li><a id="liTodayRate" href="/Apraiser/TodayRate">Today Rate</a></li>
+            <li><a id="liProcessLoan" href="/Apraiser/ProcessLoan">Process Loan</a></li>
+            <li><a id="liCustomerData" href="/Apraiser/CustomerLoanData">Customer data</a></li>
+            <li><a id="liCollectLoan" href="/Apraiser/CollectLoan">Collect Personal Loans</a></li>
+            <li><a id="liSubscription" href="/Apraiser/Subscription">Subscription</a></li>
+            <li style="float:right"><a href="/Apraiser/Settings"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li style="float:right"><a> @LogedUser.UserName </a></li>
+            <li style="float:right"><a href="/Login/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+        @*<ul style="float:right;margin:0px;">
+            <li><a href="/Apraiser/Settings"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li><a> @LogedUser.UserName </a></li>
+            <li><a href="/Login/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>*@
     </nav>
 
     <div class="container-fluid text-left" id="divMainContainer">
         <div class="row content">
             <div class="overlay" id="loader" style="display:none">
-                <img src="~/Content/Images/loader-black.gif" style="margin-left:50%;margin-top:20%" />
+                <img src="~/Content/Images/loader-black.gif" style="margin-left:50%;"/>
                 @*<img src="~/Content/Images/ajax-loader.gif"  />*@
             </div>
-            @*<div class="col-sm-2 sidenav">
-                    <p><a href="#">Today Rate</a></p>
-                    <p><a href="#">Process Loan</a></p>
-                    <p><a href="#">Customer data</a></p>
-                    <p><a href="#">Collect Persional Loans</a></p>
-                </div>*@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
                 <div id="divMain" style="overflow-y:auto !important;overflow-x:hidden;">
                     @RenderBody()
@@ -156,8 +92,8 @@
             </div>
         </div>
     </div>
-    <footer class="container-fluid text-center">
-        <p>Copyrights &copy; Smithoid Technologies</p>
-    </footer>
+    @*<footer class="container-fluid text-center" style="margin-top: 4.5%;">
+            <p>Copyrights &copy; Smithoid Technologies</p>
+        </footer>*@
 </body>
 </html>

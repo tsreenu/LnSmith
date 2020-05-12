@@ -1,6 +1,6 @@
 ﻿@model DigitalAppraiser.Models.ViewModels.ReceiptModel
 <script src="~/Scripts/jQuery.print.js"></script>
-<div class="container" id="divSelfReceipt">
+<div class="container panel panel-default" id="divSelfReceipt">
     <div class="row">
         <div style="margin: auto;width:100%;text-align:center">
             <h1>@Model.ShopDetails</h1>
@@ -112,10 +112,6 @@
             </tbody>
         </table>
     </div>
-
-
-
-
 </div>
 <input type="button" class="btn btn-info btn-md pull-right col-sm-2" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DigitalAppraiser.BuinessLogic.Interfaces;
+using DigitalAppraiser.Models.DBModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -123,7 +124,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             //var appriaserBanks = _Context.AppraiserBanks.Where(x => x.AppriaserId == appraiserId && x.IsActive == true).ToList();
             //var date = DateTime.Now;
             //var rate = _Context.TodayRates.Where(x => x.AppraiserId == appraiserId && x.BankId == bankId && x.CreatedOn.Year == date.Year && x.CreatedOn.Month == date.Month && x.CreatedOn.Day == date.Day).FirstOrDefault();
-                var rate = _Context.TodayRates.OrderByDescending(x => x.Id).Where(x => x.AppraiserId == appraiserId && x.IsActive == true && x.BankId == bankId).FirstOrDefault();
+            var rate = _Context.TodayRates.OrderByDescending(x => x.Id).Where(x => x.AppraiserId == appraiserId && x.IsActive == true && x.BankId == bankId).FirstOrDefault();
             return rate;
         }
         public int SaveOrnaments(string userName, int customerId, Models.ViewModels.OrnamentDetailsModel model)
@@ -315,7 +316,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             return model;
         }
 
-        public Models.DBModels.SubscriptionDetails GetSubscriptionDetails( int appraiserId)
+        public Models.DBModels.SubscriptionDetails GetSubscriptionDetails(int appraiserId)
         {
             Models.DBModels.SubscriptionDetails subscription = new Models.DBModels.SubscriptionDetails();
             subscription = (from subs in _Context.SubscriptionDetails.Where(x => x.AppraiserId == appraiserId)
@@ -340,13 +341,15 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                                 SubscriptionStartDate = x.SubscriptionStartDate
                             }).FirstOrDefault();
 
+            subscription.lnSmithPlans = _Context.LnSmithPlans.Where(x => x.IsActive == true && x.PlanId != 1).ToList();
             return subscription;
         }
 
-        public void payment()
+        public string payment(int planId)
         {
             var mid = ConfigurationManager.AppSettings["MerchantID"].ToString();
             var clientSecret = ConfigurationManager.AppSettings["AccountSecretKey"].ToString();
+            var txnAmount = _Context.LnSmithPlans.Where(x => x.PlanId == planId).FirstOrDefault().PlanValue.ToString();
             /* initialize a TreeMap object */
             Dictionary<String, String> paytmParams = new Dictionary<String, String>();
 
@@ -362,14 +365,16 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             /* WEB for website and WAP for Mobile-websites or App */
             paytmParams.Add("CHANNEL_ID", "WEB");
 
+            var orderId = Guid.NewGuid().ToString("N").ToUpper();
+
             /* Enter your unique order id */
-            paytmParams.Add("ORDER_ID", "123456789");
+            paytmParams.Add("ORDER_ID", orderId);
 
             /* unique id that belongs to your customer */
-            paytmParams.Add("CUST_ID", "8");
+            paytmParams.Add("CUST_ID", LogedUser.AppraiserId.Value.ToString());
 
             /* customer's mobile number */
-            paytmParams.Add("MOBILE_NO", "9030834737");
+            paytmParams.Add("MOBILE_NO", LogedUser.MobileNumber);
 
             /* customer's email */
             paytmParams.Add("EMAIL", "tsreenu.9@gmail.com");
@@ -378,17 +383,17 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             * Amount in INR that is payble by customer
             * this should be numeric with optionally having two decimal points
 */
-            paytmParams.Add("TXN_AMOUNT", "1");
+            paytmParams.Add("TXN_AMOUNT", txnAmount);
 
             /* on completion of transaction, we will send you the response on this URL */
-            paytmParams.Add("CALLBACK_URL", "http://localhost:26137/Apraiser/TodayRate");
+            paytmParams.Add("CALLBACK_URL", "http://localhost:26137/Apraiser/PaytmResponse");
 
             /**
             * Generate checksum for parameters we have
             * You can get Checksum DLL from https://developer.paytm.com/docs/checksum/
             * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
 */
-            String checksum = paytm.CheckSum.generateCheckSum("YOUR_KEY_HERE", paytmParams);
+            String checksum = paytm.CheckSum.generateCheckSum(clientSecret, paytmParams);
 
             /* for Staging */
             String url = "https://securegw-stage.paytm.in/order/process";
@@ -416,6 +421,23 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             outputHtml += "</script>";
             outputHtml += "</body>";
             outputHtml += "</html>";
+
+            return outputHtml;
+        }
+        public int AddPaymentDetails(PaytmResponse paytmResponse)
+        {
+            int result = 0;
+            paytmResponse.AppraiserId = LogedUser.AppraiserId.Value;
+            _Context.PaytmResponse.Add(paytmResponse);
+            if (paytmResponse.STATUS == "TXN_SUCCESS")
+            {
+                var userSubDetails = _Context.SubscriptionDetails.Where(x => x.AppraiserId == paytmResponse.AppraiserId).FirstOrDefault();
+                var plan = _Context.LnSmithPlans.Where(x => x.PlanValue.ToString() == paytmResponse.TXNAMOUNT.Replace(".00", "")).FirstOrDefault();
+                userSubDetails.SubscriptionEndDate = userSubDetails.SubscriptionEndDate.AddDays(plan.PlanDuration);
+                userSubDetails.PlanId = plan.PlanId;
+            }
+            result = _Context.SaveChanges();
+            return result;
         }
     }
 }

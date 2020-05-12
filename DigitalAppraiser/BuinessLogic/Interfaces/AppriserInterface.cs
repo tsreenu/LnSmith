@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DigitalAppraiser.Models.DBModels;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace DigitalAppraiser.BuinessLogic.Interfaces
@@ -19,6 +20,7 @@ namespace DigitalAppraiser.BuinessLogic.Interfaces
         int SettleLoan(string loanId, decimal collectedAmount, string collectedOn, decimal CollectedInterest, int NoOfDays);
         Models.ViewModels.SelfCustomerModel customerDetails(int loanType, int customerId);
         Models.DBModels.SubscriptionDetails GetSubscriptionDetails(int appraiserId);
-        void payment();
+        string payment(int planId);
+        int AddPaymentDetails(PaytmResponse paytmResponse);
     }
 }

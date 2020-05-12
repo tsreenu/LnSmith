@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace DigitalAppraiser
 {
@@ -15,13 +16,19 @@ namespace DigitalAppraiser
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            HttpContext ctx = HttpContext.Current;
-            if (HttpContext.Current.Session["AppraiserId"] == null)
+            if (LogedUser.AppraiserId.HasValue == false)
             {
                 filterContext.Result = new RedirectResult("~/Login/Login");
                 return;
             }
+            FormsAuthentication.SetAuthCookie(LogedUser.MobileNumber, false);
             base.OnActionExecuting(filterContext);
         }
+    }
+    public static class LogedUser
+    {
+        public static string MobileNumber { get; set; }
+        public static int? AppraiserId { get; set; }
+        public static string UserName { get; set; }
     }
 }

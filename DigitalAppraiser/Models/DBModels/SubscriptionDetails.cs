@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,5 +17,7 @@ namespace DigitalAppraiser.Models.DBModels
 
         [NotMapped]
         public string PlanName { get; set; }
+        [NotMapped]
+        public List<LnSmithPlans> lnSmithPlans { get; set; }
     }
 }
