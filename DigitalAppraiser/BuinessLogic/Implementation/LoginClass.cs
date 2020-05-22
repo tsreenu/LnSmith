@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using DigitalAppraiser.Models.DBModels;
+using System.Data.Entity;
 
 namespace DigitalAppraiser.BuinessLogic.Implementation
 {
@@ -39,39 +41,57 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             try
             {
                 var user = _Context.AppraiserDetails.Where(x => x.MobileNumber == signUpModel.MobileNumber).FirstOrDefault();
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Models.ViewModels.SignUpModel, Models.DBModels.AppraiserDetail>();
-                });
-                IMapper mapper = config.CreateMapper();
-                var signup = mapper.Map<Models.ViewModels.SignUpModel, Models.DBModels.AppraiserDetail>(signUpModel);
+                //var config = new MapperConfiguration(cfg =>
+                //{
+                //    cfg.CreateMap<Models.ViewModels.SignUpModel, Models.DBModels.AppraiserDetail>();
+                //});
+                //IMapper mapper = config.CreateMapper();
+                //var signup = mapper.Map<Models.ViewModels.SignUpModel, Models.DBModels.AppraiserDetail>(signUpModel);
+
+                AppraiserDetail appraiserDetail = new AppraiserDetail();
+                AppraiserBank appraiserBank = new AppraiserBank();
+                SubscriptionDetails subscriptionDetails = new SubscriptionDetails();
+
+                appraiserDetail.AppraiserId = signUpModel.AppraiserId;
+                appraiserDetail.AppraiserName = signUpModel.AppraiserName;
+                appraiserDetail.AppraiserNumber = signUpModel.AppraiserNumber;
+                appraiserDetail.CityId = signUpModel.CityId;
+                appraiserDetail.IsSelfLoan = signUpModel.IsSelfLoan;
+                appraiserDetail.MobileNumber = signUpModel.MobileNumber;
+                appraiserDetail.Password = signUpModel.Password;
+                appraiserDetail.ShopAddress = signUpModel.ShopAddress;
+                appraiserDetail.ShopName = signUpModel.ShopName;
+                appraiserDetail.ShopNumber = signUpModel.ShopNumber;
+                appraiserDetail.StateId = signUpModel.StateId;
+                appraiserDetail.CreatedBy = signUpModel.AppraiserName;
+                appraiserDetail.ModifiedBy = signUpModel.AppraiserName;
+                appraiserDetail.CreatedOn = DateTime.Now;
+                appraiserDetail.ModifiedOn = DateTime.Now;
+                appraiserDetail.IsActive = true;
+
 
                 if (user == null)
                 {
-                    signup.CreatedBy = signup.AppraiserName;
-                    signup.ModifiedBy = signup.AppraiserName;
-                    signup.CreatedOn = DateTime.Now;
-                    signup.ModifiedOn = DateTime.Now;
-                    signup.IsActive = true;
-                    _Context.AppraiserDetails.Add(signup);
+
+                    _Context.AppraiserDetails.Add(appraiserDetail);
                     _Context.SaveChanges();
 
-                    for (int i = 0; i < signUpModel.Banks.Count(); i++)
+                    for (int i = 0; i < signUpModel.selectedBanks.Count(); i++)
                     {
                         _Context.AppraiserBanks.Add(new Models.DBModels.AppraiserBank
                         {
-                            AppriaserId = signup.AppraiserId,
-                            BankId = signUpModel.Banks[i].BankId,
-                            CreatedBy = signup.AppraiserName,
+                            AppriaserId = appraiserDetail.AppraiserId,
+                            BankId = signUpModel.selectedBanks[i].Value,
+                            CreatedBy = appraiserDetail.AppraiserName,
                             IsActive = true,
-                            ModifiedBy = signup.AppraiserName,
+                            ModifiedBy = appraiserDetail.AppraiserName,
                             CreatedOn = DateTime.Now,
                             ModifiedOn = DateTime.Now
                         });
                     }
                     _Context.SubscriptionDetails.Add(new Models.DBModels.SubscriptionDetails
                     {
-                        AppraiserId = signup.AppraiserId,
+                        AppraiserId = appraiserDetail.AppraiserId,
                         PlanId = 1,
                         IsActive = true,
                         SubscriptionStartDate = DateTime.Now,
@@ -84,16 +104,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                 }
                 else
                 {
-                    user.ModifiedBy = signup.AppraiserName;
-                    user.ModifiedOn = DateTime.Now;
-                    user.ShopName = signup.ShopName;
-                    user.ShopAddress = signup.ShopAddress;
-                    user.ShopNumber = signup.ShopNumber;
-                    user.CityId = signup.CityId;
-                    user.StateId = signup.StateId;
-                    user.MobileNumber = signup.MobileNumber;
-                    user.AppraiserNumber = signup.AppraiserNumber;
-                    user.AppraiserName = signup.AppraiserName;
+                    _Context.Entry(appraiserDetail).State = EntityState.Modified;
                     var previousBanks = _Context.AppraiserBanks.Where(x => x.AppriaserId == user.AppraiserId && x.IsActive == true).Select(x => x.BankId.Value).ToList();
 
                     var newBanks = signUpModel.Banks.Select(x => x.BankId).ToList();

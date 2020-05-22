@@ -8,5 +8,6 @@ namespace DigitalAppraiser.Models.ViewModels
         public List<Models.DBModels.AppraiserBank> appraiserBanks { get; set; }
         public IEnumerable<SelectListItem> Banks { get; set; }
         public int selectedBank { get; set; }
+        public SelfCustomerModel selfCustomer { get; set; }
     }
 }

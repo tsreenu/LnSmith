@@ -29,14 +29,21 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int AppraiserId = LogedUser.AppraiserId.Value;
             var model = bl.GetUserDateRates(AppraiserId);
-            return View("TodaysRate", model);
+            return View(model);
         }
-        public ActionResult SaveTodayRate(Models.ViewModels.TodayRateModel model)
+        [HttpPost]
+        public ActionResult TodayRate(Models.ViewModels.TodayRateModel model)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            string userName = LogedUser.UserName;
-            var result = bl.SaveTodayRate(model, userName);
-            return Json(result);
+            if (ModelState.IsValid == true)
+            {
+                string userName = LogedUser.UserName;
+                var result = bl.SaveTodayRate(model, userName);
+                return RedirectToAction("ProcessLoan");
+            }
+            int AppraiserId = LogedUser.AppraiserId.Value;
+            model = bl.GetUserDateRates(AppraiserId);
+            return View(model);
         }
         [HttpGet]
         public ActionResult ProcessLoan()
@@ -45,12 +52,20 @@ namespace DigitalAppraiser.Controllers
             int AppraiserId = LogedUser.AppraiserId.Value;
             Models.ViewModels.ProcessLoanModel model = new Models.ViewModels.ProcessLoanModel();
             model.Banks = bl.GetAppraiserBanks(AppraiserId);
-            return PartialView("ProcessLoan", model);
+            model.selfCustomer = new Models.ViewModels.SelfCustomerModel();
+            int[] list = Enumerable.Range(1, 30).ToArray();
+            model.selfCustomer.Quantity = list.Select(x => new SelectListItem
+            {
+                Value = x.ToString(),
+                Text = x.ToString()
+            });
+            return View(model);
         }
         [HttpGet]
         public ActionResult SelfCustomer()
         {
-            return PartialView("SelfCustomer");
+            var model = new Models.ViewModels.SelfCustomerModel();
+            return PartialView("SelfCustomer",model);
         }
         [HttpPost]
         public ActionResult SelfCustomer(Models.ViewModels.SelfCustomerModel model)
@@ -91,10 +106,10 @@ namespace DigitalAppraiser.Controllers
             model.loanDetails.ModifiedBy = userName;
             model.loanDetails.LoanType = model.ornamentsList[0].LoanType;
             var customer = bl.customerDetails(model.loanDetails.LoanType, customerId);
-            model.CustomerName = customer.Name;
-            model.MobileNumber = customer.MobileNumber;
-            model.Address = customer.Address;
-            model.Aadhar = customer.UANNumber;
+            model.CustomerName = customer.selfCustomer.Name;
+            model.MobileNumber = customer.selfCustomer.MobileNumber;
+            model.Address = customer.selfCustomer.Address;
+            model.Aadhar = customer.selfCustomer.UANNumber;
             return PartialView("Estimation", model);
         }
         [HttpPost]

@@ -95,12 +95,12 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             int result = 1;
             try
             {
-                model.CreatedOn = DateTime.Now;
-                model.ModifiedOn = DateTime.Now;
-                model.CreatedBy = userName;
-                model.ModifiedBy = userName;
-                model.AppraiserId = AppraiserId;
-                model.IsActive = true;
+                model.selfCustomer.CreatedOn = DateTime.Now;
+                model.selfCustomer.ModifiedOn = DateTime.Now;
+                model.selfCustomer.CreatedBy = userName;
+                model.selfCustomer.ModifiedBy = userName;
+                model.selfCustomer.AppraiserId = AppraiserId;
+                model.selfCustomer.IsActive = true;
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.CreateMap<Models.ViewModels.SelfCustomerModel, Models.DBModels.SelfCustomerDetails>();
@@ -301,17 +301,17 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             if (loanType == 1)
             {
                 var customer = _Context.SelfCustomerDetails.Where(x => x.CustomerId == customerId && x.IsActive == true).FirstOrDefault();
-                model.Name = customer.Name;
-                model.MobileNumber = customer.MobileNumber;
-                model.Address = customer.Address;
-                model.UANNumber = customer.UANNumber;
+                model.selfCustomer.Name = customer.Name;
+                model.selfCustomer.MobileNumber = customer.MobileNumber;
+                model.selfCustomer.Address = customer.Address;
+                model.selfCustomer.UANNumber = customer.UANNumber;
             }
             else
             {
                 var customer = _Context.BankCustomerDetails.Where(x => x.CustomerId == customerId && x.IsActive == true).FirstOrDefault();
-                model.Name = customer.Name;
-                model.MobileNumber = customer.MobileNumber;
-                model.Address = customer.Address;
+                model.selfCustomer.Name = customer.Name;
+                model.selfCustomer.MobileNumber = customer.MobileNumber;
+                model.selfCustomer.Address = customer.Address;
             }
             return model;
         }

@@ -2,6 +2,9 @@
 using System.Web.Mvc;
 using BL = DigitalAppraiser.BuinessLogic;
 using System.Web.Security;
+using DigitalAppraiser.Models.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DigitalAppraiser.Controllers
 {
@@ -17,36 +20,49 @@ namespace DigitalAppraiser.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Login(string mobileNumber, string password)
+        public ActionResult Login(LoginModel model)
         {
             BL.Interfaces.LoginInterface login = new BL.Implementation.LoginClass();
-            var isValidUser = login.Login(mobileNumber, password);
-            if (isValidUser.ErrorMessage == "Valid User")
+            ModelState["NewPassword"].Errors.Clear();
+            if (ModelState.IsValid == true)
             {
-                FormsAuthentication.SetAuthCookie(isValidUser.MobileNumber, false);
-                LogedUser.MobileNumber = isValidUser.MobileNumber;
-                LogedUser.UserName = isValidUser.UserName;
-                LogedUser.AppraiserId = isValidUser.AppraiserId;
-                //return RedirectToAction("Dashbord", "Apraiser");
+                LoginModel isValidUser = login.Login(model.MobileNumber, model.Password);
+                if (isValidUser.ErrorMessage == "Valid User")
+                {
+                    FormsAuthentication.SetAuthCookie(isValidUser.MobileNumber, false);
+                    LogedUser.MobileNumber = isValidUser.MobileNumber;
+                    LogedUser.UserName = isValidUser.UserName;
+                    LogedUser.AppraiserId = isValidUser.AppraiserId;
+                    return RedirectToAction("TodayRate", "Apraiser");
+                }
+                else
+                {
+                    model.ErrorMessage = isValidUser.ErrorMessage;
+                    return View(model);
+                }
             }
-            //else
-            //{
-                return Json(isValidUser);
-            //}
+            else
+            {
+                //model.ErrorMessage = "Please fill all mandatory fields.";
+                return View(model);
+            }
         }
         [AllowAnonymous]
         public ActionResult SignUp()
         {
             Models.ViewModels.SignUpModel signUpModel = new Models.ViewModels.SignUpModel();
             BL.Interfaces.LoginInterface bl = new BL.Implementation.LoginClass();
-            if(Session["AppraiserId"] != null)
+            if (Session["AppraiserId"] != null)
             {
                 int apraiserId = Convert.ToInt32(Session["AppraiserId"]);
                 signUpModel = bl.GetAppraiserDetail(apraiserId);
                 signUpModel.selectedBanks = bl.GetSelectedBanks(apraiserId);
             }
-            signUpModel.Banks = bl.BanksList();
-            signUpModel.States = bl.GetStates();
+            signUpModel.StatesList = BindStates();
+            var city = new List<SelectListItem>();
+            city.Add(new SelectListItem { Text = "Select" });
+            signUpModel.CitiesList = city;
+            signUpModel.bankList = BindBanks();
             return View(signUpModel);
         }
         [HttpPost]
@@ -54,14 +70,34 @@ namespace DigitalAppraiser.Controllers
         public ActionResult SignUp(Models.ViewModels.SignUpModel signUpModel)
         {
             BL.Interfaces.LoginInterface bl = new BL.Implementation.LoginClass();
-            var result = bl.SignUpUser(signUpModel);
-            if (Session["AppraiserId"] != null)
+            int result = 0;
+            if (signUpModel.IsSelfLoan == false)
             {
-                FormsAuthentication.SignOut();
-                Session.Abandon();
+                ModelState["ShopName"].Errors.Clear();
             }
-            var res = result == 1 ? Url.Action("Login", "Login") : "Mobile number already exists";
-            return Json(res);
+
+            if (ModelState.IsValid == true)
+            {
+                result = bl.SignUpUser(signUpModel);
+                if (Session["AppraiserId"] != null)
+                {
+                    FormsAuthentication.SignOut();
+                    Session.Abandon();
+                }
+            }
+            if (result == 1)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else
+            {
+                signUpModel.StatesList = BindStates();
+                var city = new List<SelectListItem>();
+                city.Add(new SelectListItem { Text = "Select", Value = "0" });
+                signUpModel.CitiesList = city;
+                signUpModel.bankList = BindBanks();
+                return View(signUpModel);
+            }
         }
         [AllowAnonymous]
         public JsonResult GetCities(int stateId)
@@ -73,17 +109,24 @@ namespace DigitalAppraiser.Controllers
         [AllowAnonymous]
         public ActionResult ChangePassword()
         {
-            return View();
+            Models.ViewModels.LoginModel model = new Models.ViewModels.LoginModel();
+            return View(model);
         }
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult ChangePassword(string MobileNumber, string Password, string NewPassword)
+        public ActionResult ChangePassword(LoginModel model)
         {
             BL.Interfaces.LoginInterface bl = new BL.Implementation.LoginClass();
-            var result = bl.ChangePwd(MobileNumber, Password, NewPassword);
-            FormsAuthentication.SignOut();
-            Session.Abandon();
-            return Json(result);         
+            LoginModel result = new LoginModel();
+            if (ModelState.IsValid == true)
+            {
+                result = bl.ChangePwd(model.MobileNumber, model.Password, model.NewPassword);
+                FormsAuthentication.SignOut();
+                Session.Abandon();
+                return RedirectToAction("Login");
+            }
+            model.ErrorMessage = result.ErrorMessage;
+            return View(model);
         }
         [Authorize]
         public ActionResult LogOut()
@@ -94,6 +137,31 @@ namespace DigitalAppraiser.Controllers
             LogedUser.UserName = null;
             Session.Abandon();
             return RedirectToAction("Login", "Login");
+        }
+
+        private IEnumerable<SelectListItem> BindStates()
+        {
+            BL.Interfaces.LoginInterface bl = new BL.Implementation.LoginClass();
+            var states = bl.GetStates();
+            var stateList = from s in states
+                            select new SelectListItem
+                            {
+                                Text = s.StateName,
+                                Value = s.StateId.ToString()
+                            };
+            return stateList;
+        }
+        private IEnumerable<SelectListItem> BindBanks()
+        {
+            BL.Interfaces.LoginInterface bl = new BL.Implementation.LoginClass();
+            var banks = bl.BanksList();
+            var bankList = from s in banks
+                           select new SelectListItem
+                           {
+                               Text = s.BankName,
+                               Value = s.BankId.ToString()
+                           };
+            return bankList;
         }
     }
 }

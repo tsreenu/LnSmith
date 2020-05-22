@@ -6,7 +6,28 @@
 }
 <style>
     body {
-        background-image: url('../../Content/Images/background4.jpg');
+        background-image: url('../../Content/Images/background1.jpg');
+        background-size: cover;
+    }
+
+    .login-form {
+        margin-top: 90px;
+        box-shadow: 0px 0px 10px 1px grey;
+        border-radius: 5px;
+        padding-bottom: 20px;
+        background: white;
+    }
+
+    .title {
+        background: #007bbf;
+        padding: 10px;
+        text-align: center;
+        color: #fff;
+        border-radius: 0px 0px 10px 10px;
+    }
+
+    .error {
+        color: red;
     }
 </style>
 <head>
@@ -15,55 +36,44 @@
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
 <body>
     <div class="container">
-        <div class="row">
-            <div class="panel panel-default col-sm-4 col-sm-offset-4" style="margin-top:10%">
-                <div class="panel-body">
-                    <div class="">
-                        <div style="margin: auto;width:100%;text-align:center" id="divCertificate">
-                            <p class="h3" style="font-weight:bold">Login</p>
-                        </div>
-                        <div class="row">
-                            <div class="form-group">
-                                <label for="username" class="text-info">Mobile Number<span style="color:red">*</span>:</label><br>
-                                @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileNumber", @class = "form-control", @onkeypress = "IsNumeric(event)", @maxlength = "10", autocomplete = "off" })
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group">
-                                <label for="password" class="text-info">Password<span style="color:red">*</span>:</label><br>
-                                @Html.PasswordFor(x => x.Password, new { id = "txtPassword", @class = "form-control" })
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group">
-                                <input type="button" id="btnLogin" onclick="Login()" class="btn btn-info btn-md col-sm-3" value="Login">
-                                <a id="btnSignUp" class="btn btn-info btn-md col-sm-3" style="margin-left:3%" href="/Login/SignUp">SignUp</a>
-                                <a id="btnChangePwd" class="btn btn-info btn-md col-sm-5" style="margin-left:3%" href="/Login/ChangePassword">Change Password</a>
-                            </div>
-                        </div>
-                        <div id="divError" class="alert alert-danger">
-                            <span id="spnError"> </span>
-                        </div>
-
+        <div class="login-form col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-8 offset-2 col-lg-4 offset-lg-4">
+            <h1 class="title"> Login </h1>
+            @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+            {
+                <form>
+                    <div class="form-group">
+                        <label>Mobile Number<span style="color:red">*</span></label>
+                        @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileNumber", @class = "form-control", @onkeypress = "IsNumeric(event)", @maxlength = "10", autocomplete = "off" })
+                        @Html.ValidationMessageFor(x => x.MobileNumber, "", new { @class = "error" })
                     </div>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label>Password<span style="color:red">*</span></label>
+                        @Html.PasswordFor(x => x.Password, new { id = "txtPassword", @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Password, "", new { @class = "error" })
+                    </div>
+                    <div class="form-group">
+                        <a href="/Login/ChangePassword" class="fa-link float-left">Forgot password</a>
+                        <a id="btnSignUp" class="fa-link float-right" href="/Login/SignUp">SignUp</a>
+                    </div>
+                    <br />
+                    <input type="submit" class="btn btn-primary btn-block" value="Login" />
+                    @if (Model.ErrorMessage != null)
+                    {
+                        <div id="divError" class="alert-danger form-control">
+                            <span id="spnError"> @Model.ErrorMessage </span>
+                        </div>
+                    }
+                </form>
+            }
         </div>
     </div>
 </body>
 <script>
     $(document).ready(function () {
-        $("#divError").hide();
-
         $('#txtMobileNumber').keypress(function (event) {
-            if (event.keyCode == 13) {
-                $('#btnLogin').click();
-            }
-        });
-
-        $('#txtPassword').keypress(function (event) {
             if (event.keyCode == 13) {
                 $('#btnLogin').click();
             }
@@ -73,43 +83,6 @@
     IsNumeric = function (e) {
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
             e.preventDefault()
-        }
-    }
-    Login = function () {
-        var url = "/Login/Login";
-        var isValid = true;
-        var errorMsg = "";
-        if ($("#txtMobileNumber").val() == "") {
-            errorMsg = "Please enter Mobile number.";
-            isValid = false;
-        }
-        if ($("#txtPassword").val() == "") {
-            errorMsg = errorMsg == "" ? "Please enter Password." : errorMsg + "and Password.";
-            isValid = false;
-        }
-        if (isValid == false) {
-            $("#spnError").text(errorMsg);
-            $("#divError").show();
-        } else {
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: { mobileNumber: $("#txtMobileNumber").val(), password: $("#txtPassword").val() },
-                cache: false,
-                success: function (data) {
-                    if (data != null) {
-                        if (data.ErrorMessage == "Valid User") {
-                            window.location.href = "/Apraiser/TodayRate";
-                        } else {
-                            $("#spnError").text(data.ErrorMessage);
-                            $("#divError").show();
-                        }
-                    }
-
-                }, error: function (error) {
-
-                }
-            })
         }
     }
 </script>

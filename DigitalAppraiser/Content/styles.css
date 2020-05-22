@@ -1,125 +1,110 @@
-﻿@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
+
+
+/*---Media Queries --*/
+@media (max-width: 992px) {
 }
+
+@media (max-width: 768px) {
+}
+
+@media (max-width: 576px) {
+}
+
 
 nav {
-    background: #33719b;
-    height: 80px;
-    width: 100%;
-    max-width: 100% !important;
+    background: #322e25 !important;
+    height: 70px;
+    /*width: 100%;
+    max-width: 100% !important;*/
 }
-
-label.logo {
-    color: #f2f2f2;
-    font-size: 33px;
-    line-height: 80px;
-    padding: 0 5px;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    float:left;
-}
-
-nav ul {
-    float: left;
-    margin-left: 0px;
-    z-index:999;
-}
-
-    nav ul li {
-        display: inline-block;
-        line-height: 80px;
-        margin: 0 2px;
+    nav ul li a {
+        color: #f2f2f2 !important;
+        font-weight: 500 !important;
+        /*font-size: 20px;*/
+        padding: 7px 13px;
+        border-radius: 3px;
+        /* text-transform: uppercase; */
+        font-family: 'Poppins', sans-serif;
+        text-decoration: none !important;
     }
 
-        nav ul li a {
-            color: #f2f2f2;
-            font-weight: 500;
-            font-size: 20px;
-            padding: 7px 13px;
-            border-radius: 3px;
-            /* text-transform: uppercase; */
-            font-family: 'Poppins', sans-serif;
-            text-decoration:none !important;
-        }
-
 a.active, a:hover {
-    background: #22394c;
+    background: #00000030;
     transition: .5s;
     text-decoration: none !important;
 }
 
-.checkbtn {
-    font-size: 30px;
-    color: white;
-    float: right;
-    line-height: 80px;
-    margin-right: 40px;
-    cursor: pointer;
-    display: none;
+/*---Firefox Bug Fix --*/
+.carousel-item {
+    transition: -webkit-transform 0.5s ease;
+    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+}
+/*--- Fixed Background Image --*/
+figure {
+    position: relative;
+    width: 100%;
+    height: 60%;
+    margin: 0 !important;
 }
 
-#check {
-    display: none;
+.fixed-wrap {
+    clip: rect(0, auto, auto, 0);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-@media (max-width: 952px) {
-    label.logo {
-        font-size: 27px;
-        padding-left: 25px;
-    }
-
-    nav ul li a {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 858px) {
-    .checkbtn {
-        display: block;
-        margin-right: 40px;
-    }
-
-    ul {
-        position: fixed;
-        width: 100%;
-        height: 100vh;
-        background: #2c3e50;
-        top: 80px;
-        left: -100%;
-        text-align: center;
-        transition: all .5s;
-    }
-
-    nav ul li {
-        display: block;
-        margin: 50px 0;
-        line-height: 30px;
-    }
-
-        nav ul li a {
-            font-size: 20px;
-        }
-
-    a:hover, a.active {
-        background: none;
-        color: #0082e6;
-        text-decoration: none !important;
-    }
-
-    #check:checked ~ ul {
-        left: 0;
-    }
-}
-
-#divMainContainer {
-    /*background: url(bg1.jpg) no-repeat;*/
-    /*background: url('Images/background4.jpg') no-repeat;
+#fixed {
+    background-image: url('img/mac.png');
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-size: cover;
-    height: calc(100vh - 30px);*/
+    background-position: center center;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
 }
+/*--- Bootstrap Padding Fix --*/
+[class*="col-"] {
+    padding: 1rem;
+}
+
+
+
+
+
+/*
+Extra small (xs) devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap
+
+Small (sm) devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+Medium (md) devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+Large (lg) devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+Extra (xl) large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/
+
+
+
+
+
+
+
+

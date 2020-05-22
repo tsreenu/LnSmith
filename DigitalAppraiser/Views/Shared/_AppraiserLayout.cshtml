@@ -2,8 +2,9 @@
 <style>
     body {
         /*background: url('Images/background4.jpg') no-repeat;*/
-        background-image: url('../../Content/Images/background4.jpg');
-    }
+        background-image: url('../../Content/Images/background1.jpg');
+        background-size: cover;
+    } 
 </style>
 <html>
 <head>
@@ -36,6 +37,12 @@
             //$("#divMainContainer").height(height - 200);
             //$('#divMain').css('min-height', height - 200);
             //$('#divMain').css('max-height', height - 175);
+            //var width = window.innerWidth;
+            //if (width < 859) {
+            //    $("#liSettings").css('float', 'none');
+            //    $("#liUserName").css('float', 'none');
+            //    $("#liLogout").css('float', 'none');
+            //}
         })
         $(document).ajaxStart(function () {
             $("#loader").show();
@@ -55,34 +62,31 @@
     </script>
 </head>
 <body style="padding: 0px;">
-
-    <nav>
-        <input type="checkbox" id="check">
-        <label for="check" class="checkbtn">
-            <i class="fas fa-bars"></i>
-        </label>
-        <label class="logo"><img src="~/Content/Images/logo.jpg" /></label>
-        <ul id="ulMenu" onchange="ActiveMenu()" style="overflow-y: auto;">
-            <li><a id="liTodayRate" href="/Apraiser/TodayRate">Today Rate</a></li>
-            <li><a id="liProcessLoan" href="/Apraiser/ProcessLoan">Process Loan</a></li>
-            <li><a id="liCustomerData" href="/Apraiser/CustomerLoanData">Customer data</a></li>
-            <li><a id="liCollectLoan" href="/Apraiser/CollectLoan">Collect Personal Loans</a></li>
-            <li><a id="liSubscription" href="/Apraiser/Subscription">Subscription</a></li>
-            <li style="float:right"><a href="/Apraiser/Settings"><span class="glyphicon glyphicon-cog"></span></a></li>
-            <li style="float:right"><a> @LogedUser.UserName </a></li>
-            <li style="float:right"><a href="/Login/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-        </ul>
-        @*<ul style="float:right;margin:0px;">
-            <li><a href="/Apraiser/Settings"><span class="glyphicon glyphicon-cog"></span></a></li>
-            <li><a> @LogedUser.UserName </a></li>
-            <li><a href="/Login/Logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-        </ul>*@
+    <nav class="navbar navbar-expand-md navbar-dark bg-transparent sticky-top" style="background-color:#322e25 !important;">
+        <div class="container-fluid">
+            <a class="navbar-brand"><img src="~/Content/Images/logo.jpg" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMenu" style="background-color:#322e25 !important;">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a id="liTodayRate" class="nav-link" href="/Apraiser/TodayRate">Today Rate</a></li>
+                    <li class="nav-item"><a id="liProcessLoan" class="nav-link" href="/Apraiser/ProcessLoan">Process Loan</a></li>
+                    <li class="nav-item"><a id="liCustomerData" class="nav-link" href="/Apraiser/CustomerLoanData">Customer data</a></li>
+                    <li class="nav-item"><a id="liCollectLoan" class="nav-link" href="/Apraiser/CollectLoan">Collect Personal Loans</a></li>
+                    <li class="nav-item"><a id="liSubscription" class="nav-link" href="/Apraiser/Subscription">Subscription</a></li>
+                    <li class="nav-item"><a href="/Apraiser/Settings" class="nav-link"><img src="~/Content/Images/icons8-settings.svg" /></a></li>
+                    <li class="nav-item"><a class="nav-link"> @LogedUser.UserName </a></li>
+                    <li class="nav-item"><a href="/Login/Logout" class="nav-link"><img src="~/Content/Images/power_settings_new-24px.png" /> Logout</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
     <div class="container-fluid text-left" id="divMainContainer">
         <div class="row content">
             <div class="overlay" id="loader" style="display:none">
-                <img src="~/Content/Images/loader-black.gif" style="margin-left:50%;"/>
+                <img src="~/Content/Images/loader-black.gif" style="margin-left:50%;" />
                 @*<img src="~/Content/Images/ajax-loader.gif"  />*@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
@@ -95,5 +99,6 @@
     @*<footer class="container-fluid text-center" style="margin-top: 4.5%;">
             <p>Copyrights &copy; Smithoid Technologies</p>
         </footer>*@
+<div class="fixed-bottom text-center" style="bottom: -5px;"> <p style="color:#fff;">Copyrights &copy; Smithoid Technologies</p></div>
 </body>
 </html>

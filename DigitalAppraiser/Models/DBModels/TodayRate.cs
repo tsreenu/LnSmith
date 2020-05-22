@@ -9,6 +9,7 @@ namespace DigitalAppraiser.Models.DBModels
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public decimal Rate { get; set; }
         public int? BankId { get; set; }
         public int? AppraiserId { get; set; }

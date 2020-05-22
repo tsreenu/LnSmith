@@ -5,8 +5,68 @@
     Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
 }
 
-<div class="col-sm-8 col-sm-offset-2 panel panel-default" style="padding:0px">
-    <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">Process Loan</div>
+<style>
+    nav {
+        height:unset !important;
+    }
+    .nav {
+        background: #fff;
+        text-align: center;
+        color: #fff;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+        .nav a.active, a:hover {
+            background: #33719b;
+            transition: .5s;
+            text-decoration: none !important;
+            color: #fff;
+        }
+
+    .nav-tabs .nav-link.active {
+        background-color: #33719b;
+        color: #fff;
+    }
+    .tab-content {
+        background: #fff;
+    }
+    .form label {
+        display: inline-block;
+        text-align: right;
+        float: left;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true">Pawn Broker</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false">Banks</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                @Html.Partial("SelfCustomer", Model.selfCustomer)
+
+            </div>
+
+            <div class="tab-pane fade" id="nav-Banks" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@*<div class="col-sm-8 col-sm-offset-2 panel panel-default" style="padding:0px">
+        <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">Process Loan</div>
         <input type="hidden" id="hdnBanks" value="@Json.Encode(Model.appraiserBanks)" />
         <div class="panel-body" id="divContainer">
             <div class="row">
@@ -21,7 +81,7 @@
                             <div class="form-group">
                                 @*<select class="form-control" id="ddBanks">
 
-                                </select>*@
+                                    </select>
                                 @Html.DropDownListFor(x => x.selectedBank, Model.Banks, "Select", new { id = "ddBanks", @class = "form-control", @onchange = "SelectLoanType()" })
                             </div>
                         </div>
@@ -35,7 +95,7 @@
             </div>
         </div>
 
-</div>
+    </div>*@
 <script>
     $(document).ready(function () {
         $("#loader").hide();
@@ -73,3 +133,4 @@
     }
 
 </script>
+

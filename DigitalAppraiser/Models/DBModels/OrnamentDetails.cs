@@ -9,12 +9,17 @@
     {
         [Key]
         public int OrnamentId { get; set; }
+        [Required]
         public string Ornament { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public decimal GrossWeight { get; set; }
         public decimal StoneWeight { get; set; }
         public int Quality { get; set; }
+        [Required]
         public decimal NetWeight { get; set; }
+        [Required]
         public decimal MarketPrice { get; set; }
         public int CustomerId { get; set; }
         public int LoanType { get; set; }

@@ -1,83 +1,158 @@
 ﻿@model DigitalAppraiser.Models.ViewModels.SelfCustomerModel
 
-<div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
-    Customer Details
-</div>
-<br />
-<div class="panel-body">
+<div>
     @using (Html.BeginForm("SelfCustomer", "Apraiser", FormMethod.Post, new { id = "formCustomerSelf" }))
     {
-        <div class="col-sm-offset-1">
-            <div class="col-sm-8">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="text-info">Date<span style="color:red">*</span>:</label><br />
-                    </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6" style="width:50%;">
+                <h3 class="h3 text-center"> Customer Details</h3>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6 text-left">Date<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.selfCustomer.CreatedOn, new { id = "txtCreatedOn", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                    @Html.ValidationMessageFor(x => x.selfCustomer.CreatedOn, "", new { @class = "error" })
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <input type="text" id="txtDateSelf" class="form-control" />
-                    </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Name<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.selfCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                    @Html.ValidationMessageFor(x => x.selfCustomer.Name, "", new { @class = "error" })
                 </div>
-            </div>
-            <div class="col-sm-8">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="text-info">Name<span style="color:red">*</span>:</label><br />
-                    </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Aadhar</label>
+                    @Html.TextBoxFor(x => x.selfCustomer.UANNumber, new { id = "txtUANNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)", @maxlength = "12" })
+                    @Html.ValidationMessageFor(x => x.selfCustomer.UANNumber, "", new { @class = "error" })
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        @Html.TextBoxFor(x => x.Name, new { id = "txtNameSelf", @class = "form-control", autocomplete = "off" })
-                    </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Mobile Number<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.selfCustomer.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @maxlength = "10", @onkeypress = "IsNumeric(event)" })
+                    @Html.ValidationMessageFor(x => x.selfCustomer.MobileNumber, "", new { @class = "error" })
                 </div>
-            </div>
-            <div class="col-sm-8">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="text-info">Aadhar:</label><br />
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        @Html.TextBoxFor(x => x.UANNumber, new { id = "txtUANSelf", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
-                    </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Address<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.selfCustomer.Address, new { id = "txtAddress", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                    @Html.ValidationMessageFor(x => x.selfCustomer.Address, "", new { @class = "error" })
                 </div>
             </div>
-            <div class="col-sm-8">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="text-info">Mobile Number<span style="color:red">*</span>:</label><br />
-                    </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                <h3 class="h3 text-center"> Ornament Details</h3>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6 text-left">Ornament<span style="color:red">*</span></label>
+                    @Html.TextAreaFor(x => x.ornamentDetails.Ornament, new { id = "txtOrnament", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                    @Html.ValidationMessageFor(x => x.ornamentDetails.Ornament, "", new { @class = "error" })
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileSelf", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
-                    </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Quantity<span style="color:red">*</span></label>
+                    @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantity", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                    @Html.ValidationMessageFor(x => x.ornamentDetails.Quantity, "", new { @class = "error" })
                 </div>
-            </div>
-            <div class="col-sm-8">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="text-info">Address<span style="color:red">*</span>:</label><br />
-                    </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Gross weight in grams<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { id = "txtGrossWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
+                    @Html.ValidationMessageFor(x => x.ornamentDetails.GrossWeight, "", new { @class = "error" })
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        @Html.TextAreaFor(x => x.Address, new { id = "txtAddressSelf", @class = "form-control" })
-                    </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Stone weight in grams<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { id = "txtStoneWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
+                    @Html.ValidationMessageFor(x => x.ornamentDetails.StoneWeight, "", new { @class = "error" })
                 </div>
-            </div>
-            <input type="submit" class="btn btn-info btn-md col-sm-offset-3" id="btnSaveCustomerSelf" value="Continue" onclick="SaveCustomerSelf(event)" />
-            <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
-
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Net weight in grams<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { id = "txtNetWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
+                    @Html.ValidationMessageFor(x => x.ornamentDetails.NetWeight, "", new { @class = "error" })
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Market Price<span style="color:red">*</span></label>
+                    @Html.TextBoxFor(x => x.ornamentDetails.MarketPrice, new { id = "txtMarketPrice", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                    @Html.ValidationMessageFor(x => x.ornamentDetails.MarketPrice, "", new { @class = "error" })
+                </div>
+                <div class="form-group offset-6 offset-sm-6 offset-md-6 offset-lg-6">
+                    <a class="btn btn-primary" href="/Apraiser/SelfCustomer">Cancel</a>&nbsp;&nbsp;
+                    <input type="submit" class="btn btn-primary float-right" value="Submit" />
+                </div>
             </div>
         </div>
     }
 </div>
+
+
+
+@*<div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
+        Customer Details
+    </div>
+    <br />
+    <div class="panel-body">
+        @using (Html.BeginForm("SelfCustomer", "Apraiser", FormMethod.Post, new { id = "formCustomerSelf" }))
+        {
+            <div class="col-sm-offset-1">
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Date<span style="color:red">*</span>:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" id="txtDateSelf" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Name<span style="color:red">*</span>:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.Name, new { id = "txtNameSelf", @class = "form-control", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Aadhar:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.UANNumber, new { id = "txtUANSelf", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Mobile Number<span style="color:red">*</span>:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileSelf", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">Address<span style="color:red">*</span>:</label><br />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextAreaFor(x => x.Address, new { id = "txtAddressSelf", @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-info btn-md col-sm-offset-3" id="btnSaveCustomerSelf" value="Continue" onclick="SaveCustomerSelf(event)" />
+                <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
+
+                </div>
+            </div>
+        }
+    </div>*@
 <script>
     $(document).ready(function () {
-        $("#txtDateSelf").datepicker({ dateFormat: "dd-M-yy" }).datepicker("setDate", new Date());
+        $("#txtCreatedOn").datepicker({ dateFormat: "dd-M-yy" }).datepicker("setDate", new Date());
         ActiveMenu("liProcessLoan");
         $("#loader").hide();
     })
