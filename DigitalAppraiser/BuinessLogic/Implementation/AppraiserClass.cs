@@ -81,7 +81,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
         {
             //_Context.Configuration.LazyLoadingEnabled = false;
             var list = (from apb in _Context.AppraiserBanks.Where(x => x.AppriaserId == appraiserId && x.IsActive == true)
-                        join bm in _Context.BankMasters.Where(x => x.IsActive == true) on apb.BankId equals bm.BankId
+                        join bm in _Context.BankMasters.Where(x => x.IsActive == true && x.BankCode != "SELF") on apb.BankId equals bm.BankId
                         select new { value = apb.BankId.Value, text = bm.BankName }).OrderBy(x => x.value).ToList();
             IEnumerable<SelectListItem> dd = list.Select(x => new SelectListItem
             {
@@ -92,7 +92,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
         }
         public int SaveSelfCustomerDetails(Models.ViewModels.SelfCustomerModel model, int AppraiserId, string userName)
         {
-            int result = 1;
+            int result = 0;
             try
             {
                 model.selfCustomer.CreatedOn = DateTime.Now;
@@ -101,15 +101,14 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                 model.selfCustomer.ModifiedBy = userName;
                 model.selfCustomer.AppraiserId = AppraiserId;
                 model.selfCustomer.IsActive = true;
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Models.ViewModels.SelfCustomerModel, Models.DBModels.SelfCustomerDetails>();
-                });
-                IMapper mapper = config.CreateMapper();
-                var selfCustomerDetails = mapper.Map<Models.ViewModels.SelfCustomerModel, Models.DBModels.SelfCustomerDetails>(model);
-                _Context.SelfCustomerDetails.Add(selfCustomerDetails);
+                _Context.SelfCustomerDetails.Add(model.selfCustomer);
                 _Context.SaveChanges();
-                result = selfCustomerDetails.CustomerId;
+
+                List<Models.DBModels.OrnamentDetails> ornamentsList = new List<OrnamentDetails>();
+                model.ornamentDetails.LoanType = 1;
+                ornamentsList.Add(model.ornamentDetails);
+                SaveOrnaments(userName, model.selfCustomer.CustomerId, ornamentsList);
+                result = model.selfCustomer.CustomerId;
             }
             catch (Exception ex)
             {
@@ -121,15 +120,12 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
         public Models.DBModels.TodayRate GetTodayRate(int appraiserId, int bankId)
         {
             _Context.Configuration.LazyLoadingEnabled = false;
-            //var appriaserBanks = _Context.AppraiserBanks.Where(x => x.AppriaserId == appraiserId && x.IsActive == true).ToList();
-            //var date = DateTime.Now;
-            //var rate = _Context.TodayRates.Where(x => x.AppraiserId == appraiserId && x.BankId == bankId && x.CreatedOn.Year == date.Year && x.CreatedOn.Month == date.Month && x.CreatedOn.Day == date.Day).FirstOrDefault();
             var rate = _Context.TodayRates.OrderByDescending(x => x.Id).Where(x => x.AppraiserId == appraiserId && x.IsActive == true && x.BankId == bankId).FirstOrDefault();
             return rate;
         }
-        public int SaveOrnaments(string userName, int customerId, Models.ViewModels.OrnamentDetailsModel model)
+        public int SaveOrnaments(string userName, int customerId, List<OrnamentDetails> model)
         {
-            foreach (var item in model.ornamentsList)
+            foreach (var item in model)
             {
                 item.CreatedBy = userName;
                 item.ModifiedBy = userName;
@@ -142,10 +138,10 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             _Context.SaveChanges();
             return 1;
         }
-        public Models.ViewModels.OrnamentDetailsModel GetOrnamentDetails(int customerId, int BankId)
+        public Models.ViewModels.OrnamentDetailsModel GetOrnamentDetails(int customerId)
         {
             Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
-            model.ornamentsList = _Context.OrnamentDetails.Where(x => x.CustomerId == customerId && x.LoanType == BankId && x.IsActive == true).ToList();
+            model.ornamentsList = _Context.OrnamentDetails.Where(x => x.CustomerId == customerId && x.IsActive == true).ToList();
             return model;
         }
         public Models.ViewModels.ReceiptModel GenerateLoan(Models.DBModels.LoanDetails model, int appraiserId)
@@ -191,24 +187,23 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
         public int SaveBankCustomerDetails(Models.ViewModels.BankCustomerModel model, int AppraiserId, string userName)
         {
 
-            int result = 1;
+            int result = 0;
             try
             {
-                model.CreatedOn = DateTime.Now;
-                model.ModifiedOn = DateTime.Now;
-                model.CreatedBy = userName;
-                model.ModifiedBy = userName;
-                model.AppraiserId = AppraiserId;
-                model.IsActive = true;
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Models.ViewModels.BankCustomerModel, Models.DBModels.BankCustomerDetails>();
-                });
-                IMapper mapper = config.CreateMapper();
-                var bankCustomerDetails = mapper.Map<Models.ViewModels.BankCustomerModel, Models.DBModels.BankCustomerDetails>(model);
-                _Context.BankCustomerDetails.Add(bankCustomerDetails);
+                model.bankCustomer.CreatedOn = DateTime.Now;
+                model.bankCustomer.ModifiedOn = DateTime.Now;
+                model.bankCustomer.CreatedBy = userName;
+                model.bankCustomer.ModifiedBy = userName;
+                model.bankCustomer.AppraiserId = AppraiserId;
+                model.bankCustomer.IsActive = true;
+                _Context.BankCustomerDetails.Add(model.bankCustomer);
                 _Context.SaveChanges();
-                result = bankCustomerDetails.CustomerId;
+
+                List<Models.DBModels.OrnamentDetails> ornamentsList = new List<OrnamentDetails>();
+                model.ornamentDetails.LoanType = 1;
+                ornamentsList.Add(model.ornamentDetails);
+                SaveOrnaments(userName, model.bankCustomer.CustomerId, ornamentsList);
+                result = model.bankCustomer.CustomerId;
             }
             catch (Exception ex)
             {
@@ -298,6 +293,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
         public Models.ViewModels.SelfCustomerModel customerDetails(int loanType, int customerId)
         {
             Models.ViewModels.SelfCustomerModel model = new Models.ViewModels.SelfCustomerModel();
+            model.selfCustomer = new SelfCustomerDetails();
             if (loanType == 1)
             {
                 var customer = _Context.SelfCustomerDetails.Where(x => x.CustomerId == customerId && x.IsActive == true).FirstOrDefault();

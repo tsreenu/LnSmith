@@ -1,37 +1,45 @@
 ﻿@model DigitalAppraiser.Models.ViewModels.OrnamentDetailsModel
+
+@{
+    ViewBag.Title = "Estimation";
+    Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
+}
+
+<style>
+    .flexLeft {
+        justify-content: flex-start !important;
+    }
+</style>
+
+
 @Html.HiddenFor(x => x.ornamentsList[0].LoanType, new { id = "hdnLoanType" })
-<div class="panel panel-default">
-    <br />
-<div class="container">
-    <div class="row">
-        <div class="col-sm-offset-3">
-            <div class="col-sm-8">
-                <table class="table table-bordered">
-                    <tr>
-                        <td>Customer Name</td>
-                        <td>@Model.CustomerName</td>
-                    </tr>
-                    <tr>
-                        <td>Mobile Number</td>
-                        <td>@Model.MobileNumber</td>
-                    </tr>
-                    @if (Model.ornamentsList[0].LoanType == 1)
-                    {
-                    <tr>
-                        <td>Aadhar</td>
-                        <td>@Model.Aadhar</td>
-                    </tr>
-                    }
-                    <tr>
-                        <td>Address</td>
-                        <td>@Model.Address</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="row">
+
+<div class="container-fluid" style="background-color:#fff;">
+    <div class="row offset-2 col-8">
         <table class="table table-bordered">
+            <tr>
+                <td>Customer Name</td>
+                <td>@Model.CustomerName</td>
+            </tr>
+            <tr>
+                <td>Mobile Number</td>
+                <td>@Model.MobileNumber</td>
+            </tr>
+            @if (Model.ornamentsList[0].LoanType == 1)
+            {
+                <tr>
+                    <td>Aadhar</td>
+                    <td>@Model.Aadhar</td>
+                </tr>
+            }
+            <tr>
+                <td>Address</td>
+                <td>@Model.Address</td>
+            </tr>
+        </table>
+    </div>
+    <div class="row col-12" style="padding-left:2rem;">
+        <table class="table table-bordered table-responsive-sm table-responsive-md">
             <thead>
                 <tr>
                     <th scope="col">S No</th>
@@ -82,66 +90,209 @@
             </tbody>
         </table>
     </div>
-</div>
-<div class="row">
+
     @Html.HiddenFor(x => x.loanDetails.CustomerId, new { id = "hdnCustomerId" })
     @Html.HiddenFor(x => x.loanDetails.LoanType, new { id = "hdnLoanType" })
     @Html.HiddenFor(x => x.loanDetails.CreatedBy, new { id = "hdnUserName" })
-    <div class="col-sm-8" style="display:none;" id="divPrinciple">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label class="text-info">Principle<span style="color:red">*</span>:</label><br />
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                @Html.TextBoxFor(x => x.loanDetails.LoanAmount, new { Value = "", id = "txtPrinciple", @class = "form-control", @onkeypress = "IsNumeric(event)", onblur = "CalculateEMI()", autocomplete = "off" })
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8" style="display:none;" id="divIntrestRate">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label class="text-info">Rate of Interest<span style="color:red">*</span>:</label><br />
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                @Html.TextBoxFor(x => x.loanDetails.Interest, new { Value = "", id = "txtRateofInterest", @class = "form-control", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateEMI()", autocomplete = "off" })
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8" style="display:none;" id="divEstIntrest">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label class="text-info">Estimated Monthly Interest:</label><br />
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <input type="text" id="txtEstimatedIntrest" class="form-control" disabled />
-            </div>
-        </div>
-    </div>
-    <div class="pull-right" style="margin-right: 5%;">
-        <input type="button" class="btn btn-info btn-md" id="btnContinueSelf" value="Continue" data-toggle="modal" onclick="Validate()" />
-        <input type="button" style="display:none" class="btn btn-info btn-md" id="btnContinueBank" value="Continue" onclick="GenerateLoan()"/>
-    </div>
-    <br /><br />
-</div>
-</div>
-<div id="divError" class="alert alert-danger col-sm-8" style="display:none">
 
+    <div class="form-group form-inline">
+        <label class="col-6 col-sm-6 col-md-3 col-lg-3 flexLeft">Principle<span style="color:red">*</span></label>
+        @Html.TextBoxFor(x => x.loanDetails.LoanAmount, new { id = "txtPrinciple", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3", @onkeypress = "IsNumeric(event)", onblur = "CalculateEMI()" })
+    </div>
+    <div class="form-group form-inline">
+        <label class="col-6 col-sm-6 col-md-3 col-lg-3 flexLeft">Rate of Interest<span style="color:red">*</span></label>
+        @Html.TextBoxFor(x => x.loanDetails.Interest, new { id = "txtRateofInterest", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateEMI()" })
+    </div>
+    <div class="form-group form-inline">
+        <label class="col-6 col-sm-6 col-md-3 col-lg-3 flexLeft">Estimated Monthly Interest<span style="color:red">*</span></label>
+        @Html.TextBoxFor(x => x.loanDetails.EMI, new { id = "txtEstimatedIntrest", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3", @readonly = "readonly" })
+    </div>
+    <div class="fa-pull-right" style="margin-top:-4rem;">
+        <input type="button" class="btn btn-info btn-md" id="btnContinueSelf" value="Continue" data-toggle="modal" onclick="Validate()" />
+        <input type="button" style="display:none" class="btn btn-info btn-md" id="btnContinueBank" value="Continue" onclick="GenerateLoan()" />
+    </div>
+    @*<div class="col-sm-8" style="display:none;" id="divPrinciple">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="text-info">Principle<span style="color:red">*</span>:</label><br />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.loanDetails.LoanAmount, new { Value = "", id = "txtPrinciple", @class = "form-control", @onkeypress = "IsNumeric(event)", onblur = "CalculateEMI()", autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8" style="display:none;" id="divIntrestRate">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="text-info">Rate of Interest<span style="color:red">*</span>:</label><br />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.loanDetails.Interest, new { Value = "", id = "txtRateofInterest", @class = "form-control", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateEMI()", autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8" style="display:none;" id="divEstIntrest">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="text-info">Estimated Monthly Interest:</label><br />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <input type="text" id="txtEstimatedIntrest" class="form-control" disabled />
+                </div>
+            </div>
+        </div>*@
 </div>
+
+
+
+@*<div class="panel panel-default">
+        <br />
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-offset-3">
+                    <div class="col-sm-8">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Customer Name</td>
+                                <td>@Model.CustomerName</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile Number</td>
+                                <td>@Model.MobileNumber</td>
+                            </tr>
+                            @if (Model.ornamentsList[0].LoanType == 1)
+                            {
+                                <tr>
+                                    <td>Aadhar</td>
+                                    <td>@Model.Aadhar</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td>Address</td>
+                                <td>@Model.Address</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">S No</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Gross Weight</th>
+                            <th scope="col">Stone Weight</th>
+                            <th scope="col">Quality</th>
+                            <th scope="col">Net Weight</th>
+                            <th scope="col">Market Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal GW = 0;
+                            decimal SW = 0;
+                            decimal NW = 0;
+                            decimal MP = 0;
+                            for (int i = 1; i <= Model.ornamentsList.Count(); i++)
+                            {
+                                GW += Model.ornamentsList[i - 1].GrossWeight;
+                                SW += Model.ornamentsList[i - 1].StoneWeight;
+                                NW += Model.ornamentsList[i - 1].NetWeight;
+                                MP += Model.ornamentsList[i - 1].MarketPrice;
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <td>@Model.ornamentsList[i - 1].Ornament </td>
+                                    <td>@Model.ornamentsList[i - 1].Quantity </td>
+                                    <td>@Model.ornamentsList[i - 1].GrossWeight </td>
+                                    <td>@Model.ornamentsList[i - 1].StoneWeight </td>
+                                    <td>@Model.ornamentsList[i - 1].Quality </td>
+                                    <td>@Model.ornamentsList[i - 1].NetWeight </td>
+                                    <td>@Model.ornamentsList[i - 1].MarketPrice </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td scope="col" style="font-weight: bold">@GW</td>
+                                <td scope="col" style="font-weight: bold">@SW</td>
+                                <td></td>
+                                <td scope="col" style="font-weight: bold">@NW</td>
+                                <td scope="col" style="font-weight: bold"><span id="spnMarketPrice">@MP</span></td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            @Html.HiddenFor(x => x.loanDetails.CustomerId, new { id = "hdnCustomerId" })
+            @Html.HiddenFor(x => x.loanDetails.LoanType, new { id = "hdnLoanType" })
+            @Html.HiddenFor(x => x.loanDetails.CreatedBy, new { id = "hdnUserName" })
+            <div class="col-sm-8" style="display:none;" id="divPrinciple">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Principle<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.loanDetails.LoanAmount, new { Value = "", id = "txtPrinciple", @class = "form-control", @onkeypress = "IsNumeric(event)", onblur = "CalculateEMI()", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8" style="display:none;" id="divIntrestRate">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Rate of Interest<span style="color:red">*</span>:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.TextBoxFor(x => x.loanDetails.Interest, new { Value = "", id = "txtRateofInterest", @class = "form-control", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateEMI()", autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8" style="display:none;" id="divEstIntrest">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="text-info">Estimated Monthly Interest:</label><br />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="text" id="txtEstimatedIntrest" class="form-control" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right" style="margin-right: 5%;">
+                <input type="button" class="btn btn-info btn-md" id="btnContinueSelf" value="Continue" data-toggle="modal" onclick="Validate()" />
+                <input type="button" style="display:none" class="btn btn-info btn-md" id="btnContinueBank" value="Continue" onclick="GenerateLoan()" />
+            </div>
+            <br /><br />
+        </div>
+    </div>
+    <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
+
+    </div>*@
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
-        <div class="modal-content" style="width:70%">
+        <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Confirm Loan</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <p>you really want to give loan?</p>
@@ -172,6 +323,12 @@
         }
         $("#loader").hide();
     })
+
+    IsNumeric = function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            e.preventDefault()
+        }
+    }
     Validate = function () {
         var isValid = true;
         var errorMsg = "";

@@ -11,8 +11,8 @@ namespace DigitalAppraiser.BuinessLogic.Interfaces
         IEnumerable<SelectListItem> GetAppraiserBanks(int appraiserId);
         int SaveSelfCustomerDetails(Models.ViewModels.SelfCustomerModel model,int AppraiserId, string userName);
         Models.DBModels.TodayRate GetTodayRate(int appraiserId, int bankId);
-        int SaveOrnaments(string userName, int customerId, Models.ViewModels.OrnamentDetailsModel model);
-        Models.ViewModels.OrnamentDetailsModel GetOrnamentDetails(int customerId,int BankId);
+        int SaveOrnaments(string userName, int customerId, List<OrnamentDetails> model);
+        Models.ViewModels.OrnamentDetailsModel GetOrnamentDetails(int customerId);
         Models.ViewModels.ReceiptModel GenerateLoan(Models.DBModels.LoanDetails model, int appraiserId);
         int SaveBankCustomerDetails(Models.ViewModels.BankCustomerModel model,int AppraiserId, string userName);
         Models.ViewModels.CustomerLoanDataModel GetCustomerLoanData(int AppraiserId);

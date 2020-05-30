@@ -1,0 +1,259 @@
+﻿@model DigitalAppraiser.Models.ViewModels.OrnamentDetailsModel
+@Html.HiddenFor(x => x.ornamentsList[0].LoanType, new { id = "hdnLoanType" })
+<div class="panel panel-default">
+    <br />
+<div class="container">
+    <div class="row">
+        <div class="col-sm-offset-3">
+            <div class="col-sm-8">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Customer Name</td>
+                        <td>@Model.CustomerName</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile Number</td>
+                        <td>@Model.MobileNumber</td>
+                    </tr>
+                    @if (Model.ornamentsList[0].LoanType == 1)
+                    {
+                    <tr>
+                        <td>Aadhar</td>
+                        <td>@Model.Aadhar</td>
+                    </tr>
+                    }
+                    <tr>
+                        <td>Address</td>
+                        <td>@Model.Address</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">S No</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Gross Weight</th>
+                    <th scope="col">Stone Weight</th>
+                    <th scope="col">Quality</th>
+                    <th scope="col">Net Weight</th>
+                    <th scope="col">Market Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal GW = 0;
+                    decimal SW = 0;
+                    decimal NW = 0;
+                    decimal MP = 0;
+                    for (int i = 1; i <= Model.ornamentsList.Count(); i++)
+                    {
+                        GW += Model.ornamentsList[i - 1].GrossWeight;
+                        SW += Model.ornamentsList[i - 1].StoneWeight;
+                        NW += Model.ornamentsList[i - 1].NetWeight;
+                        MP += Model.ornamentsList[i - 1].MarketPrice;
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td>@Model.ornamentsList[i - 1].Ornament </td>
+                            <td>@Model.ornamentsList[i - 1].Quantity </td>
+                            <td>@Model.ornamentsList[i - 1].GrossWeight </td>
+                            <td>@Model.ornamentsList[i - 1].StoneWeight </td>
+                            <td>@Model.ornamentsList[i - 1].Quality </td>
+                            <td>@Model.ornamentsList[i - 1].NetWeight </td>
+                            <td>@Model.ornamentsList[i - 1].MarketPrice </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td scope="col" style="font-weight: bold">@GW</td>
+                        <td scope="col" style="font-weight: bold">@SW</td>
+                        <td></td>
+                        <td scope="col" style="font-weight: bold">@NW</td>
+                        <td scope="col" style="font-weight: bold"><span id="spnMarketPrice">@MP</span></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    @Html.HiddenFor(x => x.loanDetails.CustomerId, new { id = "hdnCustomerId" })
+    @Html.HiddenFor(x => x.loanDetails.LoanType, new { id = "hdnLoanType" })
+    @Html.HiddenFor(x => x.loanDetails.CreatedBy, new { id = "hdnUserName" })
+    <div class="col-sm-8" style="display:none;" id="divPrinciple">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="text-info">Principle<span style="color:red">*</span>:</label><br />
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.loanDetails.LoanAmount, new { Value = "", id = "txtPrinciple", @class = "form-control", @onkeypress = "IsNumeric(event)", onblur = "CalculateEMI()", autocomplete = "off" })
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8" style="display:none;" id="divIntrestRate">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="text-info">Rate of Interest<span style="color:red">*</span>:</label><br />
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.loanDetails.Interest, new { Value = "", id = "txtRateofInterest", @class = "form-control", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateEMI()", autocomplete = "off" })
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8" style="display:none;" id="divEstIntrest">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="text-info">Estimated Monthly Interest:</label><br />
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <input type="text" id="txtEstimatedIntrest" class="form-control" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="pull-right" style="margin-right: 5%;">
+        <input type="button" class="btn btn-info btn-md" id="btnContinueSelf" value="Continue" data-toggle="modal" onclick="Validate()" />
+        <input type="button" style="display:none" class="btn btn-info btn-md" id="btnContinueBank" value="Continue" onclick="GenerateLoan()"/>
+    </div>
+    <br /><br />
+</div>
+</div>
+<div id="divError" class="alert alert-danger col-sm-8" style="display:none">
+
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="width:70%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirm Loan</h4>
+            </div>
+            <div class="modal-body">
+                <p>you really want to give loan?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-info" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-info" data-dismiss="modal" onclick="GenerateLoan()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var LoanType = $("#hdnLoanType").val();
+    $(document).ready(function () {
+        ActiveMenu("liProcessLoan");
+        if (LoanType == 1) {
+            $("#divPrinciple").show();
+            $("#divEstIntrest").show();
+            $("#divIntrestRate").show();
+            $("#btnContinueSelf").show();
+            $("#btnContinueBank").hide();
+        } else {
+            $("#divPrinciple").hide();
+            $("#divEstIntrest").hide();
+            $("#divIntrestRate").hide();
+            $("#btnContinueSelf").hide();
+            $("#btnContinueBank").show();
+        }
+        $("#loader").hide();
+    })
+    Validate = function () {
+        var isValid = true;
+        var errorMsg = "";
+        if ($("#txtPrinciple").val() == "") {
+            isValid = false;
+            errorMsg = "Please enter all mandatory fields";
+        }
+        if ($("#txtRateofInterest").val() == "") {
+            isValid = false;
+            errorMsg = "Please enter all mandatory fields";
+        }
+        if (isValid == true) {
+            $("#myModal").modal('show');
+        } else {
+            $("#divError").html(errorMsg);
+            $("#divError").show();
+        }
+    }
+    CalculateEMI = function () {
+        var principle = $("#txtPrinciple").val();
+        var interest = $("#txtRateofInterest").val();
+        if (principle != "" && interest != "") {
+            var emi = (principle * interest) / 100;
+            $("#txtEstimatedIntrest").val(emi);
+        }
+    }
+    GenerateLoan = function () {
+        var model = {
+            ID: 0,
+            CustomerId: $("#hdnCustomerId").val(),
+            LoanType: LoanType,
+            LoanAmount: LoanType == 1 ? $("#txtPrinciple").val() : $("#spnMarketPrice").text(),
+            Interest: $("#txtRateofInterest").val(),
+            EMI: $("#txtEstimatedIntrest").val(),
+            IsActive: true,
+            CreatedBy: $("#hdnUserName").val(),
+            ModifiedBy: $("#hdnUserName").val()
+        };
+        $.ajax({
+            url: "/Apraiser/GenerateLoan",
+            type: "POST",
+            cache: false,
+            data: { model: model },
+            success: function (data) {
+                $("#divMain").html(data);
+            },
+            error: function (error) {
+
+            }
+        })
+    }
+    GenerateLoanBank = function () {
+
+    }
+    IsWeight = function (evt, element) {
+        //if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //    e.preventDefault()
+        //}
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 46 || charCode == 8 || charCode == 45))
+            return false;
+        else {
+            var len = $(element).val().length;
+            // Validation Point
+            var index = $(element).val().indexOf('.');
+            if (index > -1 && charCode == 46) {
+                return false;
+            }
+            if (index > 0 || index == 0) {
+                var CharAfterdot = (len + 1) - index;
+                if (CharAfterdot > 3) {
+                    return false;
+                }
+            }
+
+            // Validating Negative sign
+            index = $(element).val().indexOf('-');
+            if (index = '-1' && charCode == 45) {
+                return false;
+            }
+        }
+        return true;
+    }
+</script>

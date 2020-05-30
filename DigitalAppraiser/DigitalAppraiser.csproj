@@ -458,7 +458,7 @@
     <Content Include="Views\Apraiser\DashBoard.cshtml" />
     <Content Include="Views\Apraiser\OrnamentDetails.cshtml" />
     <Content Include="Views\Apraiser\SelfCustomer.cshtml" />
-    <Content Include="Views\Apraiser\Estimation.cshtml" />
+    <Content Include="Views\Apraiser\EstimationOld.cshtml" />
     <Content Include="Views\Apraiser\SelfReceipt.cshtml" />
     <Content Include="Views\Apraiser\BankCustomer.cshtml" />
     <Content Include="Views\Apraiser\SbiReceipt.cshtml" />
@@ -480,6 +480,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Apraiser\ProcessLoan.cshtml" />
+    <Content Include="Views\Apraiser\Estimation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

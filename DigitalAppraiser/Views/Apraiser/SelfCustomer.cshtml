@@ -1,77 +1,76 @@
 ﻿@model DigitalAppraiser.Models.ViewModels.SelfCustomerModel
 
-<div>
-    @using (Html.BeginForm("SelfCustomer", "Apraiser", FormMethod.Post, new { id = "formCustomerSelf" }))
-    {
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 row">
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6" style="width:50%;">
-                <h3 class="h3 text-center"> Customer Details</h3>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6 text-left">Date<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.selfCustomer.CreatedOn, new { id = "txtCreatedOn", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                    @Html.ValidationMessageFor(x => x.selfCustomer.CreatedOn, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Name<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.selfCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                    @Html.ValidationMessageFor(x => x.selfCustomer.Name, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Aadhar</label>
-                    @Html.TextBoxFor(x => x.selfCustomer.UANNumber, new { id = "txtUANNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)", @maxlength = "12" })
-                    @Html.ValidationMessageFor(x => x.selfCustomer.UANNumber, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Mobile Number<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.selfCustomer.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @maxlength = "10", @onkeypress = "IsNumeric(event)" })
-                    @Html.ValidationMessageFor(x => x.selfCustomer.MobileNumber, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Address<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.selfCustomer.Address, new { id = "txtAddress", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                    @Html.ValidationMessageFor(x => x.selfCustomer.Address, "", new { @class = "error" })
-                </div>
+@using (Html.BeginForm("SelfCustomer", "Apraiser", FormMethod.Post, new { id = "formCustomerSelf" }))
+{
+    <input type="hidden" id="hdnTodayRate" value="@Json.Encode(ViewBag.TodayRate)" />
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6" style="width:50%;">
+            <h3 class="h3 text-center"> Customer Details</h3>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6 text-left">Date<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.selfCustomer.CreatedOn, new { id = "txtCreatedOn", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.ValidationMessageFor(x => x.selfCustomer.CreatedOn, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                <h3 class="h3 text-center"> Ornament Details</h3>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6 text-left">Ornament<span style="color:red">*</span></label>
-                    @Html.TextAreaFor(x => x.ornamentDetails.Ornament, new { id = "txtOrnament", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                    @Html.ValidationMessageFor(x => x.ornamentDetails.Ornament, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Quantity<span style="color:red">*</span></label>
-                    @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantity", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                    @Html.ValidationMessageFor(x => x.ornamentDetails.Quantity, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Gross weight in grams<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { id = "txtGrossWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
-                    @Html.ValidationMessageFor(x => x.ornamentDetails.GrossWeight, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Stone weight in grams<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { id = "txtStoneWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
-                    @Html.ValidationMessageFor(x => x.ornamentDetails.StoneWeight, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Net weight in grams<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { id = "txtNetWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
-                    @Html.ValidationMessageFor(x => x.ornamentDetails.NetWeight, "", new { @class = "error" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-6 col-sm-6 col-md-6 col-lg-6">Market Price<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.ornamentDetails.MarketPrice, new { id = "txtMarketPrice", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                    @Html.ValidationMessageFor(x => x.ornamentDetails.MarketPrice, "", new { @class = "error" })
-                </div>
-                <div class="form-group offset-6 offset-sm-6 offset-md-6 offset-lg-6">
-                    <a class="btn btn-primary" href="/Apraiser/SelfCustomer">Cancel</a>&nbsp;&nbsp;
-                    <input type="submit" class="btn btn-primary float-right" value="Submit" />
-                </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Name<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.selfCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.ValidationMessageFor(x => x.selfCustomer.Name, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Aadhar</label>
+                @Html.TextBoxFor(x => x.selfCustomer.UANNumber, new { id = "txtUANNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)", @maxlength = "12" })
+                @Html.ValidationMessageFor(x => x.selfCustomer.UANNumber, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Mobile Number<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.selfCustomer.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @maxlength = "10", @onkeypress = "IsNumeric(event)" })
+                @Html.ValidationMessageFor(x => x.selfCustomer.MobileNumber, "", new { @class = "error col-6 offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Address<span style="color:red">*</span></label>
+                @Html.TextAreaFor(x => x.selfCustomer.Address, new { id = "txtAddress", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.ValidationMessageFor(x => x.selfCustomer.Address, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
         </div>
-    }
-</div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <h3 class="h3 text-center"> Ornament Details</h3>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6 text-left">Ornament<span style="color:red">*</span></label>
+                @Html.TextAreaFor(x => x.ornamentDetails.Ornament, new { id = "txtOrnament", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.Ornament, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Quantity<span style="color:red">*</span></label>
+                @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantity", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.Quantity, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Gross weight in grams<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { id = "txtGrossWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", onblur = "CalculateNetWeightAndPrice()", @onkeypress = "IsNumeric(event)" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.GrossWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Stone weight in grams</label>
+                @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { id = "txtStoneWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", onblur = "CalculateNetWeightAndPrice()", @onkeypress = "IsNumeric(event)" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.StoneWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Net weight in grams<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { id = "txtNetWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", onblur = "CalculateNetWeightAndPrice()", @onkeypress = "IsNumeric(event)" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.NetWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-6 col-lg-6">Market Price<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.ornamentDetails.MarketPrice, new { id = "txtMarketPrice", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.MarketPrice, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+            </div>
+            <div class="form-group offset-6 offset-sm-6 offset-md-6 offset-lg-6">
+                <a class="btn btn-primary" href="/Apraiser/ProcessLoan">Cancel</a>&nbsp;&nbsp;
+                <input type="submit" class="btn btn-primary float-right" value="Submit" />
+            </div>
+        </div>
+    </div>
+}
 
 
 
@@ -152,6 +151,7 @@
     </div>*@
 <script>
     $(document).ready(function () {
+        var TodayRate = $.parseJSON($("#hdnTodayRate").val());
         $("#txtCreatedOn").datepicker({ dateFormat: "dd-M-yy" }).datepicker("setDate", new Date());
         ActiveMenu("liProcessLoan");
         $("#loader").hide();
@@ -159,6 +159,28 @@
     IsNumeric = function (e) {
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
             e.preventDefault()
+        }
+    }
+    CalculateNetWeightAndPrice = function () {
+        debugger;
+        //var TodayRate = $.parseJSON($("#hdnTodayRate").val());
+        var netWt = 0;
+        var marketPrice = 0;
+        var grossWt = $("#txtGrossWeight").val() == "" ? 0 : $("#txtGrossWeight").val();
+        var stoneWt = $("#txtStoneWeight").val() == "" ? 0 : $("#txtStoneWeight").val();
+        var quality = $("#txtQuality").val() == "" ? 1 : $("#txtQuality").val();
+        if ($("#txtQuality").val() != "") {
+            if (TodayRate.BankId == 1) {
+                netWt = (grossWt - stoneWt) * (quality / 100);
+
+                marketPrice = netWt * TodayRate.Rate;
+            } else {
+                var s = (grossWt - stoneWt) * (quality / 100);
+                netWt = s + ((s * 8) / 100);
+                marketPrice = netWt * TodayRate.Rate;
+            }
+            $("#txtNetWeight").val(netWt.toFixed(3));
+            $("#txtMarketPrice").val(marketPrice.toFixed(2));
         }
     }
     SaveCustomerSelf = function () {

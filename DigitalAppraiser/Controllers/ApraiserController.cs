@@ -51,7 +51,8 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int AppraiserId = LogedUser.AppraiserId.Value;
             Models.ViewModels.ProcessLoanModel model = new Models.ViewModels.ProcessLoanModel();
-            model.Banks = bl.GetAppraiserBanks(AppraiserId);
+            model.bankCustomer = new Models.ViewModels.BankCustomerModel();
+            model.bankCustomer.Banks = bl.GetAppraiserBanks(AppraiserId);
             model.selfCustomer = new Models.ViewModels.SelfCustomerModel();
             int[] list = Enumerable.Range(1, 30).ToArray();
             model.selfCustomer.Quantity = list.Select(x => new SelectListItem
@@ -59,6 +60,19 @@ namespace DigitalAppraiser.Controllers
                 Value = x.ToString(),
                 Text = x.ToString()
             });
+            var relList = new[] { new { Name = "Son of", Value = 1 }, new { Name = "Daughter of", Value = 2 }, new { Name = "Wife of", Value = 3 } };
+            //model.BankId = BankId;
+            model.bankCustomer.RelationTypes = relList.Select(x => new SelectListItem
+            {
+                Value = x.Value.ToString(),
+                Text = x.Name
+            });
+            model.bankCustomer.Quantity = list.Select(x => new SelectListItem
+            {
+                Value = x.ToString(),
+                Text = x.ToString()
+            });
+            ViewBag.TodayRate = bl.GetTodayRate(AppraiserId, 1);
             return View(model);
         }
         [HttpGet]
@@ -73,33 +87,62 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int AppraiserId = LogedUser.AppraiserId.Value;
             string userName = LogedUser.UserName;
-            int customerId = bl.SaveSelfCustomerDetails(model, AppraiserId, userName);
-            return RedirectToAction("OrnamentDetails", new { bankId = 1, customerId = customerId });
-        }
-        [HttpGet]
-        public ActionResult OrnamentDetails(int bankId, int customerId)
-        {
-            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int AppraiserId = LogedUser.AppraiserId.Value;
-            Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
-            model.todayRate = bl.GetTodayRate(AppraiserId, bankId);
-            //int[] list = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            int[] list = Enumerable.Range(1, 30).ToArray();
-            model.Quantity = list.Select(x => new SelectListItem
+            if (ModelState.IsValid == true)
             {
-                Value = x.ToString(),
-                Text = x.ToString()
-            });
-            return View(model);
+                int customerId = bl.SaveSelfCustomerDetails(model, AppraiserId, userName);
+                return RedirectToAction("Estimation", new { customerId = customerId });
+            }
+            else
+            {
+                Models.ViewModels.ProcessLoanModel procModel = new Models.ViewModels.ProcessLoanModel();
+                procModel.bankCustomer = new Models.ViewModels.BankCustomerModel();
+                procModel.bankCustomer.Banks = bl.GetAppraiserBanks(AppraiserId);
+                procModel.selfCustomer = model;
+                int[] list = Enumerable.Range(1, 30).ToArray();
+                procModel.selfCustomer.Quantity = list.Select(x => new SelectListItem
+                {
+                    Value = x.ToString(),
+                    Text = x.ToString()
+                });
+                var relList = new[] { new { Name = "Son of", Value = 1 }, new { Name = "Daughter of", Value = 2 }, new { Name = "Wife of", Value = 3 } };
+                //model.BankId = BankId;
+                procModel.bankCustomer.RelationTypes = relList.Select(x => new SelectListItem
+                {
+                    Value = x.Value.ToString(),
+                    Text = x.Name
+                });
+                procModel.bankCustomer.Quantity = list.Select(x => new SelectListItem
+                {
+                    Value = x.ToString(),
+                    Text = x.ToString()
+                });
+                return View("ProcessLoan", procModel);
+            }
         }
-        [HttpPost]
-        public ActionResult SaveOrnaments(Models.ViewModels.OrnamentDetailsModel model)
+        //[HttpGet]
+        //public ActionResult OrnamentDetails(int bankId, int customerId)
+        //{
+        //    BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+        //    int AppraiserId = LogedUser.AppraiserId.Value;
+        //    Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
+        //    model.todayRate = bl.GetTodayRate(AppraiserId, bankId);
+        //    //int[] list = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        //    int[] list = Enumerable.Range(1, 30).ToArray();
+        //    model.Quantity = list.Select(x => new SelectListItem
+        //    {
+        //        Value = x.ToString(),
+        //        Text = x.ToString()
+        //    });
+        //    return View(model);
+        //}
+        [HttpGet]
+        public ActionResult Estimation(int customerId)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-            int customerId = model.customerId;
+            Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
+            model.customerId = customerId;
             string userName = LogedUser.UserName;
-            bl.SaveOrnaments(userName, customerId, model);
-            model.ornamentsList = bl.GetOrnamentDetails(customerId, model.ornamentsList[0].LoanType).ornamentsList;
+            model.ornamentsList = bl.GetOrnamentDetails(customerId).ornamentsList;
             model.loanDetails = new Models.DBModels.LoanDetails();
             model.loanDetails.CustomerId = customerId;
             model.loanDetails.CreatedBy = userName;
@@ -110,7 +153,7 @@ namespace DigitalAppraiser.Controllers
             model.MobileNumber = customer.selfCustomer.MobileNumber;
             model.Address = customer.selfCustomer.Address;
             model.Aadhar = customer.selfCustomer.UANNumber;
-            return PartialView("Estimation", model);
+            return View(model);
         }
         [HttpPost]
         public ActionResult GenerateLoan(Models.DBModels.LoanDetails model)
@@ -132,7 +175,7 @@ namespace DigitalAppraiser.Controllers
         {
             Models.ViewModels.BankCustomerModel model = new Models.ViewModels.BankCustomerModel();
             var relList = new[] { new { Name = "Son of", Value = 1 }, new { Name = "Daughter of", Value = 2 }, new { Name = "Wife of", Value = 3 } };
-            model.BankId = BankId;
+            //model.BankId = BankId;
             model.RelationTypes = relList.Select(x => new SelectListItem
             {
                 Value = x.Value.ToString(),
@@ -146,9 +189,38 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int AppraiserId = LogedUser.AppraiserId.Value;
             string userName = LogedUser.UserName;
-            int BankId = model.BankId;
-            int customerId = bl.SaveBankCustomerDetails(model, AppraiserId, userName);
-            return RedirectToAction("OrnamentDetails", new { bankId = BankId, customerId = customerId });
+            //int BankId = model.BankId;
+            if (ModelState.IsValid == true)
+            {
+                int customerId = bl.SaveBankCustomerDetails(model, AppraiserId, userName);
+                return RedirectToAction("Estimation", new { customerId = customerId });
+            }
+            else
+            {
+                Models.ViewModels.ProcessLoanModel procModel = new Models.ViewModels.ProcessLoanModel();
+                procModel.selfCustomer = new Models.ViewModels.SelfCustomerModel();
+                procModel.bankCustomer = model;
+                procModel.bankCustomer.Banks = bl.GetAppraiserBanks(AppraiserId);
+                int[] list = Enumerable.Range(1, 30).ToArray();
+                procModel.selfCustomer.Quantity = list.Select(x => new SelectListItem
+                {
+                    Value = x.ToString(),
+                    Text = x.ToString()
+                });
+                var relList = new[] { new { Name = "Son of", Value = 1 }, new { Name = "Daughter of", Value = 2 }, new { Name = "Wife of", Value = 3 } };
+                //model.BankId = BankId;
+                procModel.bankCustomer.RelationTypes = relList.Select(x => new SelectListItem
+                {
+                    Value = x.Value.ToString(),
+                    Text = x.Name
+                });
+                procModel.bankCustomer.Quantity = list.Select(x => new SelectListItem
+                {
+                    Value = x.ToString(),
+                    Text = x.ToString()
+                });
+                return View("ProcessLoan", procModel);
+            }
         }
         public ActionResult SbiReceipt()
         {

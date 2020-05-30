@@ -77,10 +77,12 @@ figure {
 }
 /*--- Bootstrap Padding Fix --*/
 [class*="col-"] {
-    padding: 1rem;
+    padding: 0.5rem;
 }
 
-
+.width100{
+    padding:0px !important;
+}
 
 
 
