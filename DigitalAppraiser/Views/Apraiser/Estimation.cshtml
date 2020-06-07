@@ -6,7 +6,6 @@
 }
 
 <style>
-
 </style>
 
 
@@ -45,7 +44,7 @@
                     <th scope="col">Quantity</th>
                     <th scope="col">Gross Weight</th>
                     <th scope="col">Stone Weight</th>
-                    <th scope="col">Quality</th>
+                    @*<th scope="col">Quality</th>*@
                     <th scope="col">Net Weight</th>
                     <th scope="col">Market Price</th>
                 </tr>
@@ -68,7 +67,7 @@
                             <td>@Model.ornamentsList[i - 1].Quantity </td>
                             <td>@Model.ornamentsList[i - 1].GrossWeight </td>
                             <td>@Model.ornamentsList[i - 1].StoneWeight </td>
-                            <td>@Model.ornamentsList[i - 1].Quality </td>
+                            @*<td>@Model.ornamentsList[i - 1].Quality </td>*@
                             <td>@Model.ornamentsList[i - 1].NetWeight </td>
                             <td>@Model.ornamentsList[i - 1].MarketPrice </td>
                         </tr>
@@ -79,7 +78,7 @@
                         <td></td>
                         <td scope="col" style="font-weight: bold">@GW</td>
                         <td scope="col" style="font-weight: bold">@SW</td>
-                        <td></td>
+                        @*<td></td>*@
                         <td scope="col" style="font-weight: bold">@NW</td>
                         <td scope="col" style="font-weight: bold"><span id="spnMarketPrice">@MP</span></td>
                     </tr>
@@ -95,11 +94,13 @@
 
     <div class="form-group form-inline">
         <label class="col-6 col-sm-6 col-md-3 col-lg-3 flexLeft">Principle<span style="color:red">*</span></label>
-        @Html.TextBoxFor(x => x.loanDetails.LoanAmount, new { id = "txtPrinciple", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3", @onkeypress = "IsNumeric(event)", onblur = "CalculateEMI()" })
+        @Html.TextBoxFor(x => x.loanDetails.LoanAmount, new { Value = "", id = "txtPrinciple", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3", @onkeypress = "IsNumeric(event)", onblur = "CalculateEMI()" })
+        <label id="lblLoanAmount" class="error" style="display:none;">Please enter Loan amount. </label>
     </div>
     <div class="form-group form-inline">
         <label class="col-6 col-sm-6 col-md-3 col-lg-3 flexLeft">Rate of Interest<span style="color:red">*</span></label>
-        @Html.TextBoxFor(x => x.loanDetails.Interest, new { id = "txtRateofInterest", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateEMI()" })
+        @Html.TextBoxFor(x => x.loanDetails.Interest, new { Value = "", id = "txtRateofInterest", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateEMI()" })
+        <label id="lblInterest" class="error" style="display:none;">Please enter Interest. </label>
     </div>
     <div class="form-group form-inline">
         <label class="col-6 col-sm-6 col-md-3 col-lg-3 flexLeft">Estimated Monthly Interest<span style="color:red">*</span></label>
@@ -282,6 +283,9 @@
     <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
 
     </div>*@
+<div id="divError" class="alert alert-danger col-sm-8" style="display:none">
+
+</div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
@@ -328,21 +332,27 @@
         }
     }
     Validate = function () {
+        debugger;
         var isValid = true;
         var errorMsg = "";
         if ($("#txtPrinciple").val() == "") {
             isValid = false;
-            errorMsg = "Please enter all mandatory fields";
+            $("#lblLoanAmount").show();
+        } else {
+            $("#lblLoanAmount").hide();
         }
         if ($("#txtRateofInterest").val() == "") {
             isValid = false;
-            errorMsg = "Please enter all mandatory fields";
+            $("#lblInterest").show();
+        } else {
+            $("#lblInterest").hide();
         }
         if (isValid == true) {
+            $("#lblLoanAmount").hide();
+            $("#lblInterest").hide();
             $("#myModal").modal('show');
         } else {
-            $("#divError").html(errorMsg);
-            $("#divError").show();
+           
         }
     }
     CalculateEMI = function () {
@@ -372,6 +382,7 @@
             data: { model: model },
             success: function (data) {
                 $("#divMain").html(data);
+                $("#myModal").modal('hide');
             },
             error: function (error) {
 

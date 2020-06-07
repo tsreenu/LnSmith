@@ -1,7 +1,7 @@
 ﻿@model DigitalAppraiser.Models.ViewModels.ReceiptModel
 <script src="~/Scripts/jQuery.print.js"></script>
 
-<div>
+<div id="divSelfReceipt" class="offset-md-3 offset-lg-3 col-md-6 col-lg-6 offset-sm-1 col-sm-10 offset-1 col-10" style="background-color:#fff">
     <div style="margin: auto;width:100%;text-align:center">
         <h1>@Model.ShopDetails</h1>
     </div>
@@ -11,124 +11,193 @@
     <div style="margin: auto;width:100%;text-align:center">
         <p>Ph.No: @Model.Shopnumber</p>
     </div>
+    <table class="table table-bordered">
+        <tr>
+            <td>Loan Given Date</td>
+            <td>@Model.loanDetails.CreatedOn.DateTime.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <td>Loan ID</td>
+            <td>@Model.loanDetails.LoanId</td>
+        </tr>
+        <tr>
+            <td>Customer Name</td>
+            <td>@Model.selfCustomerDetails.Name</td>
+        </tr>
+        <tr>
+            <td>UAN Number</td>
+            <td>@Model.selfCustomerDetails.UANNumber</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>@Model.selfCustomerDetails.Address</td>
+        </tr>
+        <tr>
+            <td>Ornaments</td>
+            <td>@Model.ornamentsList[0].Ornament</td>
+        </tr>
+        <tr>
+            <td>Total Gross Weight</td>
+            <td>@Model.ornamentsList[0].GrossWeight</td>
+        </tr>
+        <tr>
+            <td>Total Stone Weight</td>
+            <td>@Model.ornamentsList[0].StoneWeight</td>
+        </tr>
+        <tr>
+            <td>Total Net Weight</td>
+            <td>@Model.ornamentsList[0].NetWeight</td>
+        </tr>
+        <tr>
+            <td>Total Items Quantity</td>
+            <td>@Model.ornamentsList[0].Quantity</td>
+        </tr>
+        <tr>
+            <td>Mobile Number</td>
+            <td>@Model.selfCustomerDetails.MobileNumber</td>
+        </tr>
+        <tr>
+            <td>Principle Amount</td>
+            <td>@Model.loanDetails.LoanAmount</td>
+        </tr>
+        <tr>
+            <td>Rate of Interest</td>
+            <td>@Model.loanDetails.Interest</td>
+        </tr>
+        <tr>
+            <td>Estimated Monthly Interest</td>
+            <td>@Model.loanDetails.EMI</td>
+        </tr>
+    </table>
+    Note: Loan tenure is valid up to 12 months
+    <br />
+    <table class="table table-borderless">
+        <tr>
+            <td> Customer Sign </td>
+            <td><label class="fa-pull-right"> Signing Authority </label></td>
+        </tr>
+    </table>
+
+</div>
+<div class="offset-md-3 offset-lg-3 col-md-6 col-lg-6 offset-sm-1 col-sm-10 offset-1 col-10">
+    <input type="button" class="btn btn-info fa-pull-right" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()">
 </div>
 
 
-
 @*<div class="container" id="divSelfReceipt">
-    <div class="row">
-        <div style="margin: auto;width:100%;text-align:center">
-            <h1>@Model.ShopDetails</h1>
-        </div>
-        <div style="margin: auto;width:100%;text-align:center">
-            <p>@Model.ShopAddress</p>
-        </div>
-        <div style="margin: auto;width:100%;text-align:center">
-            <p>Ph.No: @Model.Shopnumber</p>
-        </div>
-<div class="col-sm-offset-3">
-                <div class="col-sm-8">
-                    <table class="table table-bordered">
-                        <tr>
-                            <td>Date</td>
-                            <td id="txtDate" style="font-weight: bold;font-size:medium">@DateTime.Now.ToString("dd/MMM/yyyy")</td>
-                        </tr>
-                        <tr>
-                            <td>Loan ID</td>
-                            <td style="font-weight: bold;font-size:medium">@Model.loanDetails.LoanId</td>
-                        </tr>
-                        <tr>
-                            <td>Customer Name</td>
-                            <td>@Model.selfCustomerDetails.Name</td>
-                        </tr>
-                        <tr>
-                            <td>UAN Number</td>
-                            <td>@Model.selfCustomerDetails.UANNumber</td>
-                        </tr>
-                        <tr>
-                            <td>Address</td>
-                            <td>@Model.selfCustomerDetails.Address</td>
-                        </tr>
-                        <tr>
-                            <td>Mobile Number</td>
-                            <td>@Model.selfCustomerDetails.MobileNumber</td>
-                        </tr>
-                        <tr>
-                            <td>Principle Amount</td>
-                            <td style="font-weight: bold;font-size:medium">@Model.loanDetails.LoanAmount</td>
-                        </tr>
-                        <tr>
-                            <td>Rate of Interest</td>
-                            <td style="font-weight: bold;font-size:medium">@Model.loanDetails.Interest</td>
-                        </tr>
-                        <tr>
-                            <td>Estimated Monthly Interest</td>
-                            <td>@Model.loanDetails.EMI</td>
-                        </tr>
-                    </table>
+        <div class="row">
+            <div style="margin: auto;width:100%;text-align:center">
+                <h1>@Model.ShopDetails</h1>
+            </div>
+            <div style="margin: auto;width:100%;text-align:center">
+                <p>@Model.ShopAddress</p>
+            </div>
+            <div style="margin: auto;width:100%;text-align:center">
+                <p>Ph.No: @Model.Shopnumber</p>
+            </div>
+    <div class="col-sm-offset-3">
+                    <div class="col-sm-8">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Date</td>
+                                <td id="txtDate" style="font-weight: bold;font-size:medium">@DateTime.Now.ToString("dd/MMM/yyyy")</td>
+                            </tr>
+                            <tr>
+                                <td>Loan ID</td>
+                                <td style="font-weight: bold;font-size:medium">@Model.loanDetails.LoanId</td>
+                            </tr>
+                            <tr>
+                                <td>Customer Name</td>
+                                <td>@Model.selfCustomerDetails.Name</td>
+                            </tr>
+                            <tr>
+                                <td>UAN Number</td>
+                                <td>@Model.selfCustomerDetails.UANNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>@Model.selfCustomerDetails.Address</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile Number</td>
+                                <td>@Model.selfCustomerDetails.MobileNumber</td>
+                            </tr>
+                            <tr>
+                                <td>Principle Amount</td>
+                                <td style="font-weight: bold;font-size:medium">@Model.loanDetails.LoanAmount</td>
+                            </tr>
+                            <tr>
+                                <td>Rate of Interest</td>
+                                <td style="font-weight: bold;font-size:medium">@Model.loanDetails.Interest</td>
+                            </tr>
+                            <tr>
+                                <td>Estimated Monthly Interest</td>
+                                <td>@Model.loanDetails.EMI</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
+            <div class="row">
 
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">S No</th>
-                        <th scope="col">Item</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Gross Weight</th>
-                        <th scope="col">Stone Weight</th>
-                        <th scope="col">Quality</th>
-                        <th scope="col">Net Weight</th>
-                        <th scope="col">Market Price</th>
-                        <th scope="col">Principle</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        decimal GW = 0;
-                        decimal SW = 0;
-                        decimal NW = 0;
-                        decimal MP = 0;
-                        int total = 0;
-                        for (int i = 1; i <= Model.ornamentsList.Count(); i++)
-                        {
-                            GW += Model.ornamentsList[i - 1].GrossWeight;
-                            SW += Model.ornamentsList[i - 1].StoneWeight;
-                            NW += Model.ornamentsList[i - 1].NetWeight;
-                            MP += Model.ornamentsList[i - 1].MarketPrice;
-                            total += Model.ornamentsList[i - 1].Quantity;
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">S No</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Gross Weight</th>
+                            <th scope="col">Stone Weight</th>
+                            <th scope="col">Quality</th>
+                            <th scope="col">Net Weight</th>
+                            <th scope="col">Market Price</th>
+                            <th scope="col">Principle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal GW = 0;
+                            decimal SW = 0;
+                            decimal NW = 0;
+                            decimal MP = 0;
+                            int total = 0;
+                            for (int i = 1; i <= Model.ornamentsList.Count(); i++)
+                            {
+                                GW += Model.ornamentsList[i - 1].GrossWeight;
+                                SW += Model.ornamentsList[i - 1].StoneWeight;
+                                NW += Model.ornamentsList[i - 1].NetWeight;
+                                MP += Model.ornamentsList[i - 1].MarketPrice;
+                                total += Model.ornamentsList[i - 1].Quantity;
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <td>@Model.ornamentsList[i - 1].Ornament (@Model.ornamentsList[i - 1].Quantity) </td>
+
+                                    <td>@Model.ornamentsList[i - 1].GrossWeight </td>
+                                    <td>@Model.ornamentsList[i - 1].StoneWeight </td>
+                                    <td>@Model.ornamentsList[i - 1].Quality </td>
+                                    <td>@Model.ornamentsList[i - 1].NetWeight </td>
+                                    <td>@Model.ornamentsList[i - 1].MarketPrice </td>
+                                    <td></td>
+                                </tr>
+                            }
                             <tr>
-                                <th scope="row">@i</th>
-                                <td>@Model.ornamentsList[i - 1].Ornament (@Model.ornamentsList[i - 1].Quantity) </td>
-
-                                <td>@Model.ornamentsList[i - 1].GrossWeight </td>
-                                <td>@Model.ornamentsList[i - 1].StoneWeight </td>
-                                <td>@Model.ornamentsList[i - 1].Quality </td>
-                                <td>@Model.ornamentsList[i - 1].NetWeight </td>
-                                <td>@Model.ornamentsList[i - 1].MarketPrice </td>
                                 <td></td>
+
+                                <td style="font-weight: bold">Total(@total)</td>
+                                <td scope="col" style="font-weight: bold">@GW</td>
+                                <td scope="col" style="font-weight: bold">@SW</td>
+                                <td></td>
+                                <td scope="col" style="font-weight: bold">@NW</td>
+                                <td scope="col" style="font-weight: bold">@MP</td>
+                                <td scope="col" style="font-weight: bold">@Model.loanDetails.LoanAmount</td>
                             </tr>
                         }
-                        <tr>
-                            <td></td>
 
-                            <td style="font-weight: bold">Total(@total)</td>
-                            <td scope="col" style="font-weight: bold">@GW</td>
-                            <td scope="col" style="font-weight: bold">@SW</td>
-                            <td></td>
-                            <td scope="col" style="font-weight: bold">@NW</td>
-                            <td scope="col" style="font-weight: bold">@MP</td>
-                            <td scope="col" style="font-weight: bold">@Model.loanDetails.LoanAmount</td>
-                        </tr>
-                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>*@
 
-                </tbody>
-            </table>
-        </div>
-    </div>*@
-<input type="button" class="btn btn-info btn-md pull-right col-sm-2" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
 
 <script>
     $(document).ready(function () {
