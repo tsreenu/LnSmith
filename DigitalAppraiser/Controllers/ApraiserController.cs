@@ -116,25 +116,19 @@ namespace DigitalAppraiser.Controllers
                     Value = x.ToString(),
                     Text = x.ToString()
                 });
+                procModel.ActiveTab = "Self";
                 return View("ProcessLoan", procModel);
             }
         }
-        //[HttpGet]
-        //public ActionResult OrnamentDetails(int bankId, int customerId)
-        //{
-        //    BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
-        //    int AppraiserId = LogedUser.AppraiserId.Value;
-        //    Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
-        //    model.todayRate = bl.GetTodayRate(AppraiserId, bankId);
-        //    //int[] list = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        //    int[] list = Enumerable.Range(1, 30).ToArray();
-        //    model.Quantity = list.Select(x => new SelectListItem
-        //    {
-        //        Value = x.ToString(),
-        //        Text = x.ToString()
-        //    });
-        //    return View(model);
-        //}
+        [HttpGet]
+        public ActionResult GetTodayRate(int bankId)
+        {
+            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+            int AppraiserId = LogedUser.AppraiserId.Value;
+            TodayRate todayRate = new TodayRate();
+            todayRate = bl.GetTodayRate(AppraiserId, bankId);
+            return Json(todayRate, JsonRequestBehavior.AllowGet);
+        }
         [HttpGet]
         public ActionResult Estimation(int customerId)
         {
@@ -219,6 +213,7 @@ namespace DigitalAppraiser.Controllers
                     Value = x.ToString(),
                     Text = x.ToString()
                 });
+                procModel.ActiveTab = "Bank";
                 return View("ProcessLoan", procModel);
             }
         }
@@ -260,7 +255,7 @@ namespace DigitalAppraiser.Controllers
             int result = bl.SettleLoan(loanId, collectedAmount, collectedOn, CollectedInterest, NoOfDays);
             return Json(result);
         }
-        public void DownLoadExcel()
+        public void DownLoadExcel(int bankId)
         {
             Models.ViewModels.CustomerLoanDataModel model = new Models.ViewModels.CustomerLoanDataModel();
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
@@ -290,7 +285,16 @@ namespace DigitalAppraiser.Controllers
             //Body of table  
             //  
             int recordIndex = 2;
-            foreach (var customer in model.customerDataList)
+            IEnumerable<Models.ViewModels.CustomerLoanData> CustomerLoanData = new List<Models.ViewModels.CustomerLoanData>();
+            if(bankId == 1)
+            {
+                CustomerLoanData = model.selfCustomerDataList;
+            }
+            else
+            {
+                CustomerLoanData = model.bankCustomerDataList;
+            }
+            foreach (var customer in CustomerLoanData)
             {
                 workSheet.Cells[recordIndex, 1].Value = (recordIndex - 1).ToString();
                 workSheet.Cells[recordIndex, 2].Value = customer.Date.Date.ToShortDateString();

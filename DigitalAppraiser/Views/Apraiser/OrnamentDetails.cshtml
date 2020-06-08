@@ -6,7 +6,7 @@
 }
 
 @Html.HiddenFor(x => x.customerId, new { id = "hdnCustomerId" })
-<div class="col-sm-10 col-sm-offset-1 panel panel-default" style="padding:0px">
+@*<div class="col-sm-10 col-sm-offset-1 panel panel-default" style="padding:0px">
 
     @using (Html.BeginForm("SaveOrnaments", "Apraiser", FormMethod.Post, new { id = "formOrnamentDetails" }))
     {
@@ -47,7 +47,7 @@
             <div class="col-sm-8">
                 <div class="col-sm-4">
                     <div class="form-group">
-                        @*<label class="text-info" id="lblWeight" style="display:none">22 Carat Gold weight in grams<span style="color:red">*</span>:</label><br />*@
+                        
                         <label class="text-info" id="lblWeight"><span id="spnWeight">Gross weight in grams </span><span style="color:red">*</span>:</label><br />
                     </div>
                 </div>
@@ -115,7 +115,7 @@
         </div>
     }
 
-</div>
+</div>*@
 <div id="divOrnamentsTbl" class="row col-xs-12" style="display:none">
 
 </div>

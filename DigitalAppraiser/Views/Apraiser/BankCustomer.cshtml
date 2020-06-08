@@ -4,23 +4,23 @@
 {
     @*@Html.HiddenFor(x => x.BankId, new { id = "hdnBankId" })*@
     @*@Html.HiddenFor(x=>x.Banks)*@
-
+    <input type="hidden" id="hdnTodayRate" />
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 row">
         <div class="col-12 col-sm-12 col-md-6 col-lg-6" style="width:50%;">
             <h3 class="h3 text-center"> Customer Details</h3>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Bank<span style="color:red">*</span></label>
-                @Html.DropDownListFor(x => x.selectedBank, Model.Banks, "Select", new { id = "txtBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100", @onkeypress = "IsNumeric(event)", @maxlength = "12" })
+                @Html.DropDownListFor(x => x.selectedBank, Model.Banks, "Select", new { id = "ddBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100", @onchange = "GetTodayRate()" })
                 @Html.ValidationMessageFor(x => x.selectedBank, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Branch<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.Branch, new { id = "txtBranch", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.TextBoxFor(x => x.bankCustomer.Branch, new { id = "txtBranch", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
                 @Html.ValidationMessageFor(x => x.bankCustomer.Branch, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Name<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.TextBoxFor(x => x.bankCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
                 @Html.ValidationMessageFor(x => x.bankCustomer.Name, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
             <div class="form-group form-inline">
@@ -30,7 +30,7 @@
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Relation Name<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.RelationName, new { id = "txtRelationName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6"})
+                @Html.TextBoxFor(x => x.bankCustomer.RelationName, new { id = "txtRelationName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
                 @Html.ValidationMessageFor(x => x.bankCustomer.RelationName, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
             <div class="form-group form-inline">
@@ -40,7 +40,7 @@
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Mobile Number<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @maxlength = "10", @onkeypress = "IsNumeric(event)" })
+                @Html.TextBoxFor(x => x.bankCustomer.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @maxlength = "10", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
                 @Html.ValidationMessageFor(x => x.bankCustomer.MobileNumber, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
         </div>
@@ -53,27 +53,32 @@
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Quantity<span style="color:red">*</span></label>
-                @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantity", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100" })
+                @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantity", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100", autocomplete = "off" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.Quantity, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Gross weight in grams<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { id = "txtGrossWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
+                @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { id = "txtGrossWeightBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", autocomplete = "off", onblur = "CalculateNetWeightAndPriceBank()" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.GrossWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Stone weight in grams<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { id = "txtStoneWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
+                @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { id = "txtStoneWeightBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", autocomplete = "off", onblur = "CalculateNetWeightAndPriceBank()" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.StoneWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group form-inline">
+                <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Quality<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.ornamentDetails.Quality, new { id = "txttxtQualityBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", autocomplete = "off", onblur = "CalculateNetWeightAndPriceBank()" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.Quality, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
+            </div>
+            <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Net weight in grams<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { id = "txtNetWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "IsNumeric(event)" })
+                @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { id = "txtNetWeightBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 disable-color", @readonly = "readonly" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.NetWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Market Price<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.ornamentDetails.MarketPrice, new { id = "txtMarketPrice", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.TextBoxFor(x => x.ornamentDetails.MarketPrice, new { id = "txtMarketPriceBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 disable-color", @readonly = "readonly" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.MarketPrice, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group offset-6 offset-sm-6 offset-md-4 offset-lg-4 col-6 col-sm-6 col-md-6 col-lg-6">
@@ -83,94 +88,6 @@
         </div>
     </div>
 }
-@*<div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
-        Customer Details
-    </div>
-    <br />
-    <div class="panel-body">
-        @using (Html.BeginForm("BankCustomer", "Apraiser", FormMethod.Post, new { id = "formCustomerBank" }))
-        {
-            @Html.HiddenFor(x => x.BankId, new { id = "hdnBankId" })
-            <div class="col-sm-offset-1">
-                <div class="col-sm-8">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="text-info">Branch<span style="color:red">*</span>:</label><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            @Html.TextBoxFor(x => x.Branch, new { id = "txtBranch", @class = "form-control", autocomplete = "off" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="text-info">Name<span style="color:red">*</span>:</label><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            @Html.TextBoxFor(x => x.Name, new { id = "txtNameBank", @class = "form-control", autocomplete = "off" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="text-info">Relation Type<span style="color:red">*</span>:</label><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            @Html.DropDownListFor(x => x.RelationType, Model.RelationTypes, "Select", new { id = "ddRelationType", @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="text-info">Relation Name<span style="color:red">*</span>:</label><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            @Html.TextBoxFor(x => x.RelationName, new { id = "txtRelationName", @class = "form-control", autocomplete = "off" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="text-info">Address<span style="color:red">*</span>:</label><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            @Html.TextAreaFor(x => x.Address, new { id = "txtAddressBank", @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="text-info">Mobile Number<span style="color:red">*</span>:</label><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileBank", @class = "form-control", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
-                        </div>
-                    </div>
-                </div>
-                <input type="submit" class="btn btn-info btn-md col-sm-offset-3" id="btnSaveCustomerBank" value="Continue" onclick="SaveCustomerBank(event)" />
-                <div id="divError" class="alert alert-danger col-sm-8" style="display:none">
-
-                </div>
-            </div>
-        }
-    </div>*@
 <script>
     $(document).ready(function () {
         //$("#txtDateSelf").datepicker({ dateFormat: "dd-mm-yy" }).datepicker("setDate", new Date());
@@ -180,45 +97,42 @@
             e.preventDefault()
         }
     }
-    SaveCustomerBank = function () {
-        debugger;
-        var isValid = true;
-        var errorMsg = "";
-        if ($("#txtBranch").val() == "") {
-            errorMsg = "Please fill all amndatory fields."
-            isValid = false;
-        } if ($("#txtNameBank").val() == "") {
-            errorMsg = "Please fill all amndatory fields."
-            isValid = false;
-        }
-        if ($("#ddRelationType").val() == "") {
-            errorMsg = "Please fill all amndatory fields."
-            isValid = false;
-        }
-        if ($("#txtRelationName").val() == "") {
-            errorMsg = "Please fill all amndatory fields."
-            isValid = false;
-        }
-        if ($("#txtMobileBank").val() == "") {
-            errorMsg = "Please fill all amndatory fields."
-            isValid = false;
-        }
-        if ($("#txtAddressBank").val() == "") {
-            errorMsg = "Please fill all amndatory fields."
-            isValid = false;
+    CalculateNetWeightAndPriceBank = function () {
+
+        var TodayRate = $("#hdnTodayRate").val();
+        if (TodayRate != "") {
+            var netWt = 0;
+            var marketPrice = 0;
+            var grossWt = $("#txtGrossWeightBank").val() == "" ? 0 : $("#txtGrossWeightBank").val();
+            var stoneWt = $("#txtStoneWeightBank").val() == "" ? 0 : $("#txtStoneWeightBank").val();
+            var quality = $("#txttxtQualityBank").val() == "" ? 1 : $("#txttxtQualityBank").val();
+
+            var s = (grossWt - stoneWt) * (quality / 100);
+            netWt = s + ((s * 8) / 100);
+            marketPrice = netWt * TodayRate;
+
+            $("#txtNetWeightBank").val(netWt.toFixed(3));
+            $("#txtMarketPriceBank").val(marketPrice.toFixed(2));
+        } else {
+            alert("Please select any bank.");
         }
 
-        if (isValid == true) {
-            //$("#formCustomerBank").bind("submit");
-            $("#formCustomerBank").submit(function (e) {
-                e.currentTarget.submit();
-            });
-        } else {
-            $("#formCustomerBank").submit(function (e) {
-                e.preventDefault();
-            });
-            $("#divError").html(errorMsg);
-            $("#divError").show();
+    }
+
+    GetTodayRate = function () {
+        if ($("#ddBank").val() != "") {
+            $.ajax({
+                url: "/Apraiser/GetTodayRate",
+                type: "GET",
+                cache: false,
+                data: { bankId: $("#ddBank").val() },
+                success: function (data) {
+                    $("#hdnTodayRate").val(data.Rate);
+                },
+                error: function (error) {
+
+                }
+            })
         }
     }
 </script>

@@ -17,6 +17,7 @@ namespace DigitalAppraiser.Models.ViewModels
     }
     public class CustomerLoanDataModel
     {
-        public IEnumerable<CustomerLoanData> customerDataList { get; set; }
+        public IEnumerable<CustomerLoanData> selfCustomerDataList { get; set; }
+        public IEnumerable<CustomerLoanData> bankCustomerDataList { get; set; }
     }
 }

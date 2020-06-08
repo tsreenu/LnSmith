@@ -16,7 +16,7 @@
     }
 }
 
-<div class="container panel panel-default" style="width:100%" id="divSbiReport">
+<div class="container" style="width:100%;background:#fff;" id="divSbiReport">
     <div class="row">
         <div style="margin: auto;width:100%;text-align:center" id="divAnnexture">
             <p class="h3">Annexure 22</p>
@@ -122,7 +122,7 @@
         </div>
     </div>
 </div>
-<input type="button" class="btn btn-info btn-md pull-right col-sm-2" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
+<input type="button" class="btn btn-info fa-pull-right col-sm-2" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
 <script>
     PrintReceipt = function () {
         $.print("#divSbiReport");

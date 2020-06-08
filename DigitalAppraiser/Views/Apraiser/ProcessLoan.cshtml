@@ -7,8 +7,9 @@
 
 <style>
     nav {
-        height:unset !important;
+        height: unset !important;
     }
+
     .nav {
         background: #fff;
         text-align: center;
@@ -28,14 +29,17 @@
         background-color: #33719b;
         color: #fff;
     }
+
     .tab-content {
-        background: #fff;
+        background: #eee;
     }
+
     .form label {
         display: inline-block;
         text-align: right;
         float: left;
     }
+
     [class*="col-"] {
         padding: 0.5rem;
     }
@@ -61,56 +65,33 @@
                 @Html.Partial("BankCustomer", Model.bankCustomer)
 
             </div>
-
-
         </div>
+        <input type="hidden" id="hdnActiveTab" value="@Model.ActiveTab" />
     </div>
 </div>
 
 
-
-@*<div class="col-sm-8 col-sm-offset-2 panel panel-default" style="padding:0px">
-        <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">Process Loan</div>
-        <input type="hidden" id="hdnBanks" value="@Json.Encode(Model.appraiserBanks)" />
-        <div class="panel-body" id="divContainer">
-            <div class="row">
-                <div class="panel-body">
-                    <div class="col-sm-8 col-sm-offset-1">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="text-info">Loan Type<span style="color:red">*</span>:</label><br />
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                @*<select class="form-control" id="ddBanks">
-
-                                    </select>
-                                @Html.DropDownListFor(x => x.selectedBank, Model.Banks, "Select", new { id = "ddBanks", @class = "form-control", @onchange = "SelectLoanType()" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div id="divCustomerDetails">
-
-                </div>
-            </div>
-        </div>
-
-    </div>*@
 <script>
     $(document).ready(function () {
         $("#loader").hide();
         ActiveMenu("liProcessLoan");
-        debugger;
-        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-            localStorage.setItem('activeTab', $(e.target).attr('href'));
-        });
-        var activeTab = localStorage.getItem('activeTab');
-        if (activeTab) {
-            $('#nav-tab a[href="' + activeTab + '"]').tab('show');
+
+        //$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+        //    localStorage.setItem('activeTab', $(e.target).attr('href'));
+        //});
+        //var activeTab = localStorage.getItem('activeTab');
+        //if (activeTab) {
+        //    $('#nav-tab a[href="' + activeTab + '"]').tab('show');
+        //}
+        var actTab = $("#hdnActiveTab").val();
+        var activetab = "";
+        if (actTab == "Bank") {
+            activetab = "#nav-Banks";
+        } else {
+            activetab = "#nav-PawnBroker";
+        }
+        if (activetab) {
+            $('#nav-tab a[href="' + activetab + '"]').tab('show');
         }
     })
 
@@ -142,6 +123,36 @@
             })
         }
         $("#loader").hide();
+    }
+    IsWeight = function (evt, element) {
+        //if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //    e.preventDefault()
+        //}
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 46 || charCode == 8 || charCode == 45))
+            return false;
+        else {
+            var len = $(element).val().length;
+            // Validation Point
+            var index = $(element).val().indexOf('.');
+            if (index > -1 && charCode == 46) {
+                return false;
+            }
+            if (index > 0 || index == 0) {
+                var CharAfterdot = (len + 1) - index;
+                if (CharAfterdot > 5) {
+                    return false;
+                }
+            }
+
+            // Validating Negative sign
+            index = $(element).val().indexOf('-');
+            if (index = '-1' && charCode == 45) {
+                return false;
+            }
+        }
+        return true;
     }
 
 </script>

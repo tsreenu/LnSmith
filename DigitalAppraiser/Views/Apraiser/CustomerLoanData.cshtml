@@ -19,46 +19,118 @@
         border-right-style: solid;
     }
 </style>
-<div class="panel panel-default col-sm-12" style="padding:0px">
-    <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
-        Customer Loan Data
-    </div>
-    <br />
-    <input type="hidden" id="hdnCustomerDataList" value="@Json.Encode(Model.customerDataList)" />
-    <div class="row  col-sm-offset-1">
-        <table id="gridCustomerData" class="table table-bordered" style="border-collapse:collapse"></table>
-        <div id="divPager" style="text-align:center"> </div>
-        @*<button id="export" class="btn btn-success">Export to Excel</button>*@
-        <a href="@Url.Action("DownLoadExcel","Apraiser")" class="btn btn-success">Download</a>
+<style>
+    nav {
+        height: unset !important;
+    }
+
+    .nav {
+        background: #fff;
+        text-align: center;
+        color: #fff;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+        .nav a.active, a:hover {
+            background: #33719b;
+            transition: .5s;
+            text-decoration: none !important;
+            color: #fff;
+        }
+
+    .nav-tabs .nav-link.active {
+        background-color: #33719b;
+        color: #fff;
+    }
+
+    .tab-content {
+        background: #fff;
+    }
+
+    .form label {
+        display: inline-block;
+        text-align: right;
+        float: left;
+    }
+
+    [class*="col-"] {
+        padding: 0.5rem;
+    }
+</style>
+<input type="hidden" id="hdnSelfCustomerDataList" value="@Json.Encode(Model.selfCustomerDataList)" />
+<input type="hidden" id="hdnBankCustomerDataList" value="@Json.Encode(Model.bankCustomerDataList)" />
+<div class="container-fluid">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true">Pawn Broker</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false">Banks</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                <table id="gridCustomerDataSelf" class="table"></table>
+                <div id="divPagerSelf"> </div>
+                <a href="@Url.Action("DownLoadExcel","Apraiser",new {bankId=1 })" class="btn btn-success">Download</a>
+            </div>
+
+            <div class="tab-pane fade" id="nav-Banks" role="tabpanel" aria-labelledby="nav-profile-tab">
+                @*<div class="offset-md-3 offset-lg-3">*@
+                    <table id="gridCustomerDataBank" class="table" style="border-collapse:collapse"></table>
+                    <div id="divPagerBank"> </div>
+                    <a href="@Url.Action("DownLoadExcel","Apraiser",new {bankId=2 })" class="btn btn-success">Download</a>
+                @*</div>*@
+            </div>
+
+
+        </div>
     </div>
 </div>
+
+@*<div class="col-sm-12" style="padding:0px">
+        <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
+            Customer Loan Data
+        </div>
+        <br />
+
+        <div class="row  col-sm-offset-1">
+
+            <div id="divPager"> </div>
+
+            <a href="@Url.Action("DownLoadExcel","Apraiser")" class="btn btn-success">Download</a>
+        </div>
+    </div>*@
 <script>
     $(document).ready(function () {
         ActiveMenu("liCustomerData");
-        var data = $.parseJSON($("#hdnCustomerDataList").val());
+        var dataSelf = $.parseJSON($("#hdnSelfCustomerDataList").val());
+        var dataBank = $.parseJSON($("#hdnBankCustomerDataList").val());
         var rowList = [];
-        var length = Math.ceil(data.length / 10);
+        var length = Math.ceil(dataSelf.length / 10);
         for (var i = 1; i <= length; i++) {
             rowList.push(i * 10);
         }
-        $("#gridCustomerData").jqGrid({
+       var widthSelfCell = $("#nav-tabContent").width() / 10;
+        $("#gridCustomerDataSelf").jqGrid({
             datatype: "local",
             //height: 250,
             colNames: ['S No', 'Date', 'Loan Type', 'Loan ID', 'Name of the Customer', 'Mobile Number', 'Area', 'Loan Amount', 'Rate of Interest', 'Loan Status'],
             colModel: [
-                { name: 'sno', index: 'sno', width: 50, sortable: false },
+                { name: 'sno', index: 'sno', width: widthSelfCell, sortable: false },
                 {
-                    name: 'date', index: 'date', width: 80, formatter: 'date',
+                    name: 'date', index: 'date', width: widthSelfCell, formatter: 'date',
                     formatoptions: { newformat: 'd-M-Y' }
                 },
-                { name: 'loanType', index: 'loanType', width: 150, sortable: false },
-                { name: 'loanId', index: 'loanId', width: 100, sortable: false },
-                { name: 'name', index: 'name', width: 150, sortable: false },
-                { name: 'number', index: 'number', width: 110, sortable: false },
-                { name: 'area', index: 'area', width: 150, sortable: false },
-                { name: 'loanAmount', index: 'loanAmount', width: 100, sortable: false },
-                { name: 'interest', index: 'interest', width: 90, sortable: false },
-                { name: 'loanStatus', index: 'loanStatus', width: 110, sortable: false },
+                { name: 'loanType', index: 'loanType', width: widthSelfCell, sortable: false },
+                { name: 'loanId', index: 'loanId', width: widthSelfCell, sortable: false },
+                { name: 'name', index: 'name', width: widthSelfCell, sortable: false },
+                { name: 'number', index: 'number', width: widthSelfCell, sortable: false },
+                { name: 'area', index: 'area', width: widthSelfCell, sortable: false },
+                { name: 'loanAmount', index: 'loanAmount', width: widthSelfCell, sortable: false },
+                { name: 'interest', index: 'interest', width: widthSelfCell, sortable: false },
+                { name: 'loanStatus', index: 'loanStatus', width: widthSelfCell, sortable: false },
             ],
             multiselect: false,
             height: 'auto',
@@ -67,30 +139,81 @@
             loadonce: true,
             rowNum: 10,
             rowList: rowList,
-            pager: $("#divPager"),
+            pager: $("#divPagerSelf"),
             //imgpath: '~/Content/themes/base/images/',
             //caption: "Customer Loan Data"
         });
         debugger;
         var mydata = [];
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < dataSelf.length; i++) {
             //var date = GetFormattedDate(new Date(parseInt(data[i].Date.substr(6))));
             mydata.push({
                 sno: i + 1,
-                date: data[i].Date,
-                loanType: data[i].BankName,
-                loanId: data[i].LoanId,
-                name: data[i].CustomerName,
-                number: data[i].MobileNumber,
-                area: data[i].Area,
-                loanAmount: data[i].LoanAmount,
-                interest: (data[i].LoanId == null ? "" : data[i].InterestRate),
-                loanStatus: (data[i].IsActive == true ? "Active" : "Settled")
+                date: dataSelf[i].Date,
+                loanType: dataSelf[i].BankName,
+                loanId: dataSelf[i].LoanId,
+                name: dataSelf[i].CustomerName,
+                number: dataSelf[i].MobileNumber,
+                area: dataSelf[i].Area,
+                loanAmount: dataSelf[i].LoanAmount,
+                interest: (dataSelf[i].LoanId == null ? "" : dataSelf[i].InterestRate),
+                loanStatus: (dataSelf[i].IsActive == true ? "Active" : "Settled")
             })
         }
         for (var i = 0; i <= mydata.length; i++)
-            $("#gridCustomerData").jqGrid('addRowData', i + 1, mydata[i]);
-        $("#gridCustomerData").trigger('reloadGrid');
+            $("#gridCustomerDataSelf").jqGrid('addRowData', i + 1, mydata[i]);
+        $("#gridCustomerDataSelf").trigger('reloadGrid');
+        var widthBankCell = $("#nav-tabContent").width() / 6;
+        $("#gridCustomerDataBank").jqGrid({
+            datatype: "local",
+            //height: 250,
+            colNames: ['S No', 'Date', 'Loan Type', 'Name of the Customer', 'Mobile Number','Loan Status'],
+            colModel: [
+                { name: 'sno', index: 'sno', width: widthBankCell, sortable: false },
+                {
+                    name: 'date', index: 'date', width: widthBankCell, formatter: 'date',
+                    formatoptions: { newformat: 'd-M-Y' }
+                },
+                { name: 'loanType', index: 'loanType', width: widthBankCell, sortable: false },
+                //{ name: 'loanId', index: 'loanId', width: 100, sortable: false },
+                { name: 'name', index: 'name', width: widthBankCell, sortable: false },
+                { name: 'number', index: 'number', width: widthBankCell, sortable: false },
+                //{ name: 'area', index: 'area', width: 150, sortable: false },
+                //{ name: 'loanAmount', index: 'loanAmount', width: 100, sortable: false },
+                //{ name: 'interest', index: 'interest', width: 90, sortable: false },
+                { name: 'loanStatus', index: 'loanStatus', width: widthBankCell, sortable: false },
+            ],
+            multiselect: false,
+            height: 'auto',
+            width: 'auto',
+            viewrecords: true,
+            loadonce: true,
+            rowNum: 10,
+            rowList: rowList,
+            pager: $("#divPagerBank"),
+            //imgpath: '~/Content/themes/base/images/',
+            //caption: "Customer Loan Data"
+        });
+        debugger;
+        var mydataBank = [];
+        for (var i = 0; i < dataBank.length; i++) {
+            //var date = GetFormattedDate(new Date(parseInt(data[i].Date.substr(6))));
+            mydataBank.push({
+                sno: i + 1,
+                date: dataBank[i].Date,
+                loanType: dataBank[i].BankName,
+                //loanId: dataBank[i].LoanId,
+                name: dataBank[i].CustomerName,
+                number: dataBank[i].MobileNumber,
+                //area: dataBank[i].Area,
+                //loanAmount: dataBank[i].LoanAmount,
+                //interest: (dataBank[i].LoanId == null ? "" : dataBank[i].InterestRate),
+                loanStatus: (dataBank[i].IsActive == true ? "Active" : "Settled")
+            })
+        }
+        for (var i = 0; i <= mydataBank.length; i++)
+            $("#gridCustomerDataBank").jqGrid('addRowData', i + 1, mydataBank[i]);
+        $("#gridCustomerDataBank").trigger('reloadGrid');
         $("#loader").hide();
     })
 

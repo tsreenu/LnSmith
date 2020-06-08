@@ -200,7 +200,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                 _Context.SaveChanges();
 
                 List<Models.DBModels.OrnamentDetails> ornamentsList = new List<OrnamentDetails>();
-                model.ornamentDetails.LoanType = 1;
+                model.ornamentDetails.LoanType = 2;
                 ornamentsList.Add(model.ornamentDetails);
                 SaveOrnaments(userName, model.bankCustomer.CustomerId, ornamentsList);
                 result = model.bankCustomer.CustomerId;
@@ -248,7 +248,9 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                                                                      IsActive = loans.IsActive
                                                                  }
                                       ).ToList();
-            model.customerDataList = selfList.Concat(bankList);
+
+            model.selfCustomerDataList = selfList;
+            model.bankCustomerDataList = bankList;
             return model;
         }
         public Models.ViewModels.ReceiptModel GetLoanDetails(string LoanId)
