@@ -481,6 +481,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Apraiser\ProcessLoan.cshtml" />
     <Content Include="Views\Apraiser\Estimation.cshtml" />
+    <Content Include="Views\Apraiser\LoanDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

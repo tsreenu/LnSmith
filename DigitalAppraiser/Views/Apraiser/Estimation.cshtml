@@ -46,7 +46,10 @@
                     <th scope="col">Stone Weight</th>
                     @*<th scope="col">Quality</th>*@
                     <th scope="col">Net Weight</th>
-                    <th scope="col">Market Price</th>
+                    @if (Model.ornamentsList[0].LoanType == 2)
+                    {
+                        <th scope="col">Market Price</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -69,7 +72,10 @@
                             <td>@Model.ornamentsList[i - 1].StoneWeight </td>
                             @*<td>@Model.ornamentsList[i - 1].Quality </td>*@
                             <td>@Model.ornamentsList[i - 1].NetWeight </td>
-                            <td>@Model.ornamentsList[i - 1].MarketPrice </td>
+                            @if (Model.ornamentsList[0].LoanType == 2)
+                            {
+                                <td>@Model.ornamentsList[i - 1].MarketPrice </td>
+                            }
                         </tr>
                     }
                     <tr>
@@ -80,7 +86,10 @@
                         <td scope="col" style="font-weight: bold">@SW</td>
                         @*<td></td>*@
                         <td scope="col" style="font-weight: bold">@NW</td>
-                        <td scope="col" style="font-weight: bold"><span id="spnMarketPrice">@MP</span></td>
+                        @if (Model.ornamentsList[0].LoanType == 2)
+                        {
+                            <td scope="col" style="font-weight: bold"><span id="spnMarketPrice">@MP</span></td>
+                        }
                     </tr>
                 }
 
@@ -116,7 +125,7 @@
 
 </div>
 <!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal" id="myModal" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -182,7 +191,7 @@
             $("#lblInterest").hide();
             $("#myModal").modal('show');
         } else {
-           
+
         }
     }
     CalculateEMI = function () {
@@ -212,8 +221,9 @@
             cache: false,
             data: { model: model },
             success: function (data) {
-                $("#divMain").html(data);
                 $("#myModal").modal('hide');
+                $("#divMain").html(data);
+                
             },
             error: function (error) {
 

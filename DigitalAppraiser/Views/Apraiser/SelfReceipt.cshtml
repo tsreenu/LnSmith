@@ -14,7 +14,7 @@
     <table class="table table-bordered">
         <tr>
             <td>Loan Given Date</td>
-            <td>@Model.loanDetails.CreatedOn.DateTime.ToShortDateString()</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToShortDateString()</td>
         </tr>
         <tr>
             <td>Loan ID</td>
@@ -58,15 +58,15 @@
         </tr>
         <tr>
             <td>Principle Amount</td>
-            <td>@Model.loanDetails.LoanAmount</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.LoanAmount</td>
         </tr>
         <tr>
             <td>Rate of Interest</td>
-            <td>@Model.loanDetails.Interest</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.Interest</td>
         </tr>
         <tr>
             <td>Estimated Monthly Interest</td>
-            <td>@Model.loanDetails.EMI</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.EMI</td>
         </tr>
     </table>
     Note: Loan tenure is valid up to 12 months

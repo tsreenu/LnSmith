@@ -235,13 +235,13 @@ namespace DigitalAppraiser.Controllers
             return View("CollectLoanDetails");
         }
         [HttpGet]
-        public ActionResult GetLoanDetails(string LoanId)
+        public ActionResult LoanDetails(string LoanId)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             var model = bl.GetLoanDetails(LoanId);
             if (model.errMessage == "")
             {
-                return PartialView("CollectLoan", model);
+                return View(model);
             }
             else
             {

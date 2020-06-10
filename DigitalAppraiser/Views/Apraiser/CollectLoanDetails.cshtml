@@ -1,85 +1,117 @@
-﻿@model DigitalAppraiser.Models.ViewModels.ReceiptModel
+﻿@model DigitalAppraiser.Models.DBModels.LoanDetails
 @{
     ViewBag.Title = "CollectLoanDetails";
     Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
 }
+<style>
+    .login-form {
+        margin-top: 10px;
+        box-shadow: 0px 0px 10px 1px grey;
+        border-radius: 5px;
+        padding-bottom: 20px;
+        background: #eee;
+    }
 
-@Html.HiddenFor(x => x.errMessage, new { id = "hdnErrorMsg" })
-<div class="panel panel-default col-sm-12 col-sm-offset-0" style="padding:0px;min-height:200px">
-    <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
-        Search Loan ID
-    </div>
-    <br />
-    <div class="row" id="divContainer">
+    .title {
+        background: #007bbf;
+        padding: 10px;
+        text-align: center;
+        color: #fff;
+        border-radius: 0px 0px 10px 10px;
+    }
 
-        <div class="col-sm-offset-3">
-            <div class="col-sm-9">
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <label class="text-info">Loan ID<span style="color:red">*</span>:</label><br />
-                    </div>
-                </div>
-                <div class="col-sm-5">
-                    <div class="form-group">
-                        <input type="text" id="txtLoanId" class="form-control" autocomplete="off" />
-                    </div>
-                </div>
+    .error {
+        color: red;
+    }
+</style>
+<div class="login-form col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-8 offset-2 col-lg-4 offset-lg-4">
+    <h1 class="title"> Search Loan ID </h1>
+    @using (Html.BeginForm("LoanDetails", "Apraiser", FormMethod.Get, new { id = "formCustomerGetLoan" }))
+    {
+        <form>
+            <div class="form-group form-inline">
+                <label class="">Loan ID<span style="color:red">*</span></label>
+                @Html.TextBoxFor(x => x.LoanId, new { id = "txtLoanId", @class = "form-control offset-sm-2 offset-md-2 offset-lg-2", autocomplete = "off" })
+                @*&nbsp;&nbsp;<input type="submit" class="btn btn-info fa-pull-right" id="btnSubmitLoanId" value="Submit" />*@
             </div>
-        </div>
-        <input type="button" id="btnSubmitLoanId" value="Submit" class="btn btn-info btn-md col-sm-2 col-sm-offset-5" onclick="GetLoanDetails()" />
-        <br />
-        <div id="divError" class="alert alert-danger col-sm-4 col-sm-offset-4" style="display:none;margin-top:1%;">
+            <input type="submit" class="btn btn-info" id="btnSubmitLoanId" value="Submit" />
+        </form>
 
-        </div>
-    </div>
+        @*<div class="col-12 offset-0" style="padding:0px;min-height:200px">
+                <div class="h2" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
+                    Search Loan ID
+                </div>
+                <br />
+                <div class="row" id="divContainer">
 
-    <div class="row">
-        <div id="divCustomerDetails">
+                    <div class="offset-3">
+                        <div class="col-9">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label class="text-info">Loan ID<span style="color:red">*</span>:</label><br />
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x=>x.LoanId)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" id="btnSubmitLoanId" value="Submit" class="btn btn-info btn-md col-sm-2 col-sm-offset-5" />
+                    <br />
+                    <div id="divError" class="alert alert-danger col-4 offset-4" style="display:none;margin-top:1%;">
 
-        </div>
-    </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div id="divCustomerDetails">
+
+                    </div>
+                </div>
+            </div>*@
+    }
 </div>
-
-
 <script>
     $(document).ready(function () {
         ActiveMenu("liCollectLoan");
     })
 
-    GetLoanDetails = function () {
-        var isValid = true;
-        var errorMsg = "";
-        if ($("#txtLoanId").val() == "") {
-            isValid = false;
-            errorMsg = "Please enter all mandatory fields";
-        }
-        if (isValid == true) {
-            var Url = "/Apraiser/GetLoanDetails";
-            $.ajax({
-                url: Url,
-                type: "GET",
-                cache: false,
-                data: {
-                    LoanId: $("#txtLoanId").val()
-                },
-                success: function (data) {
-                    debugger;
-                    if (data == "") {
-                        $("#divError").html(data);
-                        $("#divError").show();
-                    } else {
-                        $("#divCustomerDetails").html(data);
-                        $("#divContainer").hide();
-                    }
-                },
-                error: function (error) {
+                            //GetLoanDetails = function () {
+                            //    var isValid = true;
+                            //    var errorMsg = "";
+                            //    if ($("#txtLoanId").val() == "") {
+                            //        isValid = false;
+                            //        errorMsg = "Please enter all mandatory fields";
+                            //    }
+                            //    if (isValid == true) {
+                            //        var Url = "/Apraiser/GetLoanDetails";
+                            //        $.ajax({
+                            //            url: Url,
+                            //            type: "GET",
+                            //            cache: false,
+                            //            data: {
+                            //                LoanId: $("#txtLoanId").val()
+                            //            },
+                            //            success: function (data) {
+                            //                debugger;
+                            //                if (data == "") {
+                            //                    $("#divError").html(data);
+                            //                    $("#divError").show();
+                            //                } else {
+                            //                    $("#divCustomerDetails").html(data);
+                            //                    $("#divContainer").hide();
+                            //                }
+                            //            },
+                            //            error: function (error) {
 
-                }
-            });
-        } else {
-            $("#divError").html(errorMsg);
-            $("#divError").show();
-        }
+                            //            }
+                            //        });
+                            //    } else {
+                            //        $("#divError").html(errorMsg);
+                            //        $("#divError").show();
+                            //    }
 
-    }
+                            //}
 </script>

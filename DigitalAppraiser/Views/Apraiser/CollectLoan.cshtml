@@ -12,13 +12,13 @@
 <input type="hidden" id="hdnYear" value="@Model.loanDetails.CreatedOn.Year" />
 
 <div class="container" id="divSelfReceipt">
-    <h2 class="col-sm-offset-5">Settlement</h2>
+    <h2 class="offset-5">Settlement</h2>
     <div class="row">
-        <div class="col-sm-offset-4">
+        <div class="offset-4">
             <h1>@Model.ShopDetails</h1>
         </div>
-        <div class="col-sm-offset-3">
-            <div class="col-sm-8">
+        <div class="offset-3">
+            <div class="col-8">
                 <table class="table table-bordered">
                     <tr>
                         <td>Loan Given Date</td>
@@ -117,13 +117,13 @@
         </table>
     </div>
     <div class="row">
-        <div class="col-sm-8">
-            <div class="col-sm-4">
+        <div class="col-8">
+            <div class="col-4">
                 <div class="form-group">
                     <label class="text-info">Release Date<span style="color:red">*</span>:</label><br />
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-4">
                 <div class="form-group">
                     @if (Model.loanDetails.IsActive == false)
                     {
@@ -136,13 +136,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
-            <div class="col-sm-4">
+        <div class="col-8">
+            <div class="col-4">
                 <div class="form-group">
                     <label class="text-info">No.of Days:</label><br />
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-4">
                 <div class="form-group">
                     @if (Model.loanDetails.IsActive == false)
                     {
@@ -156,13 +156,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
-            <div class="col-sm-4">
+        <div class="col-8">
+            <div class="col-4">
                 <div class="form-group">
                     <label class="text-info">Total Interest<span style="color:red">*</span>:</label><br />
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-4">
                 <div class="form-group">
                     @if (Model.loanDetails.IsActive == false)
                     {
@@ -176,13 +176,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
-            <div class="col-sm-4">
+        <div class="col-8">
+            <div class="col-4">
                 <div class="form-group">
                     <label class="text-info">Toatal Amount<span style="color:red">*</span>:</label><br />
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-4">
                 <div class="form-group">
                     @if (Model.loanDetails.IsActive == false)
                     {
@@ -197,8 +197,8 @@
         </div>
     </div>
 </div>
-<a class="btn btn-info btn-md pull-left col-sm-2" href="/Apraiser/CollectLoan">Back</a>
-<input type="button" class="btn btn-info btn-md pull-right col-sm-2" id="btnRelease" value="Release" onclick="OpenPopup()" />
+<a class="btn btn-info btn-md pull-left col-2" href="/Apraiser/CollectLoan">Back</a>
+<input type="button" class="btn btn-info btn-md pull-right col-2" id="btnRelease" value="Release" onclick="OpenPopup()" />
 <!-- Modal -->
 <div class="modal fade" id="modelCollectLoan" role="dialog" style="margin-left:12%">
     <div class="modal-dialog">
@@ -226,10 +226,6 @@
 
         <!-- Modal content-->
         <div class="modal-content" style="width:70%">
-            @*<div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Confirm Loan</h4>
-                </div>*@
             <div class="modal-body">
                 <p id="pSuccessMsg"></p>
             </div>
