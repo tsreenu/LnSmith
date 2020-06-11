@@ -25,18 +25,21 @@
             <p class="h2 underlined">APPRAISER CERTIFICATE</p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-offset-1">
+    <div class="row col-11">
+        <div class="offset-1">
             <p>To</p>
             <p>The Branch Manager</p>
             <p>State Bank of India</p>
-            <div style="display:inline">
-                <p><span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Branch </span>Branch. <span class="pull-right" style="margin-right:20%;font-weight:bold">Ac.No.</span></p>
-            </div>
+            <p><span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Branch </span>Branch.</p>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-offset-1">
+        <div class="offset-1 col-11">
+            <span class="fa-pull-right" style="margin-right:20%;font-weight:bold;margin-top:-3rem;">Ac.No.</span>
+        </div>
+    </div>
+    <div class="row col-12">
+        <div class="offset-1">
             <p>
                 I here certify that
 
@@ -44,7 +47,7 @@
 
                 Sri/Smt<span style="font-weight:bold;text-decoration:underline;">&nbsp;@Model.bankCustomerDetails.Name</span> &nbsp;<span>@RelationType </span> <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.RelationName</span> Resident of
 
-               <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Address</span> Have been weighted and scrutinized by me on
+                <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Address</span> Have been weighted and scrutinized by me on
 
                 <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span> and the exact weight, purity of the metal and market value of each item as
 
@@ -54,8 +57,8 @@
             <p>Market rate per Gram : Rs: <span style="font-weight:bold;text-decoration:underline;">@Model.todayRate.Rate</span></p>
         </div>
     </div>
-    <div class="row col-sm-offset-1">
-        <table class="table-bordered table-responsive col-sm-12">
+    <div class="row offset-1">
+        <table class="table-bordered table-responsive col-sm-11">
             <thead>
                 <tr>
                     <th scope="col" class="text-center">S.No</th>
@@ -107,7 +110,7 @@
     </div>
     <br />
     <br />
-    <div class="row col-sm-offset-1">
+    <div class="row offset-1 col-11">
         <p>
             I Solemnly declare that weight, purity of the gold ornaments/precious stones indicated
             above are correct and I under take to indemnify the Bank against any loss may sustain on
@@ -116,13 +119,14 @@
     </div>
     <br />
     <div class="row">
-        <div class="col-sm-offset-1">
-            <p>Place: <span class="pull-right">Yours Faithfully</span></p>
-            <p>Date: <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span><span class="pull-right"></span></p>
+        <div class="offset-1 col-11">
+            <p>Place: </p>
+            <span class="fa-pull-right">Yours Faithfully</span>
+            <p>Date: <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span><span class="fa-pull-right"></span></p>
         </div>
     </div>
 </div>
-<input type="button" class="btn btn-info fa-pull-right col-sm-2" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
+<input type="button" class="btn btn-info fa-pull-right col-sm-2" style="margin-right:7%;" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
 <script>
     PrintReceipt = function () {
         $.print("#divSbiReport");

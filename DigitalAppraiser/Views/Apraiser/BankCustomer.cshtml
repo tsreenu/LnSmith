@@ -101,19 +101,21 @@
 
         var TodayRate = $("#hdnTodayRate").val();
         if (TodayRate != "") {
-            var netWt = 0;
-            var marketPrice = 0;
-            var grossWt = $("#txtGrossWeightBank").val() == "" ? 0 : $("#txtGrossWeightBank").val();
-            var stoneWt = $("#txtStoneWeightBank").val() == "" ? 0 : $("#txtStoneWeightBank").val();
-            var quality = $("#txttxtQualityBank").val() == "" ? 1 : $("#txttxtQualityBank").val();
+            if ($("#txttxtQualityBank").val() != "") {
+                var netWt = 0;
+                var marketPrice = 0;
+                var grossWt = $("#txtGrossWeightBank").val() == "" ? 0 : $("#txtGrossWeightBank").val();
+                var stoneWt = $("#txtStoneWeightBank").val() == "" ? 0 : $("#txtStoneWeightBank").val();
+                var quality = $("#txttxtQualityBank").val() == "" ? 1 : $("#txttxtQualityBank").val();
 
-            var s = (grossWt - stoneWt) * (quality / 100);
-            netWt = s + ((s * 8) / 100);
-            marketPrice = netWt * TodayRate;
+                var s = (grossWt - stoneWt) * (quality / 100);
+                netWt = s + ((s * 8) / 100);
+                marketPrice = netWt * TodayRate;
 
-            $("#txtNetWeightBank").val(netWt.toFixed(3));
-            $("#txtMarketPriceBank").val(marketPrice.toFixed(2));
-        } else {
+                $("#txtNetWeightBank").val(netWt.toFixed(3));
+                $("#txtMarketPriceBank").val(marketPrice.toFixed(2));
+            }
+        }else {
             alert("Please select any bank.");
         }
 
