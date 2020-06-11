@@ -4,99 +4,175 @@
     ViewBag.Title = "Subscription";
     Layout = "~/Views/Shared/_AppraiserLayout.cshtml";
 }
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    .columns {
-        float: left;
-        width: 33.3%;
-        padding: 8px;
-    }
-
-    .price {
-        list-style-type: none;
-        border: 1px solid #eee;
-        margin: 0;
-        padding: 0;
-        -webkit-transition: 0.3s;
-        transition: 0.3s;
-    }
-
-        .price:hover {
-            box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2)
-        }
-
-        .price .header {
-            background-color: #33719b;
-            color: white;
-            font-size: 25px;
-        }
-
-        .price li {
-            border-bottom: 1px solid #eee;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .price .grey {
-            background-color: #eee;
-            font-size: 20px;
-        }
-
-    .button {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 4% 10%;
+    .pricingTable {
+        font-family: 'Lato', sans-serif;
         text-align: center;
-        text-decoration: none !important;
-        font-size: 18px;
+        margin: 0 10px;
+        border-radius: 40px 40px 170px 170px / 40px 40px 70px 70px;
+        overflow: hidden;
+        transition: all 0.3s ease 0s;
+    }
+
+        .pricingTable:hover {
+            box-shadow: 0 0 20px -5px rgba(0,0,0, 0.9);
+        }
+
+        .pricingTable .pricingTable-header {
+            background: #e7e8ea;
+            padding: 25px 0 0;
+        }
+
+        .pricingTable .price-value {
+            color: #86878B;
+            font-weight: 900;
+            margin: 0 0 15px;
+        }
+
+            .pricingTable .price-value .amount {
+                font-size: 45px;
+                line-height: 40px;
+                display: block;
+            }
+
+            .pricingTable .price-value .duration {
+                font-size: 16px;
+                font-weight: 600;
+                text-transform: uppercase;
+                display: block;
+            }
+
+        .pricingTable .title {
+            color: #fff;
+            background: #f76b0e;
+            font-size: 33px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 18px 10px 15px;
+            margin: 0 -8px;
+            border: 8px solid #fff;
+            border-bottom: none;
+            border-radius: 170px 170px 0 0 / 70px 70px 0 0;
+        }
+
+        .pricingTable .content-list {
+            background: #E7E8EA;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+            .pricingTable .content-list li {
+                color: #86878B;
+                font-size: 16px;
+                font-weight: 600;
+                text-transform: uppercase;
+                padding: 12px 5px;
+            }
+
+                .pricingTable .content-list li:nth-child(even) {
+                    background: #D1D2D4;
+                }
+
+                .pricingTable .content-list li:last-child {
+                    margin-bottom: 0;
+                }
+
+        .pricingTable .pricingTable-signup {
+            background: #f76b0e;
+            padding: 17px 20px 23px;
+        }
+
+            .pricingTable .pricingTable-signup a {
+                color: #fff;
+                font-size: 27px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                transition: all 0.3s ease 0s;
+            }
+
+                .pricingTable .pricingTable-signup a:hover {
+                    font-weight: 900;
+                    letter-spacing: 2px;
+                    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+                }
+
+        .pricingTable.blue .title,
+        .pricingTable.blue .pricingTable-signup {
+            background: #3867d6;
+        }
+
+        .pricingTable.green .title,
+        .pricingTable.green .pricingTable-signup {
+            background: #0fb9b1;
+        }
+
+    @@media only screen and (max-width: 990px) {
+        .pricingTable {
+            margin-bottom: 30px;
+        }
     }
 </style>
-<div class="col-6 col-sm-6 col-md-4 col-lg-4 offset-lg-4" style="background-color: #33719b;color: #fff;">
-    <div class="" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
-        Subscription Details
-    </div>
-    <div class="">
-        @using (Html.BeginForm("Subscription", "Apraiser", FormMethod.Post, new { id = "formSubscription" }))
-        {
-            <div class="col-sm-offset-3">
-                <div class="col-sm-8">
-                    <table class="table table-responsive table-bordered">
-                        <tr class="price">
-                            <td class="grey">Subscribed Plan</td>
-                            <td class="grey">@Model.PlanName</td>
-                        </tr>
-                        <tr class="price">
-                            <td class="grey">Subscription Start Date</td>
-                            <td class="grey">@Model.SubscriptionStartDate.Date.ToShortDateString()</td>
-                        </tr>
-                        <tr class="price">
-                            <td class="grey">Subscription End Date</td>
-                            <td class="grey">@Model.SubscriptionEndDate.Date.ToShortDateString()</td>
-                        </tr>
-                    </table>
+
+<div class="demo">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-6">
+                <div class="pricingTable green">
+                    <div class="pricingTable-header">
+                        <div class="price-value">
+                            <span class="amount">@Model.PlanName</span>
+                        </div>
+                        <h3 class="title">Active Plan</h3>
+                    </div>
+                    <ul class="content-list">
+                        <li>Start Date : @Model.SubscriptionStartDate.Date.ToShortDateString()</li>
+                        <li>End Date : @Model.SubscriptionEndDate.Date.ToShortDateString()</li>
+                    </ul>
+                    <div class="pricingTable-signup">
+                        @*<a href="#">Sign Up</a>*@
+                    </div>
                 </div>
             </div>
-        }
-        @foreach (var item in Model.lnSmithPlans)
-        {
-            <div class="columns">
-                <ul class="price">
-                    <li class="header">@item.PlanName</li>
-                    <li class="grey">@item.PlanDuration Days</li>
-                    <li class="grey">@item.PlanValue <i class="fa fa-inr"></i></li>
-                    <li class="grey"><a href="/Apraiser/Payment?planId=@item.PlanId" class="button">Subscribe</a></li>
-                </ul>
-            </div>
-        }
+            @for (int i = 0; i < Model.lnSmithPlans.Count(); i++)
+            {
+                <div class="col-md-3 col-sm-6 col-6">
+                    <div class="pricingTable blue">
+                        <div class="pricingTable-header">
+                            <div class="price-value">
+                                <span class="amount">@Model.lnSmithPlans[i].PlanName</span>
+
+                            </div>
+                            @if (i == 0)
+                            {
+                                <h3 class="title">BASIC</h3>
+                            }
+                            else if (i == 1)
+                            {
+                                <h3 class="title">STANDARD</h3>
+                            }
+                            else if (i == 2)
+                            {
+                                <h3 class="title">PREMIUM</h3>
+                            }
+                        </div>
+                        <ul class="content-list">
+                            <li>@Model.lnSmithPlans[i].PlanDuration Days</li>
+                            <li>@Model.lnSmithPlans[i].PlanValue</li>
+                        </ul>
+                        <div class="pricingTable-signup">
+                            <a href="/Apraiser/Payment?planId=@Model.lnSmithPlans[i].PlanId">Subscribe</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <p style="color:#fff;font-size: 27px;">Pease contact LnSmith for life time membership.</p>
     </div>
-
-
 </div>
+
 <script>
     $(document).ready(function () {
         $("#loader").hide();

@@ -32,9 +32,14 @@
             <div class="form-group form-inline">
                 <label class="">Loan ID<span style="color:red">*</span></label>
                 @Html.TextBoxFor(x => x.LoanId, new { id = "txtLoanId", @class = "form-control offset-sm-2 offset-md-2 offset-lg-2", autocomplete = "off" })
-                @*&nbsp;&nbsp;<input type="submit" class="btn btn-info fa-pull-right" id="btnSubmitLoanId" value="Submit" />*@
+                @if (ViewBag.LoanNotFound != null)
+                {
+                    <label class="error">@ViewBag.LoanNotFound</label>
+                }
             </div>
-            <input type="submit" class="btn btn-info" id="btnSubmitLoanId" value="Submit" />
+            <div class="form-group form-inline">
+                <input type="submit" class="btn btn-info" id="btnSubmitLoanId" value="Submit" />
+            </div>
         </form>
 
         @*<div class="col-12 offset-0" style="padding:0px;min-height:200px">

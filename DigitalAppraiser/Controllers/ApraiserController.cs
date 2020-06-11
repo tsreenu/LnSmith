@@ -232,6 +232,10 @@ namespace DigitalAppraiser.Controllers
         [HttpGet]
         public ActionResult CollectLoan()
         {
+            if(TempData["LoanNotFound"] != null)
+            {
+                ViewBag.LoanNotFound = TempData["LoanNotFound"];
+            }
             return View("CollectLoanDetails");
         }
         [HttpGet]
@@ -245,7 +249,8 @@ namespace DigitalAppraiser.Controllers
             }
             else
             {
-                return Json(model.errMessage, JsonRequestBehavior.AllowGet);
+                TempData["LoanNotFound"] = model.errMessage;
+                return RedirectToAction("CollectLoan");
             }
         }
         [HttpPost]
