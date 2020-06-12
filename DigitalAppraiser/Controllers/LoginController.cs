@@ -52,9 +52,9 @@ namespace DigitalAppraiser.Controllers
         {
             Models.ViewModels.SignUpModel signUpModel = new Models.ViewModels.SignUpModel();
             BL.Interfaces.LoginInterface bl = new BL.Implementation.LoginClass();
-            if (Session["AppraiserId"] != null)
+            if (LogedUser.AppraiserId != null)
             {
-                int apraiserId = Convert.ToInt32(Session["AppraiserId"]);
+                int apraiserId = LogedUser.AppraiserId.Value;
                 signUpModel = bl.GetAppraiserDetail(apraiserId);
                 signUpModel.selectedBanks = bl.GetSelectedBanks(apraiserId);
             }

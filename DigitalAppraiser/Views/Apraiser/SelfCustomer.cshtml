@@ -46,17 +46,17 @@
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Gross weight in grams<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { id = "txtGrossWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateNetWeightAndPrice()", autocomplete = "off" })
+                @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { Value = "", id = "txtGrossWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateNetWeightAndPrice()", autocomplete = "off" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.GrossWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Stone weight in grams</label>
-                @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { id = "txtStoneWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateNetWeightAndPrice()", autocomplete = "off" })
+                @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { Value = "", id = "txtStoneWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", onblur = "CalculateNetWeightAndPrice()", autocomplete = "off" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.StoneWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Net weight in grams<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { id = "txtNetWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 disable-color", @readonly = "readonly" })
+                @Html.TextBoxFor(x => x.ornamentDetails.NetWeight, new { Value = "", id = "txtNetWeight", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 disable-color", @readonly = "readonly" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.NetWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             @*<div class="form-group form-inline">

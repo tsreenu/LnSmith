@@ -73,13 +73,17 @@ namespace DigitalAppraiser.Controllers
                 Text = x.ToString()
             });
             ViewBag.TodayRate = bl.GetTodayRate(AppraiserId, 1);
+            model.bankCustomer.bankCustomer = new BankCustomerDetails();
+            model.bankCustomer.ornamentDetails = new OrnamentDetails();
+            model.selfCustomer.selfCustomer = new SelfCustomerDetails();
+            model.selfCustomer.ornamentDetails = new OrnamentDetails();
             return View(model);
         }
         [HttpGet]
         public ActionResult SelfCustomer()
         {
             var model = new Models.ViewModels.SelfCustomerModel();
-            return PartialView("SelfCustomer",model);
+            return PartialView("SelfCustomer", model);
         }
         [HttpPost]
         public ActionResult SelfCustomer(Models.ViewModels.SelfCustomerModel model)
@@ -232,11 +236,12 @@ namespace DigitalAppraiser.Controllers
         [HttpGet]
         public ActionResult CollectLoan()
         {
-            if(TempData["LoanNotFound"] != null)
+            if (TempData["LoanNotFound"] != null)
             {
                 ViewBag.LoanNotFound = TempData["LoanNotFound"];
             }
-            return View("CollectLoanDetails");
+            Models.DBModels.LoanDetails loanDetails = new LoanDetails();
+            return View("CollectLoanDetails", loanDetails);
         }
         [HttpGet]
         public ActionResult LoanDetails(string LoanId)
@@ -291,7 +296,7 @@ namespace DigitalAppraiser.Controllers
             //  
             int recordIndex = 2;
             IEnumerable<Models.ViewModels.CustomerLoanData> CustomerLoanData = new List<Models.ViewModels.CustomerLoanData>();
-            if(bankId == 1)
+            if (bankId == 1)
             {
                 CustomerLoanData = model.selfCustomerDataList;
             }

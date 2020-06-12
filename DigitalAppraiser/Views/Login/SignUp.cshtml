@@ -47,8 +47,8 @@
 
 <body>
     @Html.HiddenFor(x => x.AppraiserId, new { id = "hdnApraiserId" })
-    @*@Html.HiddenFor(x => x.StateId, new { id = "hdnStateId" })*@
-    @*@Html.HiddenFor(x => x.CityId, new { id = "hdnCityId" })*@
+    @Html.HiddenFor(x => x.StateId, new { id = "hdnStateId" })
+    @Html.HiddenFor(x => x.CityId, new { id = "hdnCityId" })
 
     <input type="hidden" id="hdnSelectedBanks" value="@Json.Encode(Model.selectedBanks)" />
     <input type="hidden" id="hdnBanks" value="@Json.Encode(Model.Banks)" />
@@ -127,7 +127,7 @@
             </div>
 
                 <div class="form-group form-inline offset-5 offset-sm-5 offset-md-5 offset-lg-5">
-                    <a class="btn btn-primary" href="/Login/Login">Cancel</a>&nbsp;&nbsp;
+                    <a class="btn btn-primary" href="javascript:void(0)" onclick="goBack()">Cancel</a>&nbsp;&nbsp;
                     <input type="submit" class="btn btn-primary offset-md-2 offset-lg-4" value="Submit" />
                 </div>
 
@@ -153,7 +153,7 @@
             $("#ddStates").trigger("change");
             var selectedBanks = $.parseJSON($("#hdnSelectedBanks").val());
             $('#ddBanks').val(selectedBanks);
-            $('#ddBanks').multiselect('refresh');
+           // $('#ddBanks').multiselect('refresh');
             $('#ddBanks').trigger("change");
             $("#ddCity").val($("#hdnCityId").val())
             $("#chkTermsAndCondtions")[0].checked = true;
@@ -331,5 +331,8 @@
                 }
             })
         }
+    }
+    function goBack() {
+        window.history.back();
     }
 </script>

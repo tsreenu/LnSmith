@@ -207,9 +207,11 @@
     <Content Include="Content\fontawesome.css" />
     <Content Include="Content\fontawesome.min.css" />
     <Content Include="Content\Images\animated-overlay.gif" />
+    <Content Include="Content\Images\background1.jpg" />
     <Content Include="Content\Images\background4.jpg" />
-    <Content Include="Content\Images\icons8-settings-52.png" />
-    <Content Include="Content\Images\power_settings_new-24px.svg" />
+    <Content Include="Content\Images\icons8-settings.svg" />
+    <Content Include="Content\Images\power_settings_new-24.svg" />
+    <Content Include="Content\Images\power_settings_new-24px.png" />
     <Content Include="Content\Images\processloan.jpg" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\blue-plus-icon-12.png" />
