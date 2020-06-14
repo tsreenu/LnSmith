@@ -17,5 +17,6 @@ namespace DigitalAppraiser.Models.ViewModels
         public int selectedBank { get; set; }
         public IEnumerable<SelectListItem> Banks { get; set; }
         public DBModels.OrnamentDetails ornamentDetails { get; set; }
+        public List<DBModels.OrnamentDetails> ornamentsList { get; set; }
     }
 }

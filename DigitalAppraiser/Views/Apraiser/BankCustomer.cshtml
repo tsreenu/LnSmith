@@ -11,65 +11,64 @@
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Bank<span style="color:red">*</span></label>
                 @Html.DropDownListFor(x => x.selectedBank, Model.Banks, "Select", new { id = "ddBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100", @onchange = "GetTodayRate()" })
-                @Html.ValidationMessageFor(x => x.selectedBank, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+                @Html.ValidationMessageFor(x => x.selectedBank, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "BankValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Branch<span style="color:red">*</span></label>
                 @Html.TextBoxFor(x => x.bankCustomer.Branch, new { id = "txtBranch", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
-                @Html.ValidationMessageFor(x => x.bankCustomer.Branch, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+                @Html.ValidationMessageFor(x => x.bankCustomer.Branch, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "BranchValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Name<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
-                @Html.ValidationMessageFor(x => x.bankCustomer.Name, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+                @Html.TextBoxFor(x => x.bankCustomer.Name, new { id = "txtNameBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
+                @Html.ValidationMessageFor(x => x.bankCustomer.Name, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "NameBankValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Relation Type<span style="color:red">*</span></label>
                 @Html.DropDownListFor(x => x.bankCustomer.RelationType, Model.RelationTypes, "Select", new { id = "txtRelationType", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100" })
-                @Html.ValidationMessageFor(x => x.bankCustomer.RelationType, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+                @Html.ValidationMessageFor(x => x.bankCustomer.RelationType, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "RelationTypeValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Relation Name<span style="color:red">*</span></label>
                 @Html.TextBoxFor(x => x.bankCustomer.RelationName, new { id = "txtRelationName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
-                @Html.ValidationMessageFor(x => x.bankCustomer.RelationName, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+                @Html.ValidationMessageFor(x => x.bankCustomer.RelationName, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "RelationNameValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Address<span style="color:red">*</span></label>
-                @Html.TextAreaFor(x => x.bankCustomer.Address, new { id = "txtAddress", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                @Html.ValidationMessageFor(x => x.bankCustomer.Address, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+                @Html.TextAreaFor(x => x.bankCustomer.Address, new { id = "txtAddressBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.ValidationMessageFor(x => x.bankCustomer.Address, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "AddressBankValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Mobile Number<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @maxlength = "10", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
-                @Html.ValidationMessageFor(x => x.bankCustomer.MobileNumber, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
+                @Html.TextBoxFor(x => x.bankCustomer.MobileNumber, new { id = "txtMobileNumberBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @maxlength = "10", @onkeypress = "IsNumeric(event)", autocomplete = "off" })
+                @Html.ValidationMessageFor(x => x.bankCustomer.MobileNumber, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "MobileNumberBankValid" })
             </div>
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-6">
             <h3 class="h3 text-center"> Ornament Details</h3>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Ornament<span style="color:red">*</span></label>
-                @Html.TextAreaFor(x => x.ornamentDetails.Ornament, new { id = "txtOrnament", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
-                @Html.ValidationMessageFor(x => x.ornamentDetails.Ornament, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
+                @Html.TextAreaFor(x => x.ornamentDetails.Ornament, new { id = "txtOrnamentBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.Ornament, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4", id = "OrnamentBankValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Quantity<span style="color:red">*</span></label>
-                @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantity", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100", autocomplete = "off" })
-                @Html.ValidationMessageFor(x => x.ornamentDetails.Quantity, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
+                @Html.DropDownListFor(x => x.ornamentDetails.Quantity, Model.Quantity, "Select", new { id = "ddQuantityBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 width100", autocomplete = "off" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.Quantity, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4", id = "QuantityBankValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Gross weight in grams<span style="color:red">*</span></label>
                 @Html.TextBoxFor(x => x.ornamentDetails.GrossWeight, new { Value = "", id = "txtGrossWeightBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", autocomplete = "off", onblur = "CalculateNetWeightAndPriceBank()" })
-                @Html.ValidationMessageFor(x => x.ornamentDetails.GrossWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.GrossWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4", id = "GrossWeightBankValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Stone weight in grams</label>
                 @Html.TextBoxFor(x => x.ornamentDetails.StoneWeight, new { Value = "", id = "txtStoneWeightBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", autocomplete = "off", onblur = "CalculateNetWeightAndPriceBank()" })
-                @Html.ValidationMessageFor(x => x.ornamentDetails.StoneWeight, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Quality<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.ornamentDetails.Quality, new { Value = "", id = "txttxtQualityBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", autocomplete = "off", onblur = "CalculateNetWeightAndPriceBank()" })
-                @Html.ValidationMessageFor(x => x.ornamentDetails.Quality, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
+                @Html.TextBoxFor(x => x.ornamentDetails.Quality, new { Value = "", id = "txtQualityBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", @onkeypress = "return IsWeight(event,$(this))", autocomplete = "off", onblur = "CalculateNetWeightAndPriceBank()" })
+                @Html.ValidationMessageFor(x => x.ornamentDetails.Quality, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4", id = "QualityBankValid" })
             </div>
             <div class="form-group form-inline">
                 <label class="col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Net weight in grams<span style="color:red">*</span></label>
@@ -81,14 +80,16 @@
                 @Html.TextBoxFor(x => x.ornamentDetails.MarketPrice, new { Value = "", id = "txtMarketPriceBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6 disable-color", @readonly = "readonly" })
                 @Html.ValidationMessageFor(x => x.ornamentDetails.MarketPrice, "", new { @class = "error offset-6 offset-sm-6 offset-md-4 offset-lg-4" })
             </div>
-            <div class="form-group offset-6 offset-sm-6 offset-md-4 offset-lg-4 col-6 col-sm-6 col-md-6 col-lg-6">
-                <a class="btn btn-primary" href="/Apraiser/ProcessLoan">Cancel</a>&nbsp;&nbsp;
-                <input type="submit" class="btn btn-primary float-right" value="Submit" />
+            <div class="form-group">
+                <input type="button" value="Add New" class="btn btn-info col-3 col-sm-3 col-md-2 col-lg-2" onclick="AddNewOrnament()" />
+                <a class="btn btn-primary offset-3 offset-sm-3 offset-md-2 offset-lg-2 col-2 col-sm-2 col-md-2 col-lg-2 " href="/Apraiser/ProcessLoan">Cancel</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="submit" class="btn btn-primary offset-1 col-2 col-sm-2 col-md-2 col-lg-2" value="Submit" onclick="SaveOrnamentDetails(event)" />
             </div>
         </div>
     </div>
 }
 <script>
+    var ornamentsList = [];
     $(document).ready(function () {
         //$("#txtDateSelf").datepicker({ dateFormat: "dd-mm-yy" }).datepicker("setDate", new Date());
     })
@@ -101,12 +102,12 @@
 
         var TodayRate = $("#hdnTodayRate").val();
         if (TodayRate != "") {
-            if ($("#txttxtQualityBank").val() != "") {
+            if ($("#txtQualityBank").val() != "") {
                 var netWt = 0;
                 var marketPrice = 0;
                 var grossWt = $("#txtGrossWeightBank").val() == "" ? 0 : $("#txtGrossWeightBank").val();
                 var stoneWt = $("#txtStoneWeightBank").val() == "" ? 0 : $("#txtStoneWeightBank").val();
-                var quality = $("#txttxtQualityBank").val() == "" ? 1 : $("#txttxtQualityBank").val();
+                var quality = $("#txtQualityBank").val() == "" ? 1 : $("#txtQualityBank").val();
 
                 var s = (grossWt - stoneWt) * (quality / 100);
                 netWt = s + ((s * 8) / 100);
@@ -115,7 +116,7 @@
                 $("#txtNetWeightBank").val(netWt.toFixed(3));
                 $("#txtMarketPriceBank").val(marketPrice.toFixed(2));
             }
-        }else {
+        } else {
             alert("Please select any bank.");
         }
 
@@ -135,6 +136,192 @@
 
                 }
             })
+        }
+    }
+
+    AddNewOrnament = function () {
+        debugger;
+
+        if (ValidateOrnamentBank() == true) {
+            ornamentsList.push({
+                Ornament: $("#txtOrnamentBank").val(),
+                Quantity: $("#ddQuantityBank").val(),
+                GrossWeight: $("#txtGrossWeightBank").val(),
+                StoneWeight: $("#txtStoneWeightBank").val(),
+                Quality: $("#txtQualityBank").val(),
+                NetWeight: $("#txtNetWeightBank").val(),
+                MarketPrice: $("#txtMarketPriceBank").val(),
+                //CustomerId: $("#txtQualityBank").val(),
+                LoanType: 2
+            });
+            EmptyForm();
+            if (ornamentsList.length > 0) {
+                //LoadGrid();
+            }
+        } else {
+            //$("#divError").html(errorMsg);
+            // $("#divError").show();
+        }
+    }
+    EmptyForm = function () {
+        $("#txtOrnamentBank").val("");
+        $("#ddQuantityBank").val("");
+        $("#txtGrossWeightBank").val("");
+        $("#txtStoneWeightBank").val("");
+        $("#txtQualityBank").val("");
+        $("#txtNetWeightBank").val("");
+        $("#txtMarketPriceBank").val("");
+    }
+    ValidateCustomerBank = function () {
+        debugger;
+        var isValid = true;
+        if ($("#ddBank").val() == "") {
+            isValid = false;
+            $("#BankValid").text("The Bank field is required.");
+        } else {
+            $("#BankValid").text("");
+        }
+        if ($("#txtBranch").val() == "") {
+            isValid = false;
+            $("#BranchValid").text("The Branch field is required.");
+        } else {
+            $("#BranchValid").text("");
+        }
+        if ($("#txtNameBank").val() == "") {
+            isValid = false;
+            $("#NameBankValid").text("The Name field is required.");
+        } else {
+            $("#NameBankValid").text("");
+        }
+        if ($("#txtRelationType").val() == "") {
+            isValid = false;
+            $("#RelationTypeValid").text("The Relation Type field is required.");
+        } else {
+            $("#RelationTypeValid").text("");
+        }
+        if ($("#txtRelationName").val() == "") {
+            isValid = false;
+            $("#RelationNameValid").text("The Relation Name field is required.");
+        } else {
+            $("#RelationNameValid").text("");
+        }
+        if ($("#txtAddressBank").val() == "") {
+            isValid = false;
+            $("#AddressBankValid").text("The Address field is required.");
+        } else {
+            $("#AddressBankValid").text("");
+        }
+        if ($("#txtMobileNumberBank").val() == "") {
+            isValid = false;
+            $("#MobileNumberBankValid").text("The Bank field is required.");
+        } else {
+            $("#MobileNumberBankValid").text("");
+        }
+        return isValid;
+    }
+    ValidateOrnamentBank = function () {
+        var isValid = true;
+        if ($("#txtOrnamentBank").val() == "") {
+            isValid = false;
+            $("#OrnamentBankValid").text("The Ornament field is required.");
+        } else {
+            $("#OrnamentBankValid").text("");
+        }
+        if ($("#ddQuantityBank").val() == "") {
+            isValid = false;
+            $("#QuantityBankValid").text("The Quantity field is required.");
+        } else {
+            $("#QuantityBankValid").text("");
+        }
+        if ($("#txtGrossWeightBank").val() == "") {
+            isValid = false;
+            $("#GrossWeightBankValid").text("The Gross weight field is required.");
+        } else {
+            $("#GrossWeightBankValid").text("");
+        }
+        if ($("#txtQualityBank").val() == "") {
+            isValid = false;
+            $("#QualityBankValid").text("The Quality field is required.");
+        } else {
+            $("#QualityBankValid").text("");
+        }
+        return isValid;
+    }
+    SaveOrnamentDetails = function (e) {
+        debugger;
+        e.preventDefault();
+        var isValid = true;
+        var errorMsg = "";
+        var bankCustomer = {};
+        if ($("#txtOrnamentBank").val() == "" && $("#ddQuantityBank").val() == "" && $("#txtGrossWeightBank").val() == "" && $("#txtQualityBank").val() == "" && ornamentsList.length > 0) {
+            isValid = true;
+        }
+        else if (ValidateOrnamentBank() == true) {
+            //if (isValid == true && $("#txtOrnamentBank").val() != "") {
+            ornamentsList.push({
+                Ornament: $("#txtOrnamentBank").val(),
+                Quantity: $("#ddQuantityBank").val(),
+                GrossWeight: $("#txtGrossWeightBank").val(),
+                StoneWeight: $("#txtStoneWeightBank").val(),
+                Quality: $("#txtQualityBank").val(),
+                NetWeight: $("#txtNetWeightBank").val(),
+                MarketPrice: $("#txtMarketPriceBank").val(),
+                //CustomerId: $("#txtQualityBank").val(),
+                LoanType: 2
+            });
+        } else {
+            isValid = false;
+        }
+        if (ValidateCustomerBank() == true) {
+            bankCustomer = {
+                CustomerId: 0,
+                Branch: $("#txtBranch").val(),
+                Name: $("#txtNameBank").val(),
+                RelationType: $("#txtRelationType").val(),
+                RelationName: $("#txtRelationName").val(),
+                MobileNumber: $("#txtMobileNumberBank").val(),
+                Address: $("#txtAddressBank").val(),
+                BankId: $("#ddBank").val()
+            }
+            //}
+        }
+        else {
+            isValid = false;
+
+        }
+
+
+
+        if (isValid == true) {
+            var model = {
+                ornamentsList: ornamentsList,
+                ornamentDetails: "",
+                todayRate: $("#hdnTodayRate").val(),
+                selectedBank: $("#ddBank").val(),
+                bankCustomer: bankCustomer
+            };
+
+            $.ajax({
+                url: "/Apraiser/BankCustomer",
+                type: "POST",
+                cache: false,
+                data: { model: model },
+                success: function (data) {
+                    debugger;
+                    window.location.href = "/Estimation?customerId=" + data + "&LoanType=2";
+                },
+                error: function (error) {
+
+                }
+            })
+
+            EmptyForm();
+        } else {
+            $("#formOrnamentDetails").submit(function (e) {
+                e.preventDefault();
+            });
+            //$("#divError").html(errorMsg);
+            //$("#divError").show();
         }
     }
 </script>

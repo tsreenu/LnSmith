@@ -77,6 +77,7 @@ namespace DigitalAppraiser.Controllers
             model.bankCustomer.ornamentDetails = new OrnamentDetails();
             model.selfCustomer.selfCustomer = new SelfCustomerDetails();
             model.selfCustomer.ornamentDetails = new OrnamentDetails();
+            model.isFirstLoad = "True";
             return View(model);
         }
         [HttpGet]
@@ -91,10 +92,11 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int AppraiserId = LogedUser.AppraiserId.Value;
             string userName = LogedUser.UserName;
+            ModelState["ornamentDetails.StoneWeight"].Errors.Clear();
             if (ModelState.IsValid == true)
             {
                 int customerId = bl.SaveSelfCustomerDetails(model, AppraiserId, userName);
-                return RedirectToAction("Estimation", new { customerId = customerId });
+                return RedirectToAction("Estimation", new { customerId = customerId, LoanType = 1 });
             }
             else
             {
@@ -121,6 +123,9 @@ namespace DigitalAppraiser.Controllers
                     Text = x.ToString()
                 });
                 procModel.ActiveTab = "Self";
+                procModel.isFirstLoad = "False";
+                procModel.bankCustomer.bankCustomer = new BankCustomerDetails();
+                procModel.bankCustomer.ornamentDetails = new OrnamentDetails();
                 return View("ProcessLoan", procModel);
             }
         }
@@ -134,18 +139,18 @@ namespace DigitalAppraiser.Controllers
             return Json(todayRate, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
-        public ActionResult Estimation(int customerId)
+        public ActionResult Estimation(int customerId, int LoanType)
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
             model.customerId = customerId;
             string userName = LogedUser.UserName;
-            model.ornamentsList = bl.GetOrnamentDetails(customerId).ornamentsList;
+            model.ornamentsList = bl.GetOrnamentDetails(customerId, LoanType).ornamentsList;
             model.loanDetails = new Models.DBModels.LoanDetails();
             model.loanDetails.CustomerId = customerId;
             model.loanDetails.CreatedBy = userName;
             model.loanDetails.ModifiedBy = userName;
-            model.loanDetails.LoanType = model.ornamentsList[0].LoanType;
+            model.loanDetails.LoanType = LoanType;
             var customer = bl.customerDetails(model.loanDetails.LoanType, customerId);
             model.CustomerName = customer.selfCustomer.Name;
             model.MobileNumber = customer.selfCustomer.MobileNumber;
@@ -188,12 +193,17 @@ namespace DigitalAppraiser.Controllers
             int AppraiserId = LogedUser.AppraiserId.Value;
             string userName = LogedUser.UserName;
             //int BankId = model.BankId;
-            if (ModelState.IsValid == true)
+            //ModelState["ornamentDetails.StoneWeight"].Errors.Clear();
+            try
             {
+                //if (ModelState.IsValid == false)
+                //{
                 int customerId = bl.SaveBankCustomerDetails(model, AppraiserId, userName);
-                return RedirectToAction("Estimation", new { customerId = customerId });
+                //return RedirectToAction("Estimation", new { customerId = customerId, LoanType = 2 });
+                return Json(customerId, JsonRequestBehavior.AllowGet);
+                //}
             }
-            else
+            catch (Exception ex)
             {
                 Models.ViewModels.ProcessLoanModel procModel = new Models.ViewModels.ProcessLoanModel();
                 procModel.selfCustomer = new Models.ViewModels.SelfCustomerModel();
@@ -218,6 +228,9 @@ namespace DigitalAppraiser.Controllers
                     Text = x.ToString()
                 });
                 procModel.ActiveTab = "Bank";
+                procModel.isFirstLoad = "False";
+                procModel.selfCustomer.selfCustomer = new SelfCustomerDetails();
+                procModel.selfCustomer.ornamentDetails = new OrnamentDetails();
                 return View("ProcessLoan", procModel);
             }
         }

@@ -18,7 +18,9 @@ namespace DigitalAppraiser.Models.ViewModels
         public string Password { get; set; }
         public string ErrorMessage { get; set; }
 
-        [Compare(nameof(Password), ErrorMessage = "Password and New Password should be same.")]
+        //[Compare(nameof(Password), ErrorMessage = "Password and New Password should be same.")]
+        [Required]
+        [MinLength(6)]
         public string NewPassword { get; set; }
         public string UserName { get; set; }
     }

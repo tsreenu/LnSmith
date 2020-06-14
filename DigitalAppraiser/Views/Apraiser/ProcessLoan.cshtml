@@ -49,8 +49,8 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true">Pawn Broker</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false">Banks</a>
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true" onclick="HideTab(this)">Pawn Broker</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false" onclick="HideTab(this)">Banks</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
@@ -67,6 +67,7 @@
             </div>
         </div>
         <input type="hidden" id="hdnActiveTab" value="@Model.ActiveTab" />
+        <input type="hidden" id="hdnFirstLoad" value="@Model.isFirstLoad" />
     </div>
 </div>
 
@@ -87,13 +88,30 @@
         var activetab = "";
         if (actTab == "Bank") {
             activetab = "#nav-Banks";
+            if ($("#hdnFirstLoad").val() == "False") {
+                $("#nav-home-tab").hide();
+            }
         } else {
             activetab = "#nav-PawnBroker";
+            if ($("#hdnFirstLoad").val() == "False") {
+                $("#nav-profile-tab").hide();  
+            }
         }
         if (activetab) {
             $('#nav-tab a[href="' + activetab + '"]').tab('show');
         }
+
     })
+
+    HideTab = function (ev) {
+        debugger;
+        if (ev.id == "nav-profile-tab") {
+            $("#nav-home-tab").hide();           
+        }
+        else if (ev.id == "nav-home-tab") {
+            $("#nav-profile-tab").hide();
+        }
+    }
 
     SelectLoanType = function () {
         var bankId = $("#ddBanks").val();

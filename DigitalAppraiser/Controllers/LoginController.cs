@@ -121,9 +121,12 @@ namespace DigitalAppraiser.Controllers
             if (ModelState.IsValid == true)
             {
                 result = bl.ChangePwd(model.MobileNumber, model.Password, model.NewPassword);
-                FormsAuthentication.SignOut();
-                Session.Abandon();
-                return RedirectToAction("Login");
+                if (result.ErrorMessage == "Password changed successfully")
+                {
+                    FormsAuthentication.SignOut();
+                    Session.Abandon();
+                    return RedirectToAction("Login");
+                }
             }
             model.ErrorMessage = result.ErrorMessage;
             return View(model);

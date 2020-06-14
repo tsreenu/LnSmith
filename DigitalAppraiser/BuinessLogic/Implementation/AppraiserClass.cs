@@ -112,6 +112,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             }
             catch (Exception ex)
             {
+                var exp = ex.Message;
                 result = 0;
             }
 
@@ -138,10 +139,10 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             _Context.SaveChanges();
             return 1;
         }
-        public Models.ViewModels.OrnamentDetailsModel GetOrnamentDetails(int customerId)
+        public Models.ViewModels.OrnamentDetailsModel GetOrnamentDetails(int customerId, int LoanType)
         {
             Models.ViewModels.OrnamentDetailsModel model = new Models.ViewModels.OrnamentDetailsModel();
-            model.ornamentsList = _Context.OrnamentDetails.Where(x => x.CustomerId == customerId && x.IsActive == true).ToList();
+            model.ornamentsList = _Context.OrnamentDetails.Where(x => x.CustomerId == customerId && x.LoanType == LoanType && x.IsActive == true).ToList();
             return model;
         }
         public Models.ViewModels.ReceiptModel GenerateLoan(Models.DBModels.LoanDetails model, int appraiserId)
@@ -199,10 +200,11 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                 _Context.BankCustomerDetails.Add(model.bankCustomer);
                 _Context.SaveChanges();
 
-                List<Models.DBModels.OrnamentDetails> ornamentsList = new List<OrnamentDetails>();
-                model.ornamentDetails.LoanType = 2;
-                ornamentsList.Add(model.ornamentDetails);
-                SaveOrnaments(userName, model.bankCustomer.CustomerId, ornamentsList);
+               // List<Models.DBModels.OrnamentDetails> ornamentsList = new List<OrnamentDetails>();
+                //foreach()
+               // model.ornamentDetails.LoanType = 2;
+                //ornamentsList.Add(model.ornamentDetails);
+                SaveOrnaments(userName, model.bankCustomer.CustomerId, model.ornamentsList);
                 result = model.bankCustomer.CustomerId;
             }
             catch (Exception ex)
