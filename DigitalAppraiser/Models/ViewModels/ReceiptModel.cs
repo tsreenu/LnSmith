@@ -14,5 +14,6 @@ namespace DigitalAppraiser.Models.ViewModels
         public Models.DBModels.TodayRate todayRate { get; set; }
         public string Place { get; set; }
         public string errMessage { get; set; }
+        public string Note { get; set; }
     }
 }

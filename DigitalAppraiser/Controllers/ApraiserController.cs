@@ -384,7 +384,7 @@ namespace DigitalAppraiser.Controllers
         {
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             var res = bl.AddPaymentDetails(paytmResponse);
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("TodayRate");
         }
     }
 }

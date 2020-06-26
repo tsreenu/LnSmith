@@ -30,6 +30,7 @@ namespace DigitalAppraiser.Models.DBModels
         public DateTimeOffset CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTimeOffset ModifiedOn { get; set; }
+        public string Note { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AppraiserBank> AppraiserBanks { get; set; }

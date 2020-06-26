@@ -95,7 +95,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             int result = 0;
             try
             {
-                model.selfCustomer.CreatedOn = DateTime.Now;
+                //model.selfCustomer.CreatedOn = DateTime.Now;
                 model.selfCustomer.ModifiedOn = DateTime.Now;
                 model.selfCustomer.CreatedBy = userName;
                 model.selfCustomer.ModifiedBy = userName;
@@ -130,7 +130,10 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             {
                 item.CreatedBy = userName;
                 item.ModifiedBy = userName;
-                item.CreatedOn = DateTime.Now;
+                if (item.LoanType != 1)
+                {
+                    item.CreatedOn = DateTime.Now;
+                }
                 item.ModifiedOn = DateTime.Now;
                 item.CustomerId = customerId;
                 item.IsActive = true;
@@ -150,7 +153,10 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             Models.ViewModels.ReceiptModel receipt = new Models.ViewModels.ReceiptModel();
             try
             {
-                model.CreatedOn = DateTime.Now;
+                if (model.LoanType != 1)
+                {
+                    model.CreatedOn = DateTime.Now;
+                }
                 model.ModifiedOn = DateTime.Now;
                 model.IsActive = true;
                 _Context.LoanDetails.Add(model);
@@ -168,6 +174,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                     receipt.ShopDetails = appraiser.ShopName;
                     receipt.ShopAddress = appraiser.ShopAddress;
                     receipt.Shopnumber = appraiser.ShopNumber;
+                    receipt.Note = appraiser.Note;
                 }
                 else
                 {
@@ -244,7 +251,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                                                                      CustomerName = bank.Name,
                                                                      InterestRate = loans.Interest,
                                                                      LoanAmount = loans.LoanAmount,
-                                                                     LoanId = loans.LoanId,
+                                                                     LoanId = loans.ID.ToString(),
                                                                      MobileNumber = bank.MobileNumber,
                                                                      Area = bank.Address,
                                                                      IsActive = loans.IsActive

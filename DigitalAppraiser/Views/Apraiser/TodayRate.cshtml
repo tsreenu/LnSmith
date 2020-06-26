@@ -36,7 +36,7 @@
             <form>
                 <div class="form-group">
                     <label>Date<span style="color:red">*</span></label>
-                    <input type="text" id="txtDate" class="form-control disable-color" />
+                    <input type="text" id="txtDate" class="form-control disable-color" disabled/>
                 </div>
                 @for (int i = 0; i < Model.TodayRates.Count; i++)
                 {
@@ -52,7 +52,7 @@
                     </div>
 
                 }
-                <input type="submit" class="btn btn-info" id="btnSaveTodatRate" value="Continue" />
+                <input type="submit" class="btn btn-info offset-4" id="btnSaveTodatRate" value="Continue" />
             </form>
         }
     </div>

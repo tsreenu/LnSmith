@@ -10,9 +10,12 @@
 
 
 @Html.HiddenFor(x => x.ornamentsList[0].LoanType, new { id = "hdnLoanType" })
+@Html.HiddenFor(x => x.ornamentsList[0].CreatedOn, new { id = "hdnCreatedOn" })
 
 <div class="container-fluid" style="background-color:#eee;">
+    <h2 style="text-align: center;">Preview</h2>
     <div class="row offset-2 col-8">
+
         <table class="table table-bordered" style="background:#fff;">
             <tr>
                 <td>Customer Name</td>
@@ -213,7 +216,8 @@
             EMI: $("#txtEstimatedIntrest").val(),
             IsActive: true,
             CreatedBy: $("#hdnUserName").val(),
-            ModifiedBy: $("#hdnUserName").val()
+            ModifiedBy: $("#hdnUserName").val(),
+            CreatedOn: $("#hdnCreatedOn").val()
         };
         $.ajax({
             url: "/Apraiser/GenerateLoan",

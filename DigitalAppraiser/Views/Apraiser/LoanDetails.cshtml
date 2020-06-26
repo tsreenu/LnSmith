@@ -15,156 +15,172 @@
 <input type="hidden" id="hdnDay" value="@Model.loanDetails.CreatedOn.Day" />
 <input type="hidden" id="hdnMonth" value="@Model.loanDetails.CreatedOn.Month" />
 <input type="hidden" id="hdnYear" value="@Model.loanDetails.CreatedOn.Year" />
-
-<div class="container">
-
-    <div class="row offset-2">
-        <h2 class="offset-3" style="color: #fff;text-align: center;">Settlement</h2>
-        <table class="table table-bordered col-10 col-sm-10 col-md-8 col-lg-8" style="background-color:#eee;">
-            <tr>
-                <td>Loan Given Date</td>
-                <td id="txtDate">@Model.loanDetails.CreatedOn.Date.ToString("dd-MMM-yyyy")</td>
-            </tr>
-            <tr>
-                <td>Loan ID</td>
-                <td>@Model.loanDetails.LoanId</td>
-            </tr>
-            <tr>
-                <td>Customer Name</td>
-                <td>@Model.selfCustomerDetails.Name</td>
-            </tr>
-            <tr>
-                <td>UAN Number</td>
-                <td>@Model.selfCustomerDetails.UANNumber</td>
-            </tr>
-            <tr>
-                <td>Address</td>
-                <td>@Model.selfCustomerDetails.Address</td>
-            </tr>
-            <tr>
-                <td>Mobile Number</td>
-                <td>@Model.selfCustomerDetails.MobileNumber</td>
-            </tr>
-            <tr>
-                <td>Principle Amount</td>
-                <td>@Model.loanDetails.LoanAmount</td>
-            </tr>
-            <tr>
-                <td>Rate of Interest</td>
-                <td>@Model.loanDetails.Interest</td>
-            </tr>
-            <tr>
-                <td>Estimated Monthly Interest</td>
-                <td>@Model.loanDetails.EMI</td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<div class="row" style="margin-left:0px;margin-right:0px;">
-
-    <table class="table table-bordered table-responsive-sm table-responsive-md" style="background-color:#eee;">
-        <thead>
-            <tr>
-                <th scope="col">S No</th>
-                <th scope="col">Item</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Gross Weight</th>
-                <th scope="col">Stone Weight</th>
-                <th scope="col">Quality</th>
-                <th scope="col">Net Weight</th>
-                <th scope="col">Market Price</th>
-                <th scope="col">Principle</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                decimal GW = 0;
-                decimal SW = 0;
-                decimal NW = 0;
-                decimal MP = 0;
-                for (int i = 1; i <= Model.ornamentsList.Count(); i++)
+<div id="divSelfReceipt" class="offset-md-3 offset-lg-3 col-md-6 col-lg-6 offset-sm-1 col-sm-10 offset-1 col-10" style="background-color:#fff">
+    <h2 style="text-align: center;">Settlement</h2>
+    <table class="table table-bordered">
+        <tr>
+            <td>Loan Given Date</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <td>Loan ID</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.LoanId</td>
+        </tr>
+        <tr>
+            <td>Customer Name</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.selfCustomerDetails.Name</td>
+        </tr>
+        <tr>
+            <td>UAN Number</td>
+            <td>@Model.selfCustomerDetails.UANNumber</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>@Model.selfCustomerDetails.Address</td>
+        </tr>
+        <tr>
+            <td>Ornaments</td>
+            <td>@Model.ornamentsList[0].Ornament</td>
+        </tr>
+        <tr>
+            <td>Total Gross Weight</td>
+            <td>@Model.ornamentsList[0].GrossWeight</td>
+        </tr>
+        <tr>
+            <td>Total Stone Weight</td>
+            <td>@Model.ornamentsList[0].StoneWeight</td>
+        </tr>
+        <tr>
+            <td>Total Net Weight</td>
+            <td>@Model.ornamentsList[0].NetWeight</td>
+        </tr>
+        <tr>
+            <td>Total Items Quantity</td>
+            <td>@Model.ornamentsList[0].Quantity</td>
+        </tr>
+        <tr>
+            <td>Mobile Number</td>
+            <td>@Model.selfCustomerDetails.MobileNumber</td>
+        </tr>
+        <tr>
+            <td>Principle Amount</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.LoanAmount</td>
+        </tr>
+        <tr>
+            <td>Rate of Interest</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.Interest</td>
+        </tr>
+        <tr>
+            <td>Estimated Monthly Interest</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.EMI</td>
+        </tr>
+        <tr>
+            <td>Release Date</td>
+            <td style="font-weight: bold; font-size: 20px;">
+                @if (Model.loanDetails.IsActive == false)
                 {
-                    GW += Model.ornamentsList[i - 1].GrossWeight;
-                    SW += Model.ornamentsList[i - 1].StoneWeight;
-                    NW += Model.ornamentsList[i - 1].NetWeight;
-                    MP += Model.ornamentsList[i - 1].MarketPrice;
-                    <tr>
-                        <th scope="row">@i</th>
-                        <td>@Model.ornamentsList[i - 1].Ornament </td>
-                        <td>@Model.ornamentsList[i - 1].Quantity </td>
-                        <td>@Model.ornamentsList[i - 1].GrossWeight </td>
-                        <td>@Model.ornamentsList[i - 1].StoneWeight </td>
-                        <td>@Model.ornamentsList[i - 1].Quality </td>
-                        <td>@Model.ornamentsList[i - 1].NetWeight </td>
-                        <td>@Model.ornamentsList[i - 1].MarketPrice </td>
-                        <td></td>
-                    </tr>
+                    @Html.TextBox("ModifiedOn", Model.loanDetails.ModifiedOn.Date.ToString("dd/MMM/yyyy"), new { id = "txtReleaseDate", @class = "form-control disable-color", @disable = "disable" })
                 }
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td scope="col">@GW</td>
-                    <td scope="col">@SW</td>
-                    <td></td>
-                    <td scope="col">@NW</td>
-                    <td scope="col">@MP</td>
-                    <td scope="col">@Model.loanDetails.LoanAmount</td>
-                </tr>
-            }
-
-        </tbody>
+                else
+                {
+                    <input type="text" id="txtReleaseDate" class="form-control" onchange="MonthDiff()" />
+                }    <label id="lblReleaseDate" class="error" style="display:none;">Please enter Release Date. </label>
+            </td>
+        </tr>
+        <tr>
+            <td>No.of Days:</td>
+            <td style="font-weight: bold; font-size: 20px;">
+                @if (Model.loanDetails.IsActive == false)
+                {
+                    @Html.TextBox("NoOfDays", Model.loanDetails.NoOfDays, new { id = "txtDays", @class = "form-control disable-color", @disable = "disable" })
+                }
+                else
+                {
+                    <input type="text" id="txtDays" class="form-control disable-color" disabled />
+                }    <label id="lblDays" class="error" style="display:none;">Please enter Days. </label>
+            </td>
+        </tr>
+        <tr>
+            <td>Total Interest</td>
+            <td style="font-weight: bold; font-size: 20px;">
+                @if (Model.loanDetails.IsActive == false)
+                {
+                    @Html.TextBox("CollectedInterest", Model.loanDetails.CollectedInterest, new { id = "txtTotalInerest", @class = "form-control disable-color", @disable = "disable" })
+                }
+                else
+                {
+                    <input type="text" id="txtTotalInerest" class="form-control disable-color" disabled />
+                }
+                <label id="lblTotalInerest" class="error" style="display:none;">Please enter Total Inerest. </label>
+            </td>
+        </tr>
+        <tr>
+            <td>Toatal Amount</td>
+            <td style="font-weight: bold; font-size: 20px;">
+                @if (Model.loanDetails.IsActive == false)
+                {
+                    @Html.TextBoxFor(x => x.loanDetails.CollectedAmount, new { id = "txtTotalAmount", @class = "form-control disable-color", @disable = "disable" })
+                }
+                else
+                {
+                    <input type="text" id="txtTotalAmount" class="form-control" />
+                }    <label id="lblTotalAmount" class="error" style="display:none;">Please enter Total amount. </label>
+            </td>
+        </tr>
     </table>
 </div>
+<div class="offset-md-3 offset-lg-3 col-md-6 col-lg-6 offset-sm-1 col-sm-10 offset-1 col-10" >
+    <a class="btn btn-info btn-md fa-pull-left col-2" href="/Apraiser/CollectLoan">Back</a>
+    <input type="button" class="btn btn-info btn-md fa-pull-right col-2" id="btnRelease" value="Release" onclick="OpenPopup()" />
+</div>
 
-<div class="form-group form-inline" id="divPrinciple">
-    <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">Release Date<span style="color:red">*</span></label>
-    @if (Model.loanDetails.IsActive == false)
-    {
-        @Html.TextBox("ModifiedOn", Model.loanDetails.ModifiedOn.Date.ToString("dd/MMM/yyyy"), new { id = "txtReleaseDate", @class = "form-control disable-color", @disable = "disable" })
-    }
-    else
-    {
-        <input type="text" id="txtReleaseDate" class="form-control" onchange="MonthDiff()" />
-    }    <label id="lblReleaseDate" class="error" style="display:none;">Please enter Release Date. </label>
-</div>
-<div class="form-group form-inline" id="divPrinciple">
-    <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">No.of Days:<span style="color:red">*</span></label>
-    @if (Model.loanDetails.IsActive == false)
-    {
-        @Html.TextBox("NoOfDays", Model.loanDetails.NoOfDays, new { id = "txtDays", @class = "form-control disable-color", @disable = "disable" })
-    }
-    else
-    {
-        <input type="text" id="txtDays" class="form-control disable-color" disabled />
-    }    <label id="lblDays" class="error" style="display:none;">Please enter Days. </label>
-</div>
-<div class="form-group form-inline" id="divPrinciple">
-    <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">Total Interest<span style="color:red">*</span></label>
-    @if (Model.loanDetails.IsActive == false)
-    {
-        @Html.TextBox("CollectedInterest", Model.loanDetails.CollectedInterest, new { id = "txtTotalInerest", @class = "form-control disable-color", @disable = "disable" })
-    }
-    else
-    {
-        <input type="text" id="txtTotalInerest" class="form-control disable-color" disabled />
-    }   
-    <label id="lblTotalInerest" class="error" style="display:none;">Please enter Total Inerest. </label>
-</div>
-<div class="form-group form-inline" id="divPrinciple">
-    <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">Toatal Amount<span style="color:red">*</span></label>
-    @if (Model.loanDetails.IsActive == false)
-    {
-        @Html.TextBoxFor(x => x.loanDetails.CollectedAmount, new { id = "txtTotalAmount", @class = "form-control disable-color", @disable = "disable" })
-    }
-    else
-    {
-        <input type="text" id="txtTotalAmount" class="form-control" />
-    }    <label id="lblTotalAmount" class="error" style="display:none;">Please enter Total amount. </label>
-</div>
-<a class="btn btn-info btn-md fa-pull-left col-2" href="/Apraiser/CollectLoan">Back</a>
-<input type="button" class="btn btn-info btn-md fa-pull-right col-2" id="btnRelease" value="Release" onclick="OpenPopup()" />
+@*<div class="form-group form-inline" id="divPrinciple">
+        <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">Release Date<span style="color:red">*</span></label>
+        @if (Model.loanDetails.IsActive == false)
+        {
+            @Html.TextBox("ModifiedOn", Model.loanDetails.ModifiedOn.Date.ToString("dd/MMM/yyyy"), new { id = "txtReleaseDate", @class = "form-control disable-color", @disable = "disable" })
+        }
+        else
+        {
+            <input type="text" id="txtReleaseDate" class="form-control" onchange="MonthDiff()" />
+        }    <label id="lblReleaseDate" class="error" style="display:none;">Please enter Release Date. </label>
+    </div>
+    <div class="form-group form-inline" id="divPrinciple">
+        <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">No.of Days:<span style="color:red">*</span></label>
+        @if (Model.loanDetails.IsActive == false)
+        {
+            @Html.TextBox("NoOfDays", Model.loanDetails.NoOfDays, new { id = "txtDays", @class = "form-control disable-color", @disable = "disable" })
+        }
+        else
+        {
+            <input type="text" id="txtDays" class="form-control disable-color" disabled />
+        }    <label id="lblDays" class="error" style="display:none;">Please enter Days. </label>
+    </div>
+    <div class="form-group form-inline" id="divPrinciple">
+        <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">Total Interest<span style="color:red">*</span></label>
+        @if (Model.loanDetails.IsActive == false)
+        {
+            @Html.TextBox("CollectedInterest", Model.loanDetails.CollectedInterest, new { id = "txtTotalInerest", @class = "form-control disable-color", @disable = "disable" })
+        }
+        else
+        {
+            <input type="text" id="txtTotalInerest" class="form-control disable-color" disabled />
+        }
+        <label id="lblTotalInerest" class="error" style="display:none;">Please enter Total Inerest. </label>
+    </div>
+    <div class="form-group form-inline" id="divPrinciple">
+        <label class="col-4 col-sm-4 col-md-2 col-lg-2 flexLeft" style="color:#fff;">Toatal Amount<span style="color:red">*</span></label>
+        @if (Model.loanDetails.IsActive == false)
+        {
+            @Html.TextBoxFor(x => x.loanDetails.CollectedAmount, new { id = "txtTotalAmount", @class = "form-control disable-color", @disable = "disable" })
+        }
+        else
+        {
+            <input type="text" id="txtTotalAmount" class="form-control" />
+        }    <label id="lblTotalAmount" class="error" style="display:none;">Please enter Total amount. </label>
+    </div>*@
+@*<a class="btn btn-info btn-md fa-pull-left col-2" href="/Apraiser/CollectLoan">Back</a>
+    <input type="button" class="btn btn-info btn-md fa-pull-right col-2" id="btnRelease" value="Release" onclick="OpenPopup()" />*@
 <!-- Modal -->
 <div class="modal fade" id="modelCollectLoan" role="dialog">
     <div class="modal-dialog">
@@ -188,13 +204,13 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modelThankYou" role="dialog">
+<div class="modal fade offset-1" id="modelThankYou" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
         <div class="modal-content" style="width:70%">
             <div class="modal-body">
-                <p id="pSuccessMsg"></p>
+                <p style="text-align:center;" id="pSuccessMsg"></p>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-default btn-info" href="/Apraiser/TodayRate" id="btnRedirectHome" style="display:none" onclick="">Ok</a>

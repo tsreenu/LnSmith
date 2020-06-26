@@ -18,6 +18,13 @@
         .disable-color:hover {
             cursor: not-allowed;
         }
+    .footer {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        text-align: center;
+    }
 </style>
 <html>
 <head>
@@ -65,7 +72,6 @@
         //    $("#loader").hide();
         //});
         ActiveMenu = function (menuId) {
-            debugger;
             $("#myNavbar a.active").removeClass("active");
 
             $("#" + menuId).addClass("active");
@@ -74,7 +80,7 @@
 
     </script>
 </head>
-<body style="padding: 0px;">
+<body style="padding: 0px;min-height:100%;">
     <nav class="navbar navbar-expand-md navbar-dark bg-transparent sticky-top" style="background-color:#322e25 !important;">
         <div class="container-fluid">
             <a class="navbar-brand"><img src="~/Content/Images/logo.jpg" /></a>
@@ -109,9 +115,9 @@
             </div>
         </div>
     </div>
-    @*<footer class="container-fluid text-center" style="margin-top: 4.5%;">
-            <p>Copyrights &copy; Smithoid Technologies</p>
-        </footer>*@
-<div class="fixed-bottom text-center" style="bottom: -1rem;"> <p style="color:#fff;">Copyrights &copy; Smithoid Technologies</p></div>
+    <footer class="container-fluid text-center" style="margin-top: 4.5%;">
+            <p style="color:#fff;">Copyrights &copy; Smithoid Technologies</p>
+        </footer>
+@*<div class="text-center footer" style="bottom: -5rem;"> <p style="color:#fff;">Copyrights &copy; Smithoid Technologies</p></div>*@
 </body>
 </html>

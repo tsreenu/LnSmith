@@ -2,6 +2,7 @@
 
 @{
     Layout = null;
+    ViewBag.Title = "Signup";
 }
 
 <!DOCTYPE html>
@@ -46,90 +47,116 @@
 </head>
 
 <body>
-    @Html.HiddenFor(x => x.AppraiserId, new { id = "hdnApraiserId" })
-    @Html.HiddenFor(x => x.StateId, new { id = "hdnStateId" })
-    @Html.HiddenFor(x => x.CityId, new { id = "hdnCityId" })
 
-    <input type="hidden" id="hdnSelectedBanks" value="@Json.Encode(Model.selectedBanks)" />
-    <input type="hidden" id="hdnBanks" value="@Json.Encode(Model.Banks)" />
-    <input type="hidden" id="hdnStates" value="@Json.Encode(Model.States)" />
 
     <div class="container">
         <div class="login-form col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-10 offset-1 col-lg-8 offset-lg-2">
-            <h1 class="title"> SignUp </h1>
+            @if (Model.AppraiserId != 0)
+            {
+                <h1 class="title"> Settings </h1>
+            }
+            else
+            {
+                <h1 class="title"> SignUp </h1>
+            }
             @using (Html.BeginForm("SignUp", "Login", FormMethod.Post))
             {
-        <form>
-            @Html.HiddenFor(x => x.IsSelfLoan, new { id = "hdnIsSelfLoan" })
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Name<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.AppraiserName, new { id = "txtAppraiserName", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                @Html.ValidationMessageFor(x => x.AppraiserName, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Appraiser Number</label>
-                @Html.TextBoxFor(x => x.AppraiserNumber, new { id = "txtAppraiserNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                @Html.ValidationMessageFor(x => x.AppraiserNumber, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Mobile Number<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5", @onkeypress = "IsNumeric(event)", @maxlength = "10", autocomplete = "off" })
-                @Html.ValidationMessageFor(x => x.MobileNumber, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Password<span style="color:red">*</span></label>
-                @Html.PasswordFor(x => x.Password, new { id = "txtMobileNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                @Html.ValidationMessageFor(x => x.Password, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Confirm Password<span style="color:red">*</span></label>
-                @Html.PasswordFor(x => x.ConfirmPassword, new { id = "txtConfirmPassword", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                @Html.ValidationMessageFor(x => x.ConfirmPassword, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">State<span style="color:red">*</span></label>
-                @Html.DropDownListFor(x => x.StateId, Model.StatesList, "Select", new { id = "ddStates", @onchange = "BindCities(this)", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                @Html.ValidationMessageFor(x => x.StateId, "", new { @class = "error offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">City<span style="color:red">*</span></label>
-                @Html.DropDownListFor(x => x.CityId, Model.CitiesList, new { id = "ddCity", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                @Html.ValidationMessageFor(x => x.CityId, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Bank<span style="color:red">*</span></label>
-                @Html.DropDownListFor(x => x.selectedBanks, Model.bankList, "Select", new { id = "ddBanks", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5", @onchange = "ChangeBank(this)", @multiple = "multiple" })
-                @Html.ValidationMessageFor(x => x.selectedBanks, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-            </div>
-            <div id="divShopDetails" style="display:none;">
-                <div class="form-group form-inline">
-                    <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5 text-left">Shop Name<span style="color:red">*</span></label>
-                    @Html.TextBoxFor(x => x.ShopName, new { id = "txtShopName", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                    @Html.ValidationMessageFor(x => x.ShopName, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Shop Address</label>
-                    @Html.TextBoxFor(x => x.ShopAddress, new { id = "txtShopAddress", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
-                    @Html.ValidationMessageFor(x => x.ShopAddress, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-                </div>
-                <div class="form-group form-inline">
-                    <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Shop Phone Number</label>
-                    @Html.TextBoxFor(x => x.ShopNumber, new { id = "txtShopNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5", @onkeypress = "IsNumeric(event)" })
-                    @Html.ValidationMessageFor(x => x.ShopNumber, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
-                </div>
-            </div>
-            <div class="form-group form-inline">
-                <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5"><input id="chkTermsAndCondtions" type="checkbox" /> &nbsp; Terms and conditions </label>
-                <span style="color:#6495ed;font-weight:bold;font-size:17px;">Enjoy your 30 days free trail!</span>
-            </div>
-            <div class="form-group form-inline">
-                
-            </div>
+                <form>
+                    @Html.HiddenFor(x => x.AppraiserId, new { id = "hdnApraiserId" })
+                    @Html.HiddenFor(x => x.StateId, new { id = "hdnStateId" })
+                    @Html.HiddenFor(x => x.CityId, new { id = "hdnCityId" })
+                    @Html.HiddenFor(x => x.Banks)
+                    @Html.HiddenFor(x => x.States)
+                    <input type="hidden" id="hdnSelectedBanks" value="@Json.Encode(Model.selectedBanks)" />
+                    <input type="hidden" id="hdnBanks" value="@Json.Encode(Model.Banks)" />
+                    <input type="hidden" id="hdnStates" value="@Json.Encode(Model.States)" />
+                    @Html.HiddenFor(x => x.IsSelfLoan, new { id = "hdnIsSelfLoan" })
+                    <div class="form-group form-inline">
+                        <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Name<span style="color:red">*</span></label>
+                        @Html.TextBoxFor(x => x.AppraiserName, new { id = "txtAppraiserName", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5", @onkeypress = "IsName(event)" })
+                        @Html.ValidationMessageFor(x => x.AppraiserName, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Appraiser Number</label>
+                        @Html.TextBoxFor(x => x.AppraiserNumber, new { id = "txtAppraiserNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                        @Html.ValidationMessageFor(x => x.AppraiserNumber, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Mobile Number<span style="color:red">*</span></label>
+                        @Html.TextBoxFor(x => x.MobileNumber, new { id = "txtMobileNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5", @onkeypress = "IsNumeric(event)", @maxlength = "10", autocomplete = "off" })
+                        @Html.ValidationMessageFor(x => x.MobileNumber, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                    </div>
+                    @if (Model.AppraiserId != 0)
+                    {
+                    }
+                    else
+                    {
+                        <div class="form-group form-inline">
+                            <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Password<span style="color:red">*</span></label>
+                            @Html.PasswordFor(x => x.Password, new { id = "txtMobileNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                            @Html.ValidationMessageFor(x => x.Password, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Confirm Password<span style="color:red">*</span></label>
+                            @Html.PasswordFor(x => x.ConfirmPassword, new { id = "txtConfirmPassword", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                            @Html.ValidationMessageFor(x => x.ConfirmPassword, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                        </div>
+                    }
+                    <div class="form-group form-inline">
+                        <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">State<span style="color:red">*</span></label>
+                        @Html.DropDownListFor(x => x.StateId, Model.StatesList, "Select", new { id = "ddStates", @onchange = "BindCities(this)", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                        @Html.ValidationMessageFor(x => x.StateId, "", new { @class = "error offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">City<span style="color:red">*</span></label>
+                        @Html.DropDownListFor(x => x.CityId, Model.CitiesList, new { id = "ddCity", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                        @Html.ValidationMessageFor(x => x.CityId, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Bank<span style="color:red">*</span></label>
+                        @Html.DropDownListFor(x => x.selectedBanks, Model.bankList, "Select", new { id = "ddBanks", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5", @onchange = "ChangeBank(this)", @multiple = "multiple" })
+                        @Html.ValidationMessageFor(x => x.selectedBanks, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                    </div>
+                    <div id="divShopDetails" style="display:none;">
+                        <div class="form-group form-inline">
+                            <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5 text-left">Shop Name<span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.ShopName, new { id = "txtShopName", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                            @Html.ValidationMessageFor(x => x.ShopName, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Shop Address</label>
+                            @Html.TextBoxFor(x => x.ShopAddress, new { id = "txtShopAddress", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                            @Html.ValidationMessageFor(x => x.ShopAddress, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Shop Phone Number</label>
+                            @Html.TextBoxFor(x => x.ShopNumber, new { id = "txtShopNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5", @onkeypress = "IsNumeric(event)" })
+                            @Html.ValidationMessageFor(x => x.ShopNumber, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5">Note</label>
+                            @Html.TextBoxFor(x => x.Note, new { id = "txtShopNumber", @class = "form-control col-lg-5 col-md-5 col-sm-5 col-5" })
+                            @Html.ValidationMessageFor(x => x.Note, "", new { @class = "error  offset-5 offset-sm-5 offset-md-5 offset-lg-5" })
+                        </div>
+                    </div>
+                    @if (Model.AppraiserId != 0)
+                    {
+                    }
+                    else
+                    {
+                        <div class="form-group form-inline">
+                            <label class="text-info col-lg-5 col-md-5 col-sm-5 col-5"><input id="chkTermsAndCondtions" type="checkbox" /> &nbsp; Terms and conditions </label>
+                            <span style="color:#6495ed;font-weight:bold;font-size:17px;">Enjoy your 30 days free trail!</span>
+                        </div>
+                    }
+                    <div class="form-group form-inline">
 
-                <div class="form-group form-inline offset-5 offset-sm-5 offset-md-5 offset-lg-5">
-                    <a class="btn btn-primary" href="javascript:void(0)" onclick="goBack()">Cancel</a>&nbsp;&nbsp;
-                    <input type="submit" class="btn btn-primary offset-md-2 offset-lg-4" value="Submit" />
-                </div>
+                    </div>
+
+                    <div class="form-group form-inline offset-5 offset-sm-5 offset-md-5 offset-lg-5">
+                        <a class="btn btn-primary" href="javascript:void(0)" onclick="goBack()">Cancel</a>&nbsp;&nbsp;
+                        <input type="submit" class="btn btn-primary offset-md-2 offset-lg-4" value="Submit" />
+                    </div>
 
                 </form>
             }
@@ -145,7 +172,11 @@
         if ($("#hdnIsSelfLoan").val() == "true") {
             $("#divShopDetails").show();
         }
-
+        $("#ddBanks option").each(function () {
+            if ($(this).val() != 1 && $(this).val() != 2) {
+                $(this).prop("disabled", true);
+            }
+        });
         $('#ddBanks').selectpicker();
 
         if ($("#hdnApraiserId").val() != "0") {
@@ -153,15 +184,23 @@
             $("#ddStates").trigger("change");
             var selectedBanks = $.parseJSON($("#hdnSelectedBanks").val());
             $('#ddBanks').val(selectedBanks);
-           // $('#ddBanks').multiselect('refresh');
+            // $('#ddBanks').multiselect('refresh');
             $('#ddBanks').trigger("change");
             $("#ddCity").val($("#hdnCityId").val())
-            $("#chkTermsAndCondtions")[0].checked = true;
-            $("#txtPassword").prop("disabled", true);
-            $("#txtConfirmPwd").prop("disabled", true);
+            //$("#chkTermsAndCondtions")[0].checked = true;
+            //$("#txtPassword").prop("disabled", true);
+            //$("#txtConfirmPwd").prop("disabled", true);
         }
     });
-
+    IsName = function (e) {
+        var isValid = false;
+        var regex = /^[a-zA-Z\. ]*$/;
+        isValid = regex.test(e.key);
+        if (isValid == false) {
+            e.preventDefault()
+            return isValid;
+        }
+    }
     IsNumeric = function (e) {
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
             e.preventDefault()

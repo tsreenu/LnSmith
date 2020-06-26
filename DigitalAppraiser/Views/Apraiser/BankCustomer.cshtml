@@ -20,7 +20,7 @@
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Name<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.Name, new { id = "txtNameBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
+                @Html.TextBoxFor(x => x.bankCustomer.Name, new { id = "txtNameBank", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off", @onkeypress = "IsName(event)" })
                 @Html.ValidationMessageFor(x => x.bankCustomer.Name, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "NameBankValid" })
             </div>
             <div class="form-group form-inline">
@@ -30,7 +30,7 @@
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Relation Name<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.bankCustomer.RelationName, new { id = "txtRelationName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
+                @Html.TextBoxFor(x => x.bankCustomer.RelationName, new { id = "txtRelationName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off", @onkeypress = "IsName(event)" })
                 @Html.ValidationMessageFor(x => x.bankCustomer.RelationName, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6", id = "RelationNameValid" })
             </div>
             <div class="form-group form-inline">
@@ -86,6 +86,10 @@
                 <input type="submit" class="btn btn-primary offset-1 col-2 col-sm-2 col-md-2 col-lg-2" value="Submit" onclick="SaveOrnamentDetails(event)" />
             </div>
         </div>
+
+        <div id="divOrnamentsTbl" class="col-12" style="display:none;margin-left: 15px;">
+
+        </div>
     </div>
 }
 <script>
@@ -96,6 +100,15 @@
     IsNumeric = function (e) {
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
             e.preventDefault()
+        }
+    }
+    IsName = function (e) {
+        var isValid = false;
+        var regex = /^[a-zA-Z\. ]*$/;
+        isValid = regex.test(e.key);
+        if (isValid == false) {
+            e.preventDefault()
+            return isValid;
         }
     }
     CalculateNetWeightAndPriceBank = function () {
@@ -140,7 +153,6 @@
     }
 
     AddNewOrnament = function () {
-        debugger;
 
         if (ValidateOrnamentBank() == true) {
             ornamentsList.push({
@@ -156,7 +168,7 @@
             });
             EmptyForm();
             if (ornamentsList.length > 0) {
-                //LoadGrid();
+                LoadGrid();
             }
         } else {
             //$("#divError").html(errorMsg);
@@ -173,7 +185,6 @@
         $("#txtMarketPriceBank").val("");
     }
     ValidateCustomerBank = function () {
-        debugger;
         var isValid = true;
         if ($("#ddBank").val() == "") {
             isValid = false;
@@ -308,7 +319,7 @@
                 data: { model: model },
                 success: function (data) {
                     debugger;
-                    window.location.href = "/Estimation?customerId=" + data + "&LoanType=2";
+                    window.location.href =  '@Url.Action("Estimation", "Apraiser")'+'?customerId=' + data + '&LoanType=2';
                 },
                 error: function (error) {
 
@@ -323,5 +334,34 @@
             //$("#divError").html(errorMsg);
             //$("#divError").show();
         }
+    }
+
+    LoadGrid = function () {
+        debugger;
+        var table = "<table class='table table-bordered table-responsive-sm table-responsive-md'><thead><tr><th scope='col'>S No</th><th scope='col'>Item</th><th scope='col'>Quantity</th><th scope='col'>Gross Weight</th><th scope='col'>Stone Weight</th><th scope='col'>Quality</th><th scope='col'>Net Weight</th><th scope='col'>Market Price</th><th scope='col'></th></tr></thead><tbody>";
+        var td = "";
+        for (var i = 0; i < ornamentsList.length; i++) {
+            td += "<tr><td>" + (i + 1) + "</td><td>" + ornamentsList[i].Ornament + "</td><td>" + ornamentsList[i].Quantity + "</td><td>"
+                + ornamentsList[i].GrossWeight + "</td><td>" + ornamentsList[i].StoneWeight + "</td><td>" + ornamentsList[i].Quality + "</td><td>"
+                + ornamentsList[i].NetWeight + "</td><td>" + ornamentsList[i].MarketPrice + "</td><td><div style='display: inline-flex;'><input type='button'class='btn btn-xs btn-success' value='Edit' onclick='Edit(" + i + ")'/>&nbsp;&nbsp;&nbsp;<input type='button'class='btn btn-xs btn-success' value='Delete' onclick='Delete(" + i + ")'/></div></td></tr>";
+        }
+        table += td + "</tbody></table>";
+        $("#divOrnamentsTbl").html("");
+        $("#divOrnamentsTbl").html(table);
+        $("#divOrnamentsTbl").show();
+    }
+    Delete = function (i) {
+        ornamentsList.splice(i, 1);
+        LoadGrid();
+    }
+    Edit = function (i) {
+        $("#txtOrnamentBank").val(ornamentsList[i].Ornament);
+        $("#ddQuantityBank").val(ornamentsList[i].Quantity);
+        $("#txtGrossWeightBank").val(ornamentsList[i].GrossWeight);
+        $("#txtStoneWeightBank").val(ornamentsList[i].StoneWeight);
+        $("#txtQualityBank").val(ornamentsList[i].Quality);
+        $("#txtNetWeightBank").val(ornamentsList[i].NetWeight);
+        $("#txtMarketPriceBank").val(ornamentsList[i].MarketPrice);
+        ornamentsList.splice(i, 1);
     }
 </script>

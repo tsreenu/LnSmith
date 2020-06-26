@@ -58,5 +58,6 @@ namespace DigitalAppraiser.Models.ViewModels
         [NotMapped]
         public IEnumerable<System.Web.Mvc.SelectListItem> bankList { get; set; }
         public int bankId { get; set; }
+        public string Note { get; set; }
     }
 }

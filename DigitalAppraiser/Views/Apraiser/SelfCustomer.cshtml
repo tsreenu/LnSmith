@@ -9,11 +9,12 @@
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Date<span style="color:red">*</span></label>
                 @Html.TextBoxFor(x => x.selfCustomer.CreatedOn, new { id = "txtCreatedOn", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6" })
+                <span class="fa fa-calendar" id="spnCalender" style="margin-left:-2rem;z-index:111;"></span>
                 @Html.ValidationMessageFor(x => x.selfCustomer.CreatedOn, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
             <div class="form-group form-inline">
                 <label class="offset-md-1 offset-lg-1 col-6 col-sm-6 col-md-4 col-lg-4 flexLeft">Name<span style="color:red">*</span></label>
-                @Html.TextBoxFor(x => x.selfCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off" })
+                @Html.TextBoxFor(x => x.selfCustomer.Name, new { id = "txtName", @class = "form-control col-6 col-sm-6 col-md-6 col-lg-6", autocomplete = "off", @onkeypress = "IsName(event)" })
                 @Html.ValidationMessageFor(x => x.selfCustomer.Name, "", new { @class = "error offset-6 offset-sm-6 offset-md-6 offset-lg-6" })
             </div>
             <div class="form-group form-inline">
@@ -77,13 +78,26 @@
 <script>
     $(document).ready(function () {
         //var TodayRate = $.parseJSON($("#hdnTodayRate").val());
-        $("#txtCreatedOn").datepicker({ dateFormat: "dd-M-yy" }).datepicker("setDate", new Date());
+        $("#txtCreatedOn").datepicker({ dateFormat: "dd-M-yy", buttonImage: "Content/Images/calendar.svg", }).datepicker("setDate", new Date());
         ActiveMenu("liProcessLoan");
         $("#loader").hide();
+        $("#spnCalender").click(function () {
+            $("#txtCreatedOn").trigger("click");
+        })
     })
+
     IsNumeric = function (e) {
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
             e.preventDefault()
+        }
+    }
+    IsName = function (e) {
+        var isValid = false;
+        var regex = /^[a-zA-Z\. ]*$/;
+        isValid = regex.test(e.key);
+        if (isValid == false) {
+            e.preventDefault()
+            return isValid;
         }
     }
     CalculateNetWeightAndPrice = function () {

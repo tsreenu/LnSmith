@@ -75,19 +75,30 @@ namespace DigitalAppraiser.Controllers
             {
                 ModelState["ShopName"].Errors.Clear();
             }
+            if(LogedUser.AppraiserId > 0)
+            {
+                ModelState["Password"].Errors.Clear();
+            }
 
             if (ModelState.IsValid == true)
             {
                 result = bl.SignUpUser(signUpModel);
-                if (Session["AppraiserId"] != null)
-                {
-                    FormsAuthentication.SignOut();
-                    Session.Abandon();
-                }
+                //if (Session["AppraiserId"] != null)
+                //{
+                //    FormsAuthentication.SignOut();
+                //    Session.Abandon();
+                //}
             }
             if (result == 1)
             {
-                return RedirectToAction("Login", "Login");
+                if (LogedUser.AppraiserId > 0)
+                {
+                    return RedirectToAction("TodayRate", "Apraiser");
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Login");
+                }
             }
             else
             {

@@ -18,11 +18,11 @@
         </tr>
         <tr>
             <td>Loan ID</td>
-            <td>@Model.loanDetails.LoanId</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.LoanId</td>
         </tr>
         <tr>
             <td>Customer Name</td>
-            <td>@Model.selfCustomerDetails.Name</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.selfCustomerDetails.Name</td>
         </tr>
         <tr>
             <td>UAN Number</td>
@@ -69,7 +69,10 @@
             <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.EMI</td>
         </tr>
     </table>
-    Note: Loan tenure is valid up to 12 months
+    @if (Model.Note != null)
+    {
+        <span> Note: @Model.Note</span>
+    }
     <br />
     <table class="table table-borderless">
         <tr>
@@ -84,15 +87,15 @@
 </div>
 
 @*<style>
-    #divReceipt1 {
-        -ms-transform: rotate(90deg); /* IE 9 */
-        transform: rotate(90deg); /* Standard syntax */
-    }
-    #divReceipt2 {
-        -ms-transform: rotate(90deg); /* IE 9 */
-        transform: rotate(90deg); /* Standard syntax */
-    }
-</style>*@
+        #divReceipt1 {
+            -ms-transform: rotate(90deg); /* IE 9 */
+            transform: rotate(90deg); /* Standard syntax */
+        }
+        #divReceipt2 {
+            -ms-transform: rotate(90deg); /* IE 9 */
+            transform: rotate(90deg); /* Standard syntax */
+        }
+    </style>*@
 
 <div id="divSelfPrint" class="col-12 form-inline" style="display:none;">
     <div id="divReceipt1" class="col-6" style="background-color:#fff">
@@ -112,11 +115,11 @@
             </tr>
             <tr>
                 <td>Loan ID</td>
-                <td>@Model.loanDetails.LoanId</td>
+                <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.LoanId</td>
             </tr>
             <tr>
                 <td>Customer Name</td>
-                <td>@Model.selfCustomerDetails.Name</td>
+                <td style="font-weight: bold; font-size: 20px;">@Model.selfCustomerDetails.Name</td>
             </tr>
             <tr>
                 <td>UAN Number</td>
@@ -163,7 +166,10 @@
                 <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.EMI</td>
             </tr>
         </table>
-        Note: Loan tenure is valid up to 12 months
+        @if (Model.Note != null)
+        {
+            <span> Note: @Model.Note</span>
+        }
         <br />
         <table class="table table-borderless">
             <tr>
@@ -190,11 +196,11 @@
             </tr>
             <tr>
                 <td>Loan ID</td>
-                <td>@Model.loanDetails.LoanId</td>
+                <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.LoanId</td>
             </tr>
             <tr>
                 <td>Customer Name</td>
-                <td>@Model.selfCustomerDetails.Name</td>
+                <td style="font-weight: bold; font-size: 20px;">@Model.selfCustomerDetails.Name</td>
             </tr>
             <tr>
                 <td>UAN Number</td>
@@ -241,7 +247,10 @@
                 <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.EMI</td>
             </tr>
         </table>
-        Note: Loan tenure is valid up to 12 months
+        @if (Model.Note != null)
+        {
+            <span> Note: @Model.Note</span>
+        }
         <br />
         <table class="table table-borderless">
             <tr>
