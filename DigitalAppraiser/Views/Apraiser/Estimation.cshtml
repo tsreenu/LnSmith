@@ -69,7 +69,7 @@
                         MP += Model.ornamentsList[i - 1].MarketPrice;
                         <tr>
                             <th scope="row">@i</th>
-                            <td>@Model.ornamentsList[i - 1].Ornament </td>
+                            <td><span> @Model.ornamentsList[i - 1].Ornament </span></td>
                             <td>@Model.ornamentsList[i - 1].Quantity </td>
                             <td>@Model.ornamentsList[i - 1].GrossWeight </td>
                             <td>@Model.ornamentsList[i - 1].StoneWeight </td>
@@ -117,8 +117,11 @@
     <div class="form-group form-inline" id="divIntrestRate">
         <label class="col-6 col-sm-6 col-md-3 col-lg-3 flexLeft">Estimated Monthly Interest<span style="color:red">*</span></label>
         @Html.TextBoxFor(x => x.loanDetails.EMI, new { id = "txtEstimatedIntrest", @class = "form-control col-6 col-sm-6 col-md-3 col-lg-3 disable-color", @readonly = "readonly" })
+
+        @*<input type="button" class="btn btn-info btn-md" id="btnContinueSelf" value="Continue" data-toggle="modal" onclick="Validate()" />
+        <input type="button" style="display:none" class="btn btn-info btn-md" id="btnContinueBank" value="Continue" onclick="GenerateLoan()" />*@
     </div>
-    <div class="fa-pull-right" style="margin-top:-4rem;" id="divBtns">
+    <div class="offset-6 offset-sm-6 offset-md-6 offset-lg-6" id="divBtns">
         <input type="button" class="btn btn-info btn-md" id="btnContinueSelf" value="Continue" data-toggle="modal" onclick="Validate()" />
         <input type="button" style="display:none" class="btn btn-info btn-md" id="btnContinueBank" value="Continue" onclick="GenerateLoan()" />
     </div>

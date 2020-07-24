@@ -14,7 +14,7 @@
     <table class="table table-bordered">
         <tr>
             <td>Loan Given Date</td>
-            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToShortDateString()</td>
+            <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToString("dd/MMM/yyyy")</td>
         </tr>
         <tr>
             <td>Loan ID</td>
@@ -74,6 +74,7 @@
         <span> Note: @Model.Note</span>
     }
     <br />
+    <br />
     <table class="table table-borderless">
         <tr>
             <td> Customer Sign </td>
@@ -111,7 +112,7 @@
         <table class="table table-bordered">
             <tr>
                 <td>Loan Given Date</td>
-                <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToShortDateString()</td>
+                <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToString("dd/MMM/yyyy")</td>
             </tr>
             <tr>
                 <td>Loan ID</td>
@@ -171,6 +172,7 @@
             <span> Note: @Model.Note</span>
         }
         <br />
+        <br />
         <table class="table table-borderless">
             <tr>
                 <td> Customer Sign </td>
@@ -192,7 +194,7 @@
         <table class="table table-bordered">
             <tr>
                 <td>Loan Given Date</td>
-                <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToShortDateString()</td>
+                <td style="font-weight: bold; font-size: 20px;">@Model.loanDetails.CreatedOn.DateTime.ToString("dd/MMM/yyyy")</td>
             </tr>
             <tr>
                 <td>Loan ID</td>
@@ -251,6 +253,7 @@
         {
             <span> Note: @Model.Note</span>
         }
+        <br />
         <br />
         <table class="table table-borderless">
             <tr>

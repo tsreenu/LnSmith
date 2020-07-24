@@ -11,5 +11,6 @@ namespace DigitalAppraiser.Models.ViewModels
         public BankCustomerModel bankCustomer { get; set; }
         public string ActiveTab { get; set; }
         public string isFirstLoad { get; set; }
+        public bool isSelfEnable { get; set; }
     }
 }

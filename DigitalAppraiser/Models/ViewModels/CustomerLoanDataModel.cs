@@ -19,5 +19,7 @@ namespace DigitalAppraiser.Models.ViewModels
     {
         public IEnumerable<CustomerLoanData> selfCustomerDataList { get; set; }
         public IEnumerable<CustomerLoanData> bankCustomerDataList { get; set; }
+        public bool IsSelfEnabled { get; set; }
+        public bool IsBankEnabled { get; set; }
     }
 }

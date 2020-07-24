@@ -67,52 +67,57 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true">Pawn Broker</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false">Banks</a>
+                @if (Model.IsSelfEnabled == true)
+                {
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true">Pawn Broker</a>
+                }
+                @if (Model.IsBankEnabled == true)
+                {
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false">Banks</a>
+                }
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
+            @if (Model.IsSelfEnabled == true)
+            {
+                <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
 
-                <table id="gridCustomerDataSelf" class="table"></table>
-                <div id="divPagerSelf"> </div>
-                <a href="@Url.Action("DownLoadExcel","Apraiser",new {bankId=1 })" class="btn btn-primary offset-6">Download</a>
-            </div>
+                    <table id="gridCustomerDataSelf" class="table"></table>
+                    <div id="divPagerSelf"> </div>
+                    <a href="@Url.Action("DownLoadExcel", "Apraiser", new { bankId = 1 })" class="btn btn-primary offset-6">Download</a>
+                </div>
+            }
+            @if (Model.IsBankEnabled == true)
+            {
+        <div class="tab-pane fade" id="nav-Banks" role="tabpanel" aria-labelledby="nav-profile-tab">
+            @*<div class="offset-md-3 offset-lg-3">*@
+            <table id="gridCustomerDataBank" class="table" style="border-collapse:collapse"></table>
+            <div id="divPagerBank"> </div>
+            <a href="" class="btn btn-primary offset-5">Delete</a>
+            <a href="@Url.Action("DownLoadExcel", "Apraiser", new { bankId = 2 })" class="btn btn-primary offset-6">Download</a>
+            @*</div>*@
 
-            <div class="tab-pane fade" id="nav-Banks" role="tabpanel" aria-labelledby="nav-profile-tab">
-                @*<div class="offset-md-3 offset-lg-3">*@
-                <table id="gridCustomerDataBank" class="table" style="border-collapse:collapse"></table>
-                <div id="divPagerBank"> </div>
-                <a href="@Url.Action("DownLoadExcel","Apraiser",new {bankId=2 })" class="btn btn-primary offset-6">Download</a>
-                @*</div>*@
-            </div>
-
+        </div>
+            }
 
         </div>
     </div>
 </div>
 
-@*<div class="col-sm-12" style="padding:0px">
-        <div class="panel-heading" style="background-color: #33719b;color: #fff;font-size: 20px;font-weight:bold;">
-            Customer Loan Data
-        </div>
-        <br />
-
-        <div class="row  col-sm-offset-1">
-
-            <div id="divPager"> </div>
-
-            <a href="@Url.Action("DownLoadExcel","Apraiser")" class="btn btn-success">Download</a>
-        </div>
-    </div>*@
 <script>
     $(document).ready(function () {
         ActiveMenu("liCustomerData");
-
-        LoadSelfGrid();
-
-        LoadBankGrid();
-
+        if ('@Model.IsSelfEnabled' == 'True') {
+            LoadSelfGrid();
+        }
+        if ('@Model.IsBankEnabled' == 'True') {
+            LoadBankGrid();
+        }
+        if ('@Model.IsSelfEnabled' == "False") {
+            $("#nav-profile-tab").addClass("active");
+            $("#nav-Banks").removeClass('fade');
+            $("#nav-Banks").addClass('active');
+        }
         $("#loader").hide();
     })
 
@@ -140,7 +145,7 @@
             //height: 250,
             colNames: ['S No', 'Date', 'Loan Type', 'Loan ID', 'Name of the Customer', 'Mobile Number', 'Area', 'Loan Amount', 'Rate of Interest', 'Loan Status'],
             colModel: [
-                { name: 'sno', index: 'sno', width: (widthSelfCell - 10), sortable: false },
+                { name: 'sno', index: 'sno', width: (widthSelfCell - 23), sortable: false },
                 {
                     name: 'date', index: 'date', width: widthSelfCell, formatter: 'date',
                     formatoptions: { newformat: 'd-M-Y' }
@@ -154,7 +159,7 @@
                 { name: 'interest', index: 'interest', width: widthSelfCell, sortable: false },
                 { name: 'loanStatus', index: 'loanStatus', width: widthSelfCell, sortable: false },
             ],
-            multiselect: false,
+            multiselect: true,
             height: 'auto',
             width: 'auto',
             viewrecords: true,
@@ -191,21 +196,17 @@
 
         var dataBank = $.parseJSON($("#hdnBankCustomerDataList").val());
         var rowList = [];
+        var length = Math.ceil(dataBank.length / 10);
+        for (var i = 1; i <= length; i++) {
+            rowList.push(i * 10);
+        }
         var widthBankCell = ($("#nav-tabContent").width() + 30) / 6;
         $("#gridCustomerDataBank").jqGrid({
             datatype: "local",
             //height: 250,
-            colNames: [' ', 'S No', 'Date', 'Loan Type', 'Name of the Customer', 'Mobile Number', 'Loan Status'],
+            colNames: ['','S No', 'Date', 'Loan Type', 'Name of the Customer', 'Mobile Number', 'Loan Status'],
             colModel: [
-                {
-                    name: 'chk', index: 'chk', width: 30, sortable: false, editable: true,
-                    edittype: 'checkbox', editoptions: { value: 'Yes:No', defaultValue: 'Yes' },
-                    formatoptions: { disabled: false },
-                    formatter: function (cellvalue, options, rowObject) {
-                        debugger;
-                        return '<input type="checkbox" id="chk' + rowObject.chk +'"'+ " value=" + rowObject.chk + " />";
-                    }
-                },
+                { name: 'loanId', index: 'loanId', width: 0, sortable: false },
                 { name: 'sno', index: 'sno', width: (widthBankCell - 30), sortable: false },
                 {
                     name: 'date', index: 'date', width: widthBankCell, formatter: 'date',
@@ -220,16 +221,14 @@
                 //{ name: 'interest', index: 'interest', width: 90, sortable: false },
                 { name: 'loanStatus', index: 'loanStatus', width: (widthBankCell - 30), sortable: false },
             ],
-            multiselect: false,
+            multiselect: true,
             height: 'auto',
             width: 'auto',
             viewrecords: true,
             loadonce: true,
             rowNum: 10,
             rowList: rowList,
-            pager: $("#divPagerBank"),
-            //imgpath: '~/Content/themes/base/images/',
-            //caption: "Customer Loan Data"
+            pager: $("#divPagerBank")
         });
 
         var mydataBank = [];
@@ -237,7 +236,7 @@
             debugger;
             //var date = GetFormattedDate(new Date(parseInt(data[i].Date.substr(6))));
             mydataBank.push({
-                chk: dataBank[i].LoanId,
+                loanId: dataBank[i].LoanId,
                 sno: i + 1,
                 date: dataBank[i].Date,
                 loanType: dataBank[i].BankName,
@@ -253,5 +252,16 @@
         for (var i = 0; i <= mydataBank.length; i++)
             $("#gridCustomerDataBank").jqGrid('addRowData', i + 1, mydataBank[i]);
         $("#gridCustomerDataBank").trigger('reloadGrid');
+        var grid = $("#gridCustomerDataBank");
+        grid.jqGrid('hideCol', grid.getGridParam("colModel")[1].name);
+    }
+    DeleteBankRecords = function () {
+        var selectedIds = [];
+        var bankGrid = $("#gridCustomerDataBank");
+        var i, selRowIds = bankGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
+        for (i = 0, n = selRowIds.length; i < n; i++) {
+            rowData = bankGrid.jqGrid("getLocalRow", selRowIds[i]);
+            selectedIds.push(rowData.loanId);
+        }
     }
 </script>

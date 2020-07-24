@@ -15,8 +15,14 @@
         RelationType = "Wife of";
     }
 }
+<style>
+/*    #divSbiReport{
+        font-size:18px;
+        font-family: Arial;
+    }*/
+</style>
 
-<div class="container" style="width:100%;background:#fff;" id="divSbiReport">
+<div class="container" style="width:100%;background:#fff;font-size:18px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;" id="divSbiReport">
     <div class="row">
         <div style="margin: auto;width:100%;text-align:center" id="divAnnexture">
             <p class="h3">Annexure 22</p>
@@ -126,7 +132,7 @@
         </div>
     </div>
 </div>
-<input type="button" class="btn btn-info fa-pull-right col-sm-2" style="margin-right:7%;" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
+<input type="button" class="btn btn-info col-sm-2 offset-5" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
 <script>
     PrintReceipt = function () {
         $.print("#divSbiReport");

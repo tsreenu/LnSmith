@@ -81,7 +81,7 @@
     </script>
 </head>
 <body style="padding: 0px;min-height:100%;">
-    <nav class="navbar navbar-expand-md navbar-dark bg-transparent sticky-top" style="background-color:#322e25 !important;">
+    <nav class="navbar navbar-expand-md navbar-dark bg-transparent sticky-top" style="background-color:#322e25 !important;margin-left:-13px;">
         <div class="container-fluid">
             <a class="navbar-brand"><img src="~/Content/Images/logo.jpg" /></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">
@@ -109,13 +109,13 @@
                 @*<img src="~/Content/Images/ajax-loader.gif"  />*@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
-                <div id="divMain" style="overflow-y:auto !important;overflow-x:hidden;">
+                <div id="divMain" style="overflow-y:auto !important;overflow-x:hidden;min-height:500px">
                     @RenderBody()
                 </div>
             </div>
         </div>
     </div>
-    <footer class="container-fluid text-center" style="margin-top: 4.5%;">
+    <footer class="container-fluid text-center">
             <p style="color:#fff;">Copyrights &copy; Smithoid Technologies</p>
         </footer>
 @*<div class="text-center footer" style="bottom: -5rem;"> <p style="color:#fff;">Copyrights &copy; Smithoid Technologies</p></div>*@

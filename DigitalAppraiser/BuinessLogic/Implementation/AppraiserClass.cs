@@ -20,11 +20,14 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             var appriaserBanks = _Context.AppraiserBanks.Where(x => x.AppriaserId == AppraiserId && x.IsActive == true).ToList();
             //var date = DateTime.Now.Date;
             //model.TodayRates = _Context.TodayRates.Where(x => x.AppraiserId == AppraiserId && x.IsActive == true && x.CreatedOn.Year == date.Year && x.CreatedOn.Month == date.Month && x.CreatedOn.Day == date.Day).ToList();
-
+            model.TodayRates = new List<TodayRate>();
             if (appriaserBanks.Count() > 0)
             {
                 var bankCount = appriaserBanks.Count();
-                model.TodayRates = _Context.TodayRates.Where(x => x.AppraiserId == AppraiserId && x.IsActive == true).OrderByDescending(x => x.Id).Take(bankCount).ToList();
+                foreach (var item in appriaserBanks)
+                {
+                    model.TodayRates.Add(_Context.TodayRates.Where(x => x.AppraiserId == AppraiserId && x.IsActive == true && x.BankId == item.BankId).OrderByDescending(x => x.Id).FirstOrDefault());
+                }
             }
             if (model.TodayRates.Count == 0)
             {
@@ -45,30 +48,37 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                 var date = DateTime.Now.Date;
                 var todayList = _Context.TodayRates.Where(x => x.AppraiserId == appraiserid && x.CreatedOn.Year == date.Year && x.CreatedOn.Month == date.Month && x.CreatedOn.Day == date.Day).ToList();
 
-                if (todayList.Count == 0)
+                foreach (var item in model.TodayRates)
                 {
-                    foreach (var item in model.TodayRates)
-                    {
-                        item.CreatedBy = userName;
-                        item.CreatedOn = DateTime.Now;
-                        item.ModifiedBy = userName;
-                        item.ModifiedOn = DateTime.Now;
-                        item.IsActive = true;
-                        _Context.TodayRates.Add(item);
-                    }
-                    _Context.SaveChanges();
-                    model.message = "Save success";
+                    var rate = _Context.TodayRates.Where(x => x.Id == item.Id).FirstOrDefault();
+                    _Context.TodayRates.Remove(rate);
                 }
-                else
+                _Context.SaveChanges();
+                //if (todayList.Count == 0)
+                //{
+                foreach (var item in model.TodayRates)
                 {
-                    foreach (var item in model.TodayRates)
-                    {
-                        todayList.Where(x => x.Id == item.Id).FirstOrDefault().Rate = item.Rate;
-                        todayList.Where(x => x.Id == item.Id).FirstOrDefault().ModifiedOn = DateTime.Now;
-                    }
-                    _Context.SaveChanges();
-                    model.message = "Update Success";
+                    item.Id = 0;
+                    item.CreatedBy = userName;
+                    item.CreatedOn = DateTime.Now;
+                    item.ModifiedBy = userName;
+                    item.ModifiedOn = DateTime.Now;
+                    item.IsActive = true;
+                    _Context.TodayRates.Add(item);
                 }
+                _Context.SaveChanges();
+                model.message = "Save success";
+                // }
+                //else
+                //{
+                //  foreach (var item in model.TodayRates)
+                //  {
+                //      todayList.Where(x => x.Id == item.Id).FirstOrDefault().Rate = item.Rate;
+                //      todayList.Where(x => x.Id == item.Id).FirstOrDefault().ModifiedOn = DateTime.Now;
+                // }
+                // _Context.SaveChanges();
+                model.message = "Update Success";
+                //}
 
             }
             catch (Exception ex)
@@ -95,6 +105,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             int result = 0;
             try
             {
+                model.ornamentDetails.CreatedOn = model.selfCustomer.CreatedOn;
                 //model.selfCustomer.CreatedOn = DateTime.Now;
                 model.selfCustomer.ModifiedOn = DateTime.Now;
                 model.selfCustomer.CreatedBy = userName;
@@ -207,9 +218,9 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                 _Context.BankCustomerDetails.Add(model.bankCustomer);
                 _Context.SaveChanges();
 
-               // List<Models.DBModels.OrnamentDetails> ornamentsList = new List<OrnamentDetails>();
+                // List<Models.DBModels.OrnamentDetails> ornamentsList = new List<OrnamentDetails>();
                 //foreach()
-               // model.ornamentDetails.LoanType = 2;
+                // model.ornamentDetails.LoanType = 2;
                 //ornamentsList.Add(model.ornamentDetails);
                 SaveOrnaments(userName, model.bankCustomer.CustomerId, model.ornamentsList);
                 result = model.bankCustomer.CustomerId;
@@ -270,7 +281,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             if (model.loanDetails != null)
             {
                 model.selfCustomerDetails = _Context.SelfCustomerDetails.Where(x => x.CustomerId == model.loanDetails.CustomerId).FirstOrDefault();
-                model.ornamentsList = _Context.OrnamentDetails.Where(x => x.CustomerId == model.loanDetails.CustomerId).ToList();
+                model.ornamentsList = _Context.OrnamentDetails.Where(x => x.CustomerId == model.loanDetails.CustomerId && x.LoanType == 1).ToList();
                 model.errMessage = "";
             }
             else
@@ -445,6 +456,18 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             }
             result = _Context.SaveChanges();
             return result;
+        }
+        public bool IsSelfEnabled(int AppraiserId)
+        {
+            var res = _Context.AppraiserBanks.Where(x => x.AppriaserId == AppraiserId && x.BankId == 1).ToList();
+            bool isSelf = res.Count > 0 ? true : false;
+            return isSelf;
+        }
+        public bool IsBankEnabled(int AppraiserId)
+        {
+            var res = _Context.AppraiserBanks.Where(x => x.AppriaserId == AppraiserId && x.BankId != 1).ToList();
+            bool isSelf = res.Count > 0 ? true : false;
+            return isSelf;
         }
     }
 }

@@ -44,27 +44,60 @@
         padding: 0.5rem;
     }
 </style>
-
+@Html.HiddenFor(x => x.isSelfEnable, new { id = "hdnIsSelfEnabled" })
 <div class="container-fluid">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true" onclick="HideTab(this)">Pawn Broker</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false" onclick="HideTab(this)">Banks</a>
+                @if (Model.isSelfEnable == true && Model.bankCustomer.Banks.Count() > 0)
+                {
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true" onclick="HideTab(this)">Pawn Broker</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false" onclick="HideTab(this)">Banks</a>
+                }
+                else if (Model.isSelfEnable == true)
+                {
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true" onclick="HideTab(this)">Pawn Broker</a>
+                }
+                else if (Model.bankCustomer.Banks.Count() > 0)
+                {
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false" onclick="HideTab(this)">Banks</a>
+                }
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
+            @if (Model.isSelfEnable == true && Model.bankCustomer.Banks.Count() > 0)
+            {
+                <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
 
-                @Html.Partial("SelfCustomer", Model.selfCustomer)
+                    @Html.Partial("SelfCustomer", Model.selfCustomer)
 
-            </div>
+                </div>
 
-            <div class="tab-pane fade" id="nav-Banks" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="tab-pane fade" id="nav-Banks" role="tabpanel" aria-labelledby="nav-profile-tab">
 
-                @Html.Partial("BankCustomer", Model.bankCustomer)
+                    @Html.Partial("BankCustomer", Model.bankCustomer)
 
-            </div>
+                </div>
+            }
+            else if (Model.isSelfEnable == true)
+            {
+                <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                    @Html.Partial("SelfCustomer", Model.selfCustomer)
+
+                </div>
+            }
+            else if (Model.bankCustomer.Banks.Count() > 0)
+            {
+
+                <div class="tab-pane fade show active" id="nav-Banks" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                    @Html.Partial("BankCustomer", Model.bankCustomer)
+
+                </div>
+            }
+
+
         </div>
         <input type="hidden" id="hdnActiveTab" value="@Model.ActiveTab" />
         <input type="hidden" id="hdnFirstLoad" value="@Model.isFirstLoad" />
@@ -76,7 +109,9 @@
     $(document).ready(function () {
         $("#loader").hide();
         ActiveMenu("liProcessLoan");
-
+        if ($("#hdnIsSelfEnabled").val() == "False") {
+            $("#nav-profile-tab").addClass("active");
+        }
         //$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
         //    localStorage.setItem('activeTab', $(e.target).attr('href'));
         //});
@@ -94,7 +129,7 @@
         } else {
             activetab = "#nav-PawnBroker";
             if ($("#hdnFirstLoad").val() == "False") {
-                $("#nav-profile-tab").hide();  
+                $("#nav-profile-tab").hide();
             }
         }
         if (activetab) {
@@ -106,7 +141,7 @@
     HideTab = function (ev) {
         debugger;
         if (ev.id == "nav-profile-tab") {
-            $("#nav-home-tab").hide();           
+            $("#nav-home-tab").hide();
         }
         else if (ev.id == "nav-home-tab") {
             $("#nav-profile-tab").hide();

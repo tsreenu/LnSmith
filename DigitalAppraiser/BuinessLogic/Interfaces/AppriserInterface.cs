@@ -22,5 +22,7 @@ namespace DigitalAppraiser.BuinessLogic.Interfaces
         Models.DBModels.SubscriptionDetails GetSubscriptionDetails(int appraiserId);
         string payment(int planId);
         int AddPaymentDetails(PaytmResponse paytmResponse);
+        bool IsSelfEnabled(int AppraiserId);
+        bool IsBankEnabled(int AppraiserId);
     }
 }

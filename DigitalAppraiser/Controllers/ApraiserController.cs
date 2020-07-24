@@ -51,10 +51,11 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int AppraiserId = LogedUser.AppraiserId.Value;
             Models.ViewModels.ProcessLoanModel model = new Models.ViewModels.ProcessLoanModel();
+            model.isSelfEnable = bl.IsSelfEnabled(AppraiserId);
             model.bankCustomer = new Models.ViewModels.BankCustomerModel();
             model.bankCustomer.Banks = bl.GetAppraiserBanks(AppraiserId);
             model.selfCustomer = new Models.ViewModels.SelfCustomerModel();
-            int[] list = Enumerable.Range(1, 30).ToArray();
+            int[] list = Enumerable.Range(1, 50).ToArray();
             model.selfCustomer.Quantity = list.Select(x => new SelectListItem
             {
                 Value = x.ToString(),
@@ -104,7 +105,7 @@ namespace DigitalAppraiser.Controllers
                 procModel.bankCustomer = new Models.ViewModels.BankCustomerModel();
                 procModel.bankCustomer.Banks = bl.GetAppraiserBanks(AppraiserId);
                 procModel.selfCustomer = model;
-                int[] list = Enumerable.Range(1, 30).ToArray();
+                int[] list = Enumerable.Range(1, 50).ToArray();
                 procModel.selfCustomer.Quantity = list.Select(x => new SelectListItem
                 {
                     Value = x.ToString(),
@@ -209,7 +210,7 @@ namespace DigitalAppraiser.Controllers
                 procModel.selfCustomer = new Models.ViewModels.SelfCustomerModel();
                 procModel.bankCustomer = model;
                 procModel.bankCustomer.Banks = bl.GetAppraiserBanks(AppraiserId);
-                int[] list = Enumerable.Range(1, 30).ToArray();
+                int[] list = Enumerable.Range(1, 50).ToArray();
                 procModel.selfCustomer.Quantity = list.Select(x => new SelectListItem
                 {
                     Value = x.ToString(),
@@ -244,6 +245,8 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             int AppraiserId = LogedUser.AppraiserId.Value;
             model = bl.GetCustomerLoanData(AppraiserId);
+            model.IsSelfEnabled = bl.IsSelfEnabled(AppraiserId);
+            model.IsBankEnabled = bl.IsBankEnabled(AppraiserId);
             return View("CustomerLoanData", model);
         }
         [HttpGet]

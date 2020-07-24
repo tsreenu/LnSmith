@@ -164,7 +164,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                             int apraiserId = isExist.AppriaserId.Value;
                             var todayRate = _Context.TodayRates.Where(x => x.AppraiserId == apraiserId && x.BankId == bankid && x.IsActive == true).FirstOrDefault();
                             todayRate.IsActive = false;
-                          //  _Context.TodayRates.Remove(todayRate);
+                            _Context.TodayRates.Remove(todayRate);
                             _Context.AppraiserBanks.Remove(isExist);
                         }
                     }
