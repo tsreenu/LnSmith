@@ -125,12 +125,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-6 col-6">
-                <div class="pricingTable green">
+                <div class="pricingTable blue">
                     <div class="pricingTable-header">
                         <div class="price-value">
                             <span class="amount">@Model.PlanName</span>
                         </div>
-                        <h3 class="title">Active Plan</h3>
+                        <h3 class="title" style="color:gold;">Active Plan</h3>
                     </div>
                     <ul class="content-list">
                         <li>Start Date : @Model.SubscriptionStartDate.Date.ToShortDateString()</li>
@@ -174,7 +174,8 @@
                 </div>
             }
         </div>
-        <p id="SmithNav" style="color:#fff;font-size: 27px;background-color:#3867d6;text-align:center;">Pease contact <a style="color:#fff;" href="https://www.smithoid.in/contact" target="_blank"> SMITHOID Technologies </a> for life time membership.</p>
+        @*<p id="SmithNav" style="color:#fff;font-size: 27px;background-color:#3867d6;text-align:center;">Pease contact <a style="color:#fff;" href="https://www.smithoid.in/contact" target="_blank"> SMITHOID Technologies </a> for life time membership.</p>*@
+        <p id="SmithNav" style="color:#fff;font-size: 27px;text-align:center;">Pease contact <a style="color:#fff;" href="https://www.smithoid.in/contact" target="_blank"> SMITHOID Technologies </a> for life time membership.</p>
     </div>
 </div>
 

@@ -24,5 +24,7 @@ namespace DigitalAppraiser.BuinessLogic.Interfaces
         int AddPaymentDetails(PaytmResponse paytmResponse);
         bool IsSelfEnabled(int AppraiserId);
         bool IsBankEnabled(int AppraiserId);
+        int DeleteBankRecords(List<string> selectedIds);
+        int DeleteSelfRecords(List<string> selectedIds);
     }
 }

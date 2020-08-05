@@ -1,4 +1,6 @@
 ﻿using DigitalAppraiser.Models.DBModels;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -388,6 +390,23 @@ namespace DigitalAppraiser.Controllers
             BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
             var res = bl.AddPaymentDetails(paytmResponse);
             return RedirectToAction("TodayRate");
+        }
+
+        public ActionResult DeleteBankRecords(string selectedIds)
+        {
+            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+            var list = JsonConvert.DeserializeObject<List<string>>(selectedIds);
+            int res = bl.DeleteBankRecords(list);
+            var data = bl.GetCustomerLoanData(LogedUser.AppraiserId.Value);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DeleteSelfRecords(string selectedIds)
+        {
+            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+            var list = JsonConvert.DeserializeObject<List<string>>(selectedIds);
+            int res = bl.DeleteSelfRecords(list);
+            var data = bl.GetCustomerLoanData(LogedUser.AppraiserId.Value);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }
