@@ -16,11 +16,19 @@
     }
 }
 <style>
-/*    #divSbiReport{
+    /*    #divSbiReport{
         font-size:18px;
         font-family: Arial;
     }*/
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #121213;
+    }
+
+    .table-bordered {
+        border: 1px solid #161617;
+    }
 </style>
+<script src="~/Scripts/printThis.js"></script>
 
 <div class="container" style="width:100%;background:#fff;font-size:18px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;" id="divSbiReport">
     <div class="row">
@@ -135,7 +143,8 @@
 <input type="button" class="btn btn-info col-sm-2 offset-5" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />
 <script>
     PrintReceipt = function () {
-        $.print("#divSbiReport");
+        //$.print("#divSbiReport");
+        $("#divSbiReport").printThis();
     }
     $(document).ready(function () {
     })

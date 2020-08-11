@@ -61,8 +61,8 @@
 <input type="hidden" id="hdnSelfCustomerDataList" value="@Json.Encode(Model.selfCustomerDataList)" />
 <input type="hidden" id="hdnBankCustomerDataList" value="@Json.Encode(Model.bankCustomerDataList)" />
 <div class="container-fluid">
-    <div>
-
+    <div id="divMessage" style="display:none;text-align:center;" class="alert alert-success alert-dismissible col-4 offset-4">
+        Selected loans deleted successfully.
     </div>
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <nav>
@@ -240,7 +240,6 @@
 
         var mydataBank = [];
         for (var i = 0; i < dataBank.length; i++) {
-            debugger;
             //var date = GetFormattedDate(new Date(parseInt(data[i].Date.substr(6))));
             mydataBank.push({
                 loanId: dataBank[i].LoanId,
@@ -282,8 +281,10 @@
                 },
                 success: function (data) {
                     debugger;
+                    $("#gridCustomerDataBank").clearGridData()
                     $("#hdnBankCustomerDataList").val(JSON.stringify(data.bankCustomerDataList));
                     LoadBankGrid();
+                    $("#divMessage").show().delay(5000).fadeOut();
                 },
                 error: function (error) {
 
@@ -293,10 +294,10 @@
     }
     DeleteSelfRecords = function () {
         var selectedIds = [];
-        var bankGrid = $("#gridCustomerDataSelf");
-        var i, selRowIds = bankGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
+        var selfGrid = $("#gridCustomerDataSelf");
+        var i, selRowIds = selfGrid.jqGrid("getGridParam", "selarrrow"), n, rowData;
         for (i = 0, n = selRowIds.length; i < n; i++) {
-            rowData = bankGrid.jqGrid("getLocalRow", selRowIds[i]);
+            rowData = selfGrid.jqGrid("getLocalRow", selRowIds[i]);
             selectedIds.push(rowData.loanId);
         }
         if (selectedIds != []) {
@@ -311,8 +312,10 @@
                 },
                 success: function (data) {
                     debugger;
+                    $("#gridCustomerDataSelf").clearGridData();
                     $("#hdnSelfCustomerDataList").val(JSON.stringify(data.selfCustomerDataList));
                     LoadSelfGrid();
+                    $("#divMessage").show().delay(5000).fadeOut();
                 },
                 error: function (error) {
 

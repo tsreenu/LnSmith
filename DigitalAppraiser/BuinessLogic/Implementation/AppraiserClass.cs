@@ -236,7 +236,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             Models.ViewModels.CustomerLoanDataModel model = new Models.ViewModels.CustomerLoanDataModel();
 
             List<Models.ViewModels.CustomerLoanData> selfList = (from self in _Context.SelfCustomerDetails.Where(x => x.AppraiserId == AppraiserId && x.IsActive == true)
-                                                                 join loan in _Context.LoanDetails.Where(x => x.LoanType == 1 && x.IsActive == true) on self.CustomerId equals loan.CustomerId
+                                                                 join loan in _Context.LoanDetails.Where(x => x.LoanType == 1) on self.CustomerId equals loan.CustomerId
                                                                  join bankmaster in _Context.BankMasters.Where(x => x.IsActive == true) on loan.LoanType equals bankmaster.BankId
                                                                  select new Models.ViewModels.CustomerLoanData
                                                                  {
@@ -253,7 +253,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
                                      ).ToList();
 
             List<Models.ViewModels.CustomerLoanData> bankList = (from bank in _Context.BankCustomerDetails.Where(x => x.AppraiserId == AppraiserId && x.IsActive == true)
-                                                                 join loans in _Context.LoanDetails.Where(x => x.LoanType != 1 && x.IsActive == true) on bank.CustomerId equals loans.CustomerId
+                                                                 join loans in _Context.LoanDetails.Where(x => x.LoanType != 1) on bank.CustomerId equals loans.CustomerId
                                                                  join bankmaster in _Context.BankMasters.Where(x => x.IsActive == true) on loans.LoanType equals bankmaster.BankId
                                                                  select new Models.ViewModels.CustomerLoanData
                                                                  {
@@ -472,7 +472,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
         public int DeleteBankRecords(List<string> selectedIds)
         {
             string ids = string.Join(",", selectedIds.Select(n => n.ToString()).ToArray());
-            string query = "update LoanDetails set IsActive = 0 where ID in (" + ids + ")";
+            string query = "delete from LoanDetails where ID in (" + ids + ")";
             int rows = _Context.Database.ExecuteSqlCommand(query);
             return rows;
         }
@@ -480,7 +480,7 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
         {
             string ids = string.Join("','", selectedIds.Select(n => n.ToString()).ToArray());
             ids = "'" + ids + "'";
-            string query = "update LoanDetails set IsActive = 0, ModifiedOn = getdate() where LoanId in (" + ids + ")";
+            string query = "delete from LoanDetails where LoanId in (" + ids + ")";
             int rows = _Context.Database.ExecuteSqlCommand(query);
             return rows;
         }
