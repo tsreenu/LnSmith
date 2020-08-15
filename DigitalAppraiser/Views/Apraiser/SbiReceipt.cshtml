@@ -24,9 +24,9 @@
         border: 1px solid #121213;
     }
 
-    .table-bordered {
+    /*.table-bordered {
         border: 1px solid #161617;
-    }
+    }*/
 </style>
 <script src="~/Scripts/printThis.js"></script>
 
@@ -72,16 +72,16 @@
         </div>
     </div>
     <div class="row offset-1">
-        <table class="table-bordered table-responsive col-sm-11">
+        <table class="table-responsive col-sm-11" style="border: 1px solid #161617;">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center">S.No</th>
-                    <th scope="col" class="text-center">Description of the article</th>
-                    <th scope="col" class="text-center">Gross Weight</th>
-                    <th scope="col" class="text-center">Approximate weight of the precious stones in the ornaments (grams)</th>
-                    <th scope="col" class="text-center">Purity (Carat)</th>
-                    <th scope="col" class="text-center">Net Weight Grams in 22 Ct. Approximate</th>
-                    <th scope="col" class="text-center">Market Value Rs.</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">S.No</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Description of the article</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Gross Weight</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Approximate weight of the precious stones in the ornaments (grams)</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Purity (Carat)</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Net Weight Grams in 22 Ct. Approximate</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Market Value Rs.</th>
                 </tr>
             </thead>
             <tbody>
@@ -99,23 +99,23 @@
                         MP += Model.ornamentsList[i - 1].MarketPrice;
                         total += Model.ornamentsList[i - 1].Quantity;
                         <tr>
-                            <th scope="row" class="text-center">@i</th>
-                            <td class="text-center">@Model.ornamentsList[i - 1].Ornament (@Model.ornamentsList[i - 1].Quantity) </td>
-                            <td class="text-center">@Model.ornamentsList[i - 1].GrossWeight </td>
-                            <td class="text-center">@Model.ornamentsList[i - 1].StoneWeight </td>
-                            <td class="text-center">22 </td>
-                            <td class="text-center">@Model.ornamentsList[i - 1].NetWeight </td>
-                            <td class="text-center">@Model.ornamentsList[i - 1].MarketPrice </td>
+                            <th scope="row" class="text-center" style="border: 1px solid #121213">@i</th>
+                            <td class="text-center" style="border: 1px solid #121213">@Model.ornamentsList[i - 1].Ornament (@Model.ornamentsList[i - 1].Quantity) </td>
+                            <td class="text-center" style="border: 1px solid #121213">@Model.ornamentsList[i - 1].GrossWeight </td>
+                            <td class="text-center" style="border: 1px solid #121213">@Model.ornamentsList[i - 1].StoneWeight </td>
+                            <td class="text-center" style="border: 1px solid #121213">22 </td>
+                            <td class="text-center" style="border: 1px solid #121213">@Model.ornamentsList[i - 1].NetWeight </td>
+                            <td class="text-center" style="border: 1px solid #121213">@Model.ornamentsList[i - 1].MarketPrice </td>
                         </tr>
                     }
                     <tr>
-                        <td></td>
-                        <td class="text-center">Total(@total)</td>
-                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@GW</td>
-                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@SW</td>
-                        <td></td>
-                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@NW</td>
-                        <td scope="col" style="font-weight: bold;text-decoration:underline;" class="text-center">@MP</td>
+                        <td style="border: 1px solid #121213"></td>
+                        <td style="border: 1px solid #121213" class="text-center">Total(@total)</td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;border: 1px solid #121213" class="text-center">@GW</td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;border: 1px solid #121213" class="text-center">@SW</td>
+                        <td style="border: 1px solid #121213"></td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;border: 1px solid #121213" class="text-center">@NW</td>
+                        <td scope="col" style="font-weight: bold;text-decoration:underline;border: 1px solid #121213" class="text-center">@MP</td>
                     </tr>
                 }
 
