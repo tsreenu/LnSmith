@@ -64,32 +64,53 @@
     <div id="divMessage" style="display:none;text-align:center;" class="alert alert-success alert-dismissible col-4 offset-4">
         Selected loans deleted successfully.
     </div>
+    <div class="form-group form-inline col-12">
+        <label style="color:#fff" class="col-4 col-md-2 col-lg-2">From Date<span style="color:red">*</span></label> &nbsp;&nbsp;
+        <input type="text" id="txtStartDate" class="form-control col-3 col-md-2 col-lg-2" onchange="FilterActive()" readonly/>
+        &nbsp;&nbsp;
+        <label style="color:#fff;margin-left: 0rem;" class="col-4 col-md-2 col-lg-2">To Date<span style="color:red">*</span></label> &nbsp;&nbsp;
+        <input type="text" id="txtEndDate" class="form-control col-3 col-md-2 col-lg-2" onchange="FilterActive()" readonly/>
+        &nbsp;&nbsp;
+        <input type="button" id="btnFilter" class="btn btn-primary col-2 col-md-1 col-lg-1 offset-4 offset-lg-0 offset-md-0" onclick="FilterLoans()" value="Filter" disabled />
+        &nbsp;
+        <input type="button" id="btnFilterClear" class="btn btn-danger col-2 col-md-1 col-lg-1" onclick="ReloadData()" value="Clear" disabled/>
+    </div>
+    @*<table class="table-responsive">
+            <tr>
+                <td style="color:#fff">From Date<span style="color:red">*</span></td>
+                <td> <input type="text" id="txtStartDate" class="form-control" onchange="FilterActive()" /></td>
+                <td style="color:#fff">To Date</td>
+                <td><input type="text" id="txtEndDate" class="form-control" onchange="FilterActive()" /></td>
+                <td> <input type="button" id="btnFilter" class="btn btn-primary" onclick="FilterLoans()" value="Filter" disabled /></td>
+                <td><input type="button" id="btnFilter" class="btn btn-danger" onclick="CleareFilters()" value="Clear" /></td>
+            </tr>
+        </table>*@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                 @if (Model.IsSelfEnabled == true)
                 {
-                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true">Pawn Broker</a>
+                    <a class="nav-item nav-link active" onclick="CleareFilters()" id="nav-home-tab" data-toggle="tab" href="#nav-PawnBroker" role="tab" aria-controls="nav-home" aria-selected="true">Pawn Broker</a>
                 }
                 @if (Model.IsBankEnabled == true)
                 {
-                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false">Banks</a>
+                    <a class="nav-item nav-link" onclick="CleareFilters()" id="nav-profile-tab" data-toggle="tab" href="#nav-Banks" role="tab" aria-controls="nav-profile" aria-selected="false">Banks</a>
                 }
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
             @if (Model.IsSelfEnabled == true)
             {
-            <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="tab-pane fade show active" id="nav-PawnBroker" role="tabpanel" aria-labelledby="nav-home-tab">
 
-                <table id="gridCustomerDataSelf" class="table"></table>
-                <div id="divPagerSelf"> </div>
-                <div class="form-group offset-5 offset-sm-5 offset-md-5 offset-lg-5 col-6 col-sm-6 col-md-6 col-lg-6">
-                    <button onclick="DeleteSelfRecords()" class="btn btn-danger">Delete</button>
-                    <a href="@Url.Action("DownLoadExcel", "Apraiser", new { bankId = 1 })" class="btn btn-primary">Download</a>
+                    <table id="gridCustomerDataSelf" class="table"></table>
+                    <div id="divPagerSelf"> </div>
+                    <div class="form-group offset-5 offset-sm-5 offset-md-5 offset-lg-5 col-6 col-sm-6 col-md-6 col-lg-6">
+                        <button onclick="DeleteSelfRecords()" class="btn btn-danger">Delete</button>
+                        <a href="@Url.Action("DownLoadExcel", "Apraiser", new { bankId = 1 })" class="btn btn-primary">Download</a>
+                    </div>
+                    @*<a href="@Url.Action("DownLoadExcel", "Apraiser", new { bankId = 1 })" class="btn btn-primary offset-6">Download</a>*@
                 </div>
-                @*<a href="@Url.Action("DownLoadExcel", "Apraiser", new { bankId = 1 })" class="btn btn-primary offset-6">Download</a>*@
-            </div>
             }
             @if (Model.IsBankEnabled == true)
             {
@@ -114,6 +135,16 @@
 
 <script>
     $(document).ready(function () {
+        $("#txtStartDate").datepicker({
+            dateFormat: "dd-M-yy",
+            showOn: "button",
+            buttonImage: "/Content/Images/calendar.png",
+        });
+        $("#txtEndDate").datepicker({
+            dateFormat: "dd-M-yy",
+            showOn: "button",
+            buttonImage: "/Content/Images/calendar.png",
+        });
         ActiveMenu("liCustomerData");
         if ('@Model.IsSelfEnabled' == 'True') {
             LoadSelfGrid();
@@ -316,6 +347,78 @@
                     $("#hdnSelfCustomerDataList").val(JSON.stringify(data.selfCustomerDataList));
                     LoadSelfGrid();
                     $("#divMessage").show().delay(5000).fadeOut();
+                },
+                error: function (error) {
+
+                }
+            });
+        }
+    }
+
+    FilterActive = function () {
+        if ($("#txtStartDate").val() != "" && $("#txtEndDate").val() != "") {
+            $("#btnFilter").prop('disabled', false);
+            $("#btnFilterClear").prop('disabled', false);
+        } else {
+            $("#btnFilter").prop('disabled', true);
+            $("#btnFilterClear").prop('disabled', true);
+        }
+    }
+
+    CleareFilters = function () {
+        $("#txtStartDate").val("");
+        $("#txtEndDate").val("");
+    }
+
+    ReloadData = function () {
+        if ($("#txtStartDate").val() != "" && $("#txtEndDate").val() != "") {
+            $("#txtStartDate").val("");
+            $("#txtEndDate").val("");
+            var Url = "/Apraiser/ReloadData";
+            $.ajax({
+                url: Url,
+                type: "GET",
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+                    $("#gridCustomerDataBank").clearGridData()
+                    $("#hdnBankCustomerDataList").val(JSON.stringify(data.bankCustomerDataList));
+                    LoadBankGrid();
+                    $("#gridCustomerDataSelf").clearGridData();
+                    $("#hdnSelfCustomerDataList").val(JSON.stringify(data.selfCustomerDataList));
+                    LoadSelfGrid();
+                },
+                error: function (error) {
+
+                }
+            });
+        }
+    }
+
+    FilterLoans = function () {
+        var loanType = $("#nav-PawnBroker").hasClass("active") == true ? "Self" : "Bank";
+        var Url = "/Apraiser/FilterLoans";
+        if ($("#txtStartDate").val() != "" && $("#txtEndDate").val() != "") {
+            $.ajax({
+                url: Url,
+                type: "GET",
+                cache: false,
+                dataType: 'json',
+                data: {
+                    'LoanType': loanType, 'StartDate': $("#txtStartDate").val(), 'EndDate': $("#txtEndDate").val()
+                },
+                success: function (data) {
+                    debugger;
+                    if (loanType == "Bank") {
+                        $("#gridCustomerDataBank").clearGridData()
+                        $("#hdnBankCustomerDataList").val(JSON.stringify(data.bankCustomerDataList));
+                        LoadBankGrid();
+                    } else {
+                        $("#gridCustomerDataSelf").clearGridData();
+                        $("#hdnSelfCustomerDataList").val(JSON.stringify(data.selfCustomerDataList));
+                        LoadSelfGrid();
+                    }
+
                 },
                 error: function (error) {
 

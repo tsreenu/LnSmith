@@ -211,6 +211,7 @@
     <Content Include="Content\Images\background2.jpg" />
     <Content Include="Content\Images\background4.jpg" />
     <Content Include="Content\Images\blue-plus-icon-13.png" />
+    <Content Include="Content\Images\calendar.png" />
     <Content Include="Content\Images\calendar.svg" />
     <Content Include="Content\Images\icons8-settings.svg" />
     <Content Include="Content\Images\power_settings_new-24.svg" />

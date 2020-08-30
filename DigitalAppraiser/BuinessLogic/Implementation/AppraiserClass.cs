@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using DigitalAppraiser.BuinessLogic.Interfaces;
+﻿using DigitalAppraiser.BuinessLogic.Interfaces;
 using DigitalAppraiser.Models.DBModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -483,6 +483,56 @@ namespace DigitalAppraiser.BuinessLogic.Implementation
             string query = "delete from LoanDetails where LoanId in (" + ids + ")";
             int rows = _Context.Database.ExecuteSqlCommand(query);
             return rows;
+        }
+
+        public Models.ViewModels.CustomerLoanDataModel GetPawnBrokerLoanData(int AppraiserId, DateTime fromDate, DateTime ToDate)
+        {
+            Models.ViewModels.CustomerLoanDataModel model = new Models.ViewModels.CustomerLoanDataModel();
+
+            List<Models.ViewModels.CustomerLoanData> selfList = (from self in _Context.SelfCustomerDetails.Where(x => x.AppraiserId == AppraiserId && x.IsActive == true)
+                                                                 join loan in _Context.LoanDetails.Where(x => x.LoanType == 1) on self.CustomerId equals loan.CustomerId
+                                                                 join bankmaster in _Context.BankMasters.Where(x => x.IsActive == true) on loan.LoanType equals bankmaster.BankId
+                                                                 where (DbFunctions.TruncateTime(loan.CreatedOn) >= fromDate.Date && DbFunctions.TruncateTime(loan.CreatedOn) <= ToDate.Date)
+                                                                 select new Models.ViewModels.CustomerLoanData
+                                                                 {
+                                                                     Date = loan.CreatedOn,
+                                                                     BankName = bankmaster.BankName,
+                                                                     CustomerName = self.Name,
+                                                                     InterestRate = loan.Interest,
+                                                                     LoanAmount = loan.LoanAmount,
+                                                                     LoanId = loan.LoanId,
+                                                                     MobileNumber = self.MobileNumber,
+                                                                     Area = self.Address,
+                                                                     IsActive = loan.IsActive
+                                                                 }
+                                     ).ToList();
+            model.selfCustomerDataList = selfList;
+            return model;
+        }
+
+        public Models.ViewModels.CustomerLoanDataModel GetBankLoanData(int AppraiserId, DateTime fromDate, DateTime ToDate)
+        {
+            Models.ViewModels.CustomerLoanDataModel model = new Models.ViewModels.CustomerLoanDataModel();
+
+            List<Models.ViewModels.CustomerLoanData> bankList = (from bank in _Context.BankCustomerDetails.Where(x => x.AppraiserId == AppraiserId && x.IsActive == true)
+                                                                 join loans in _Context.LoanDetails.Where(x => x.LoanType != 1) on bank.CustomerId equals loans.CustomerId
+                                                                 join bankmaster in _Context.BankMasters.Where(x => x.IsActive == true) on loans.LoanType equals bankmaster.BankId
+                                                                 where (DbFunctions.TruncateTime(loans.CreatedOn) >= fromDate.Date && DbFunctions.TruncateTime(loans.CreatedOn) <= ToDate.Date)
+                                                                 select new Models.ViewModels.CustomerLoanData
+                                                                 {
+                                                                     Date = loans.CreatedOn,
+                                                                     BankName = bankmaster.BankName,
+                                                                     CustomerName = bank.Name,
+                                                                     InterestRate = loans.Interest,
+                                                                     LoanAmount = loans.LoanAmount,
+                                                                     LoanId = loans.ID.ToString(),
+                                                                     MobileNumber = bank.MobileNumber,
+                                                                     Area = bank.Address,
+                                                                     IsActive = loans.IsActive
+                                                                 }
+                                      ).ToList();
+            model.bankCustomerDataList = bankList;
+            return model;
         }
     }
 }

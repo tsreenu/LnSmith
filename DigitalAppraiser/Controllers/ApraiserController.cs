@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
@@ -406,6 +407,27 @@ namespace DigitalAppraiser.Controllers
             var list = JsonConvert.DeserializeObject<List<string>>(selectedIds);
             int res = bl.DeleteSelfRecords(list);
             var data = bl.GetCustomerLoanData(LogedUser.AppraiserId.Value);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult FilterLoans(string LoanType, DateTime StartDate, DateTime EndDate)
+        {
+            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+            int appraiserId = LogedUser.AppraiserId.Value;
+            var data = new Models.ViewModels.CustomerLoanDataModel();
+            if (LoanType == "Self")
+                data = bl.GetPawnBrokerLoanData(appraiserId, StartDate, EndDate);
+            else
+                data = bl.GetBankLoanData(appraiserId, StartDate, EndDate);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ReloadData()
+        {
+            BL.Interfaces.AppriserInterface bl = new BL.Implementation.AppraiserClass();
+            int appraiserId = LogedUser.AppraiserId.Value;
+            var data = new Models.ViewModels.CustomerLoanDataModel();
+            data = bl.GetCustomerLoanData(appraiserId);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
