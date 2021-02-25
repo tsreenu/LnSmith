@@ -108,6 +108,7 @@ namespace DigitalAppraiser.Controllers
                 procModel.bankCustomer = new Models.ViewModels.BankCustomerModel();
                 procModel.bankCustomer.Banks = bl.GetAppraiserBanks(AppraiserId);
                 procModel.selfCustomer = model;
+                procModel.isSelfEnable = true;
                 int[] list = Enumerable.Range(1, 50).ToArray();
                 procModel.selfCustomer.Quantity = list.Select(x => new SelectListItem
                 {

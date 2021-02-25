@@ -107,6 +107,7 @@
 
 <script>
     $(document).ready(function () {
+        
         $("#loader").hide();
         ActiveMenu("liProcessLoan");
         if ($("#hdnIsSelfEnabled").val() == "False") {
@@ -139,7 +140,7 @@
     })
 
     HideTab = function (ev) {
-        debugger;
+        
         if (ev.id == "nav-profile-tab") {
             $("#nav-home-tab").hide();
         }

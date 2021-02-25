@@ -32,11 +32,11 @@
 
 <div class="container" style="width:100%;background:#fff;font-size:18px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;" id="divSbiReport">
     <div class="row">
-        <div style="margin: auto;width:100%;text-align:center" id="divAnnexture">
-            <p class="h3">Annexure 22</p>
+        <div style="margin: auto;width:80%;text-align:right" id="divAnnexture">
+            <p class="h3">Annexure - PL-62</p>
         </div>
         <div style="margin: auto;width:100%;text-align:center" id="divCertificate">
-            <p class="h2 underlined">APPRAISER CERTIFICATE</p>
+            <p class="h2 underlined" style="text-decoration: underline;">APPRAISER CERTIFICATE</p>
         </div>
     </div>
     <div class="row col-11">
@@ -49,21 +49,23 @@
     </div>
     <div class="row">
         <div class="offset-1 col-11">
-            <span class="fa-pull-right" style="margin-right:20%;font-weight:bold;margin-top:-3rem;">Ac.No.</span>
+            <span class="float-right" style="margin-right:20%;font-weight:bold;margin-top:-3rem;">Ac.No.</span>
         </div>
     </div>
     <div class="row col-12">
         <div class="offset-1">
+            <div> Dear Sir, </div>
+            <br />
             <p>
-                I here certify that
+                I hereby certify that
 
-                the Gold Ornaments mentioned below belonging to
+                @*the Gold Ornaments mentioned below belonging to*@
 
-                Sri/Smt<span style="font-weight:bold;text-decoration:underline;">&nbsp;@Model.bankCustomerDetails.Name</span> &nbsp;<span>@RelationType </span> <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.RelationName</span> Resident of
+                Sri/Smt<span style="font-weight:bold;text-decoration:underline;">&nbsp;@Model.bankCustomerDetails.Name</span> &nbsp;<span>@RelationType </span> <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.RelationName</span>
+                Resident of <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Address</span>
+                who has sought gold loan from the Bank is not my relative and the gold against which the loan is sought is not purchased from me. The ornaments/Coins have been weighted and appraised by me on
 
-                <span style="font-weight:bold;text-decoration:underline;">@Model.bankCustomerDetails.Address</span> Have been weighted and scrutinized by me on
-
-                <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span> and the exact weight, purity of the metal and market value of each item as
+                <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span> in the presence of Sri/Smt ________________ (Cash in charge) and the exact weight, purity of the metal and market value of each item as
 
                 on date are indicated below:
             </p>
@@ -78,9 +80,9 @@
                     <th scope="col" class="text-center" style="border: 1px solid #121213">S.No</th>
                     <th scope="col" class="text-center" style="border: 1px solid #121213">Description of the article</th>
                     <th scope="col" class="text-center" style="border: 1px solid #121213">Gross Weight</th>
-                    <th scope="col" class="text-center" style="border: 1px solid #121213">Approximate weight of the precious stones in the ornaments (grams)</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Approximate weight of the precious stones in the ornaments (Grams)</th>
                     <th scope="col" class="text-center" style="border: 1px solid #121213">Purity (Carat)</th>
-                    <th scope="col" class="text-center" style="border: 1px solid #121213">Net Weight Grams in 22 Ct. Approximate</th>
+                    <th scope="col" class="text-center" style="border: 1px solid #121213">Net Weight (Grams)</th>
                     <th scope="col" class="text-center" style="border: 1px solid #121213">Market Value Rs.</th>
                 </tr>
             </thead>
@@ -127,17 +129,21 @@
     <div class="row offset-1 col-11">
         <p>
             I Solemnly declare that weight, purity of the gold ornaments/precious stones indicated
-            above are correct and I under take to indemnify the Bank against any loss may sustain on
+            above are correct and I under take to indemnify the Bank against any loss it may sustain on
             account of any inaccuracy in the above appraisal.
         </p>
     </div>
     <br />
     <div class="row">
         <div class="offset-1 col-11">
-            <p>Place: </p>
-            <span class="fa-pull-right" style="margin-right:5%;">Yours Faithfully</span>
+            <p>Place: @Model.bankCustomerDetails.Branch</p>
+            <span class="float-right" style="margin-right:5%;margin-top:-4%;">Yours Faithfully</span>
             <p>Date: <span style="font-weight:bold;text-decoration:underline;">@DateTime.Now.ToString("dd/MMM/yyyy")</span><span class="fa-pull-right"></span></p>
+            <span class="float-right" style="margin-right:5%;margin-top:-2%;">Appraiser</span>
         </div>
+    </div>
+    <div>
+        <p class="row justify-content-center align-self-center">Signature of the Borrower</p>
     </div>
 </div>
 <input type="button" class="btn btn-info col-sm-2 offset-5" id="btnSaveCustomerSelf" value="PRINT" onclick="PrintReceipt()" />

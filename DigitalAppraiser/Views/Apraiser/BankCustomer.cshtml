@@ -224,7 +224,10 @@
         }
         if ($("#txtMobileNumberBank").val() == "") {
             isValid = false;
-            $("#MobileNumberBankValid").text("The Bank field is required.");
+            $("#MobileNumberBankValid").text("The Mobile Number field is required.");
+        } else if ($("#txtMobileNumberBank").val().length < 10) {
+            isValid = false;
+            $("#MobileNumberBankValid").text("The Mobile Number is invalid.");
         } else {
             $("#MobileNumberBankValid").text("");
         }
@@ -259,7 +262,6 @@
         return isValid;
     }
     SaveOrnamentDetails = function (e) {
-        debugger;
         e.preventDefault();
         var isValid = true;
         var errorMsg = "";
@@ -318,7 +320,7 @@
                 cache: false,
                 data: { model: model },
                 success: function (data) {
-                    debugger;
+                   
                     window.location.href =  '@Url.Action("Estimation", "Apraiser")'+'?customerId=' + data + '&LoanType=2';
                 },
                 error: function (error) {
@@ -337,13 +339,28 @@
     }
 
     LoadGrid = function () {
-        debugger;
+      
         var table = "<table class='table table-bordered table-responsive-sm table-responsive-md'><thead><tr><th scope='col'>S No</th><th scope='col'>Item</th><th scope='col'>Quantity</th><th scope='col'>Gross Weight</th><th scope='col'>Stone Weight</th><th scope='col'>Quality</th><th scope='col'>Net Weight</th><th scope='col'>Market Price</th><th scope='col'></th></tr></thead><tbody>";
         var td = "";
         for (var i = 0; i < ornamentsList.length; i++) {
             td += "<tr><td>" + (i + 1) + "</td><td>" + ornamentsList[i].Ornament + "</td><td>" + ornamentsList[i].Quantity + "</td><td>"
                 + ornamentsList[i].GrossWeight + "</td><td>" + ornamentsList[i].StoneWeight + "</td><td>" + ornamentsList[i].Quality + "</td><td>"
                 + ornamentsList[i].NetWeight + "</td><td>" + ornamentsList[i].MarketPrice + "</td><td><div style='display: inline-flex;'><input type='button'class='btn btn-xs btn-success' value='Edit' onclick='Edit(" + i + ")'/>&nbsp;&nbsp;&nbsp;<input type='button'class='btn btn-xs btn-success' value='Delete' onclick='Delete(" + i + ")'/></div></td></tr>";
+        }
+        if (ornamentsList.length > 1) {
+            var GW = ornamentsList.reduce(function (s, a) {
+                return s + Number(a.GrossWeight);
+            }, 0);
+            var SW = ornamentsList.reduce(function (s, a) {
+                return s + Number(a.StoneWeight);
+            }, 0);
+            var MP = ornamentsList.reduce(function (s, a) {
+                return s + Number(a.MarketPrice);
+            }, 0);
+            var NW = ornamentsList.reduce(function (s, a) {
+                return s + Number(a.NetWeight);
+            }, 0);
+            td += "<tr><td></td><td></td><td></td><td><b>" + GW.toFixed(3) + "</b></td><td><b>" + SW.toFixed(3) + "</b></td><td></td><td><b>" + NW.toFixed(3) + "</b></td><td><b>" + MP.toFixed(2) + "</b></td></tr>";
         }
         table += td + "</tbody></table>";
         $("#divOrnamentsTbl").html("");

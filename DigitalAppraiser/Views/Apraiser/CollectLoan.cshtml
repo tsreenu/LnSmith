@@ -238,7 +238,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        debugger;
+      
         var today = new Date();
         var y = today.getFullYear();
         if ($("#hdnIsActive").val() != "False") {
@@ -294,7 +294,7 @@
                 loanId: $("#hdnLoanId").val(), collectedAmount: $("#txtTotalAmount").val(), collectedOn: $("#txtReleaseDate").val(), CollectedInterest: $("#txtTotalInerest").val(), NoOfDays: $("#txtDays").val()
             },
             success: function (data) {
-                debugger;
+       
                 if (data == 1) {
                     $("#btnRedirectHome").show();
                     $("#pSuccessMsg").text("Thank You Loan is settled.");
@@ -311,7 +311,7 @@
         })
     }
     MonthDiff = function () {
-        debugger;
+        
         var from = new Date($("#hdnYear").val(), $("#hdnMonth").val() - 1, $("#hdnDay").val());
         var day = from.getDate();
         var month = from.getMonth();

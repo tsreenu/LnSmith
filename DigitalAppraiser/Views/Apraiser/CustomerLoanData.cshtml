@@ -311,7 +311,7 @@
                     'selectedIds' : JSON.stringify(selectedIds)
                 },
                 success: function (data) {
-                    debugger;
+                   
                     $("#gridCustomerDataBank").clearGridData()
                     $("#hdnBankCustomerDataList").val(JSON.stringify(data.bankCustomerDataList));
                     LoadBankGrid();
@@ -342,7 +342,7 @@
                     'selectedIds': JSON.stringify(selectedIds)
                 },
                 success: function (data) {
-                    debugger;
+                   
                     $("#gridCustomerDataSelf").clearGridData();
                     $("#hdnSelfCustomerDataList").val(JSON.stringify(data.selfCustomerDataList));
                     LoadSelfGrid();
@@ -408,7 +408,7 @@
                     'LoanType': loanType, 'StartDate': $("#txtStartDate").val(), 'EndDate': $("#txtEndDate").val()
                 },
                 success: function (data) {
-                    debugger;
+                    
                     if (loanType == "Bank") {
                         $("#gridCustomerDataBank").clearGridData()
                         $("#hdnBankCustomerDataList").val(JSON.stringify(data.bankCustomerDataList));
